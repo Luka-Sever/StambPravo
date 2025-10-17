@@ -8,12 +8,12 @@ Aplikacija za rješavanje pravnih odnosa vezanih za stambene ustanove.
 # Tehnologije
 
 # Članovi tima
-Dominik Topić
-bruno Pleše
-Luka Sever
-Diana Agejev
-Vito Gašparac
-Amalija Novalić
-Dora Vukelić
+Dominik Topić <br />
+Bruno Pleše <br />
+Luka Sever <br />
+Diana Agejev <br />
+Vito Gašparac <br />
+Amalija Novalić <br />
+Dora Vukelić <br />
 
 # Kontribucije
