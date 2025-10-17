@@ -1,13 +1,13 @@
 # StambPravo
 Aplikacija za rješavanje pravnih odnosa vezanih za stambene ustanove.
 
-#Opis projekta
+# Opis projekta
 
-#Funkcijski zahtjevi
+# Funkcijski zahtjevi
 
-#Tehnologije
+# Tehnologije
 
-#Članovi tima
+# Članovi tima
 Dominik Topić
 bruno Pleše
 Luka Sever
@@ -16,4 +16,4 @@ Vito Gašparac
 Amalija Novalić
 Dora Vukelić
 
-#Kontribucije
+# Kontribucije
