@@ -23,7 +23,7 @@ Cilj projekta StanPlan je izrada aplikacije koja pomaže predstavnicima suvlasni
 # Članovi tima
 > Dominik Topić - arhitektura i baza podataka <br />
 > Bruno Pleše - backend <br />
-> Luka Sever - frontend <br />
+> Luka Sever - frontend, voditelj <br />
 > Diana Agejev - QA <br />
 > Vito Gašparac - backend <br />
 > Amalija Novalić - frontend <br />
