@@ -18,6 +18,7 @@ Cilj projekta StanPlan je izrada aplikacije koja pomaže predstavnicima suvlasni
 >* autentifikacija korisnika (OAuth 2.0)
 
 # Tehnologije
+> Spring Boot, postgreSql, React, OAuth 2.0, Figma <br />
 
 
 # Članovi tima
