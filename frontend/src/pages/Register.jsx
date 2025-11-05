@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { register as registerRequest } from '../services/authService.js'
 
 function Register() {
     const [name, setName] = useState('')
@@ -15,9 +16,11 @@ function Register() {
         }
         setSubmitting(true)
         try {
+            const data = await registerRequest({ name, email, password })
             console.log('Register successful:', data)
         } catch (error) {
             console.error('Register error:', error)
+            alert('Registracija nije uspjela. Pokušajte ponovno.')
         } finally {
             setSubmitting(false)
         }

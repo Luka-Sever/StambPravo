@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { login as loginRequest } from '../services/authService.js'
 
 function Login() {
     const [email, setEmail] = useState('')
@@ -14,9 +15,11 @@ function Login() {
         }
         setSubmitting(true)
         try {
+            const data = await loginRequest({ email, password })
             console.log('Login successful:', data)
         } catch (error) {
             console.error('Login error:', error)
+            alert('Neuspjela prijava. Provjerite podatke i pokušajte ponovno.')
         } finally {
             setSubmitting(false)
         }
