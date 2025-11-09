@@ -37,7 +37,7 @@ public class BackendApplication {
                         .anyRequest().authenticated()
                 )
                 .csrf(c -> c.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/h2-console/**")
+                        .ignoringRequestMatchers("/h2-console/**", "/logout")
                 )
                 .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .exceptionHandling(e -> e
