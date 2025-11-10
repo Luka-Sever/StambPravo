@@ -1,16 +1,24 @@
-import { Route, Routes } from 'react-router-dom'
+import { useState } from 'react'
 import './App.css'
-import Home from './pages/Home.jsx'
-import Login from './pages/Login.jsx'
-import Register from './pages/Register.jsx'
+
+import Head from './Head'
+import Welcome from './Welcome'
+import NotLoggedIn from './NotLoggedIn'
+import Nav from './Nav'
+
+/*
+  TODO: dodati Dark / Light mode
+*/
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-    </Routes>
+    <>
+      <Head/>
+      <NotLoggedIn notLoggedIn={true}></NotLoggedIn>
+      <Nav/>
+      <Welcome/>
+
+    </>
   )
 }
 
