@@ -1,42 +1,110 @@
+@font-face {
+    font-family: 'Monocraft'; 
+    src: local("/Monocraft.ttf"); /*Ignoriraj te, bio je fora, ali nije profesionalan.*/
+}
+
+* {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+   
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  margin: 0;
   text-align: center;
+  width: 100%;
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  width: 200px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
+#head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: #f1f0fa;
+  /* border: 1px solid black; */
+}
+
+#head button {
+  margin: 10px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-weight: 500;
+}
+
+#login {
+  background-color: #bdbdbd;
+  color: black;
+}
+
+#register {
+  background-color: black;
+  color: #d9d9d9;
+}
+
+p {
+  font-size: 20px;
+  transition: font-size 0.25s;
+}
+
+.efekt {
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 1.2s; 
+}
+
+@keyframes fadeIn {
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    font-size: 1em;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+#notLoggedIn {
+  display: flex;
+  background-color: #ff8c8c;
+  justify-content: space-between;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 20px;
+  align-items: center;
 }
 
-.card {
-  padding: 2em;
+#notLoggedIn p {
+  display: inline;
+  color: #992626;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-.read-the-docs {
-  color: #888;
+#notLoggedIn button {
+  width: fit-content;
+  height: fit-content;
+  align-self: center;
+  background-color: #bf5252;
+  color: #330505;
+}
+
+nav {
+  display: flex;
+  justify-content: space-evenly;
+  border-radius: 15px;
+  border-style: solid;
+  border-color: black;
+  border-width: 2px;
+  padding: 10px;
+  margin: 10px;
+  box-shadow: 3px 2px rgba(0, 0, 0, 0.399);
+}
+nav a {
+  cursor: pointer;
+  color: black;
+  font-weight: 900;
+  transition: 0.4s ease;
+}
+
+nav a:hover {
+  color: black;
+  transform: scale(1.2); 
 }
