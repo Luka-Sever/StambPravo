@@ -1,7 +1,7 @@
 package com.pcelice.backend;
 
-public enum Role {
+public enum RoleType {
     CO_OWNER,
-    PREDSTAVNIK,
+    REP,
     ADMIN
 }

@@ -1,3 +1,4 @@
+
 spring:
   config:
     import: optional:application-local.yml
@@ -19,3 +20,7 @@ spring:
       path: /h2-console
   datasource:
     url: jdbc:h2:mem:testdb
+
+progi:
+  fronted:
+    url: "http://localhost:5173"

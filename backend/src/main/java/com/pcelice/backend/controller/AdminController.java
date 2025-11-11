@@ -1,7 +1,7 @@
 package com.pcelice.backend.controller;
 
 import com.pcelice.backend.CoOwnerRepository;
-import com.pcelice.backend.coOwner;
+import com.pcelice.backend.entities.Users;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,11 +19,11 @@ public class AdminController {
     }
 
     @PostMapping("/user") // dodavanje usera
-    public ResponseEntity<coOwner> createUser(@RequestBody coOwner newUser) {
-        if (coOwnerRepository.findByEmail(newUser.getEmail()).isPresent()) {
+    public ResponseEntity<Users> createUser(@RequestBody Users newUsers) {
+        if (coOwnerRepository.findByEmail(newUsers.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().build(); 
         }
-        coOwner savedUser = coOwnerRepository.save(newUser);
-        return ResponseEntity.ok(savedUser);
+        Users savedUsers = coOwnerRepository.save(newUsers);
+        return ResponseEntity.ok(savedUsers);
     }
 }
