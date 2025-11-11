@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .logout(config -> config
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
+                        .deleteCookies("JSESSIONID")
                         .logoutSuccessHandler((req, res, auth) ->
                                 res.setStatus(HttpStatus.NO_CONTENT.value())
                         )
