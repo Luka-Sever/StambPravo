@@ -27,10 +27,6 @@ public class BackendApplication {
     @Autowired
     private CoOwnerRepository coOwnerRepository;
 
- /*   @GetMapping("/user")
-    public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-        return Collections.singletonMap("name", principal.getAttribute("name"));
-    }*/
     @Bean
     public CommandLineRunner demo(CoOwnerRepository repository) {
         //hardcodeani useri za testiranje
@@ -79,7 +75,6 @@ public class BackendApplication {
         request.getSession().removeAttribute("error");
         return message;
     }
-
 
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
