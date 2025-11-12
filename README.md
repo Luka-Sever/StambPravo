@@ -32,3 +32,39 @@ Cilj projekta StanPlan je izrada aplikacije koja pomaže predstavnicima suvlasni
 
 
 # Kontribucije
+## Podjela rada i doprinosi članova tima: 
+
+- **Dominik Topić** (`Dominik-Topic`):  
+  - Model baze podataka, izrada i izmjena SQL skripti  
+  - Dodavanje i dorada atributa podataka (schema, dizajn entiteta)
+
+- **Bruno Pleše** (`PleseBruno`):  
+  - Backend razvoj (Spring Boot), login i klase za korisnike i zgradu  
+  - Implementacija i dorada logout funkcionalnosti
+
+- **Vito Gašparac** (`vgasp22`):  
+  - Sudjelovanje u backendu, implementacija kreiranja korisnika  
+  - Suradnja na poslovnoj logici API-ja
+
+- **Luka Sever** (`EngineerDUDE1`, voditelj):  
+  - Frontend razvoj (React), dizajn i izrada UI komponenata  
+  - Dodavanje početne stranice, naslov, ikona, CSS stilizacija  
+  - Priprema i dorada logotipa  
+  - Opće vizualno oblikovanje korisničkog sučelja
+
+- **Amalija Novalić** (`ami231`):  
+  - Inicijalizacija React frontenda, osnove routinga  
+  - Implementacija komponenata za registraciju i autentikaciju  
+  - Ažuriranja README i podrška u dokumentaciji
+
+- **Dora Vukelić** (`DoVu4`):  
+  - DevOps (priprema i održavanje repozitorija, licenciranje)
+  - Figma dizajn stranice 
+  - Dokumentacija: izrada i ažuriranje README, upload UML i sekvencijskih dijagrama  
+  - Organizacija datoteka i priprema dodatnih materijala za wiki
+
+- **Diana Agejev** (`di4n444`):  
+  - QA (testiranje funkcionalnosti, provjera ispravnosti i konzistentnosti aplikacije)  
+  - Dokumentacija: izrada i ažuriranje README, uredivanje sekvencijskih dijagrama te opis arhitekture i dizajna sustava
+
+
