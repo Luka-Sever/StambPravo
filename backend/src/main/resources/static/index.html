@@ -18,11 +18,29 @@
 </h1>
 <div class="container"></div>
 <div class="container unauthenticated">
+
     <div>
         With GitHub: <a href="/oauth2/authorization/github">click here</a>
     </div>
     <div>
         With Google: <a href="/oauth2/authorization/google">click here</a>
+    </div>
+
+    <hr>
+
+    <div class="mb-3">
+        <h4>Login with username and password</h4>
+        <form id="loginForm">
+            <div class="mb-2">
+                <label>Username:</label>
+                <input type="text" id="username" class="form-control" required>
+            </div>
+            <div class="mb-2">
+                <label>Password:</label>
+                <input type="password" id="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-success">Login</button>
+        </form>
     </div>
 </div>
 

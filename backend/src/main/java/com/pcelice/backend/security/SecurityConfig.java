@@ -52,7 +52,6 @@ public class SecurityConfig {
                 .logout(config -> config
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
-                        .deleteCookies("JSESSIONID")
                         .logoutSuccessHandler((req, res, auth) ->
                                 res.setStatus(HttpStatus.NO_CONTENT.value())
                         )
@@ -89,6 +88,7 @@ public class SecurityConfig {
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain h2ConsoleSecurityFilterChain(HttpSecurity http) throws Exception {
         http.securityMatcher(PathRequest.toH2Console());
+        http.authorizeHttpRequests(authorizeRequests ->  authorizeRequests.anyRequest().permitAll());
         http.csrf(AbstractHttpConfigurer::disable);
         http.headers((headers) ->
                 headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));

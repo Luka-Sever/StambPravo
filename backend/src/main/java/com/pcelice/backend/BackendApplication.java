@@ -1,6 +1,9 @@
 package com.pcelice.backend;
 
-import com.pcelice.backend.entities.Users;
+import com.pcelice.backend.entities.CoOwner;
+import com.pcelice.backend.entities.RoleType;
+import com.pcelice.backend.repositories.CoOwnerRepository;
+import com.pcelice.backend.service.CoOwnerService;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +12,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +35,7 @@ public class BackendApplication {
     public CommandLineRunner demo(CoOwnerRepository repository) {
         //hardcodeani useri za testiranje
         return (args) -> {
-            Users admin = new Users();
+            CoOwner admin = new CoOwner();
             admin.setEmail("placeholder@gmail.com");
             admin.setFirstName("Admin");
             admin.setLastName("Adminovic");
@@ -42,19 +43,19 @@ public class BackendApplication {
             repository.save(admin);
 
 
-            Users users1 = new Users();
-            users1.setEmail("suvlasnik@example.com");
-            users1.setFirstName("Ime");
-            users1.setLastName("Prezime");
-            users1.setRole(RoleType.CO_OWNER);
-            repository.save(users1);
+            CoOwner coOwner1 = new CoOwner();
+            coOwner1.setEmail("suvlasnik@example.com");
+            coOwner1.setFirstName("Ime");
+            coOwner1.setLastName("Prezime");
+            coOwner1.setRole(RoleType.CO_OWNER);
+            repository.save(coOwner1);
 
-            Users users2 = new Users();
-            users2.setEmail("predstavnik@example.com");
-            users2.setFirstName("Ime");
-            users2.setLastName("Prezimepredstavnik");
-            users2.setRole(RoleType.REP);
-            repository.save(users2);
+            CoOwner coOwner2 = new CoOwner();
+            coOwner2.setEmail("predstavnik@example.com");
+            coOwner2.setFirstName("Ime");
+            coOwner2.setLastName("Prezimepredstavnik");
+            coOwner2.setRole(RoleType.REP);
+            repository.save(coOwner2);
         };
     }
 

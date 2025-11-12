@@ -1,11 +1,10 @@
 package com.pcelice.backend.entities;
 
-import com.pcelice.backend.RoleType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class Users {
+public class CoOwner {
 
     @Id
     @GeneratedValue
@@ -20,6 +19,9 @@ public class Users {
 
     @Column(nullable = true)
     private String password;
+
+    @Column(nullable = true)
+    private String username;
 
     @Enumerated(EnumType.STRING)
     @NotNull
