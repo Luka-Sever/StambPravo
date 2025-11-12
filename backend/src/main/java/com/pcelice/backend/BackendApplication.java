@@ -27,10 +27,10 @@ public class BackendApplication {
     @Autowired
     private CoOwnerRepository coOwnerRepository;
 
-    @GetMapping("/user")
+ /*   @GetMapping("/user")
     public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
         return Collections.singletonMap("name", principal.getAttribute("name"));
-    }
+    }*/
     @Bean
     public CommandLineRunner demo(CoOwnerRepository repository) {
         //hardcodeani useri za testiranje

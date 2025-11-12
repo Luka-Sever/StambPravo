@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,11 +39,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .authorizeHttpRequests(authorizeRequests ->  authorizeRequests.anyRequest().authenticated())
-                .formLogin(formLogin -> formLogin.loginPage("/login"))
+                .authorizeHttpRequests(authorizeRequests ->  authorizeRequests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/error", "/webjars/**","/api/admin/**","/admin").permitAll()
+                        .anyRequest().authenticated())
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/")
+                        .loginProcessingUrl("/login")
+                        .permitAll())
                 .httpBasic(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")
+                        .loginPage("/")
                         .userInfoEndpoint(userInfo -> userInfo.userAuthoritiesMapper(this.authorityMapper()))
                         .successHandler(
                                 (req, res, auth) -> {
@@ -52,11 +59,12 @@ public class SecurityConfig {
                 .logout(config -> config
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
-                        .logoutSuccessHandler((req, res, auth) ->
-                                res.setStatus(HttpStatus.NO_CONTENT.value())
-                        )
+                        /* .logoutSuccessHandler((req, res, auth) ->
+                               res.setStatus(HttpStatus.NO_CONTENT.value())
+                        )*/
                 )
-                .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                .csrf(csrf -> csrf.disable())
+                //.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .exceptionHandling(exc -> exc.authenticationEntryPoint(new Http403ForbiddenEntryPoint()));
 
         return http.build();
@@ -84,7 +92,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    @Profile({ "basic-security", "form-security" })
+    @Profile({ "basic-security", "form-security", "security" })
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain h2ConsoleSecurityFilterChain(HttpSecurity http) throws Exception {
         http.securityMatcher(PathRequest.toH2Console());
