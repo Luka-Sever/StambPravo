@@ -41,6 +41,7 @@ Cilj projekta StanPlan je izrada aplikacije koja pomaže predstavnicima suvlasni
 - **Bruno Pleše** (`PleseBruno`):  
   - Backend razvoj (Spring Boot), login i klase za korisnike i zgradu  
   - Implementacija i dorada logout funkcionalnosti
+  - Dokumentacija: izrada "Opis projektnog zadatka" na wiki
 
 - **Vito Gašparac** (`vgasp22`):  
   - Sudjelovanje u backendu, implementacija kreiranja korisnika  
