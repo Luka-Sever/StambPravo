@@ -10,6 +10,7 @@ async function request(path, { method = 'GET', headers = {}, body } = {}) {
   const response = await fetch(buildUrl(path), {
     method,
     headers: finalHeaders,
+    credentials: 'include',
     body: body !== undefined ? JSON.stringify(body) : undefined,
   })
 

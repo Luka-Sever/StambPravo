@@ -1,12 +1,13 @@
 @font-face {
-    font-family: 'Monocraft'; 
-    src: local("/Monocraft.ttf"); /*Ignoriraj te, bio je fora, ali nije profesionalan.*/
+  font-family: 'Monocraft';
+  src: local("/Monocraft.ttf");
+  /*Ignoriraj te, bio je fora, ali nije profesionalan.*/
 }
 
 * {
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
-   
+
 #root {
   margin: 0;
   text-align: center;
@@ -42,6 +43,8 @@
   color: #d9d9d9;
 }
 
+
+
 p {
   font-size: 20px;
   transition: font-size 0.25s;
@@ -50,7 +53,7 @@ p {
 .efekt {
   opacity: 0;
   animation: fadeIn 1s ease forwards;
-  animation-delay: 1.2s; 
+  animation-delay: 1.2s;
 }
 
 @keyframes fadeIn {
@@ -97,6 +100,7 @@ nav {
   margin: 10px;
   box-shadow: 3px 2px rgba(0, 0, 0, 0.399);
 }
+
 nav a {
   cursor: pointer;
   color: black;
@@ -106,5 +110,173 @@ nav a {
 
 nav a:hover {
   color: black;
-  transform: scale(1.2); 
+  transform: scale(1.2);
+}
+
+/* Header user label */
+#head .user-label {
+  color: #1f2937;
+  font-weight: 800;
+}
+
+/* Auth pages layout */
+.page-title {
+  text-align: left;
+  margin-left: 60px;
+  color: #616161;
+}
+
+.auth-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-container {
+  background: #d8e6f2;
+  margin: 0 auto;
+  width: min(900px, 92%);
+  border-radius: 28px;
+  padding: 28px 24px 36px;
+  color: #1f2937;
+}
+
+.auth-header h2 {
+  text-align: left;
+  margin: 8px 0 16px 8px;
+  color: #1f2937;
+  font-weight: 800;
+}
+
+.auth-role {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 24px;
+}
+
+.auth-select {
+  width: min(420px, 100%);
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.auth-card {
+  display: flex;
+  justify-content: center;
+}
+
+.auth-form {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  width: min(420px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .06);
+}
+
+.auth-field {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-field label {
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.auth-field input,
+.register-grid input {
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111827;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.auth-field input::placeholder,
+.register-grid input::placeholder {
+  color: #9ca3af;
+}
+
+.auth-button {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+  background: #efefef;
+  cursor: pointer;
+  color: #111827;
+  /* tamniji tekst na sekundarnim/outline gumbima */
+}
+
+.auth-form .auth-button {
+  width: 100%;
+}
+
+.auth-button.primary {
+  background: black;
+  color: #ffffff;
+  border-color: black;
+}
+
+.auth-button.outline {
+  background: white;
+}
+
+.auth-button.dark {
+  background: black;
+  color: white;
+  border-color: black;
+}
+
+.auth-button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.auth-link {
+  color: #6b7280;
+  font-size: 12px;
+  text-align: left;
+  margin-top: 2px;
+}
+
+.auth-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.auth-socials .auth-button {
+  width: min(420px, 100%);
+}
+
+.register-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+  background: transparent;
+  width: min(720px, 100%);
+  margin: 0 auto;
+}
+
+.register-grid .full {
+  grid-column: 1 / -1;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
 }
