@@ -1,10 +1,10 @@
-package com.pcelice.backend;
+package com.pcelice.backend.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class coOwner {
+public class CoOwner {
 
     @Id
     @GeneratedValue
@@ -17,9 +17,15 @@ public class coOwner {
     @NotNull
     private String email;
 
+    @Column(nullable = true)
+    private String password;
+
+    @Column(nullable = true)
+    private String username;
+
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Role role;
+    private RoleType roleType;
 
     public Long getId() {
         return id;
@@ -53,12 +59,12 @@ public class coOwner {
         this.email = email;
     }
 
-    public Role getRole() {
-        return role;
+    public RoleType getRole() {
+        return roleType;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRole(RoleType roleType) {
+        this.roleType = roleType;
     }
 
     @Override
@@ -68,7 +74,7 @@ public class coOwner {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", role=" + role +
+                ", role=" + roleType +
                 '}';
     }
 }

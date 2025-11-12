@@ -34,5 +34,5 @@ build/
 
 
 ### vrijednosti za oauth
-backend/src/main/resources/application-local.yml
+*application-local.yml
 

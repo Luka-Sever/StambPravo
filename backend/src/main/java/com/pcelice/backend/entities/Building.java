@@ -1,4 +1,4 @@
-package com.pcelice.backend;
+package com.pcelice.backend.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -19,20 +19,20 @@ public class Building {
     private String name;
 
     @OneToOne
-    private coOwner coOwnerRep;
+    private CoOwner coOwnerRep;
 
     @OneToMany
-    private Set<coOwner> coOwners;
+    private Set<CoOwner> users;
 
     public Building() {}
 
-    public Building(String name, coOwner coOwnerRep) {
+    public Building(String name, CoOwner coOwnerRep) {
         Assert.hasText(name, "Name must not be empty");
         Assert.isTrue(name.length()<=20, "Name must not be longer than 20 characters");
         Assert.notNull(coOwnerRep, "coOwner must not be null");
         this.name = name;
         this.coOwnerRep = coOwnerRep;
-        this.coOwners = new HashSet<>(List.of(coOwnerRep));
+        this.users = new HashSet<>(List.of(coOwnerRep));
     }
 
     public Long getId() {
@@ -51,20 +51,20 @@ public class Building {
         this.name = name;
     }
 
-    public coOwner getCoOwnerRep() {
+    public CoOwner getCoOwnerRep() {
         return coOwnerRep;
     }
 
-    public void setCoOwnerRep(coOwner coOwnerRep) {
+    public void setCoOwnerRep(CoOwner coOwnerRep) {
         this.coOwnerRep = coOwnerRep;
     }
 
-    public Set<coOwner> getCoOwners() {
-        return coOwners;
+    public Set<CoOwner> getCoOwners() {
+        return users;
     }
 
-    public void setCoOwners(Set<coOwner> coOwners) {
-        this.coOwners = coOwners;
+    public void setCoOwners(Set<CoOwner> users) {
+        this.users = users;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class Building {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", coOwnerRep=" + coOwnerRep +
-                ", coOwners=" + coOwners +
+                ", coOwners=" + users +
                 '}';
     }
 }

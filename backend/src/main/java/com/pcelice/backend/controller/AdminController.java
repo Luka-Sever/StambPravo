@@ -1,29 +1,26 @@
 package com.pcelice.backend.controller;
 
-import com.pcelice.backend.CoOwnerRepository;
-import com.pcelice.backend.coOwner;
+import com.pcelice.backend.entities.CoOwner;
+import com.pcelice.backend.service.CoOwnerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class AdminController {
 
-    private final CoOwnerRepository coOwnerRepository;
+    @Autowired
+    private CoOwnerService coOwnerService;
 
-    public AdminController(CoOwnerRepository coOwnerRepository) {
-        this.coOwnerRepository = coOwnerRepository;
-    }
-
-    @PostMapping("/user") // dodavanje usera
-    public ResponseEntity<coOwner> createUser(@RequestBody coOwner newUser) {
-        if (coOwnerRepository.findByEmail(newUser.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().build(); 
+    @PostMapping("/user")
+    public ResponseEntity<?> createCoOwner(@RequestBody CoOwner coOwner) {
+        try {
+            CoOwner createdCoOwner = coOwnerService.createCoOwner(coOwner);
+            return ResponseEntity.ok(createdCoOwner);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        coOwner savedUser = coOwnerRepository.save(newUser);
-        return ResponseEntity.ok(savedUser);
     }
 }
