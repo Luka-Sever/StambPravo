@@ -20,26 +20,18 @@ export function AuthProvider({ children }) {
         // ignore invalid storage
       }
     }
-    // To avoid Spring Security saved request redirect to /user,
-    // only fetch /user immediately after OAuth redirect when flagged.
-    const shouldFetch = localStorage.getItem('postOAuthFetchUser') === '1'
-    if (shouldFetch) {
-      ; (async () => {
-        try {
-          const sessionUser = await fetchUser()
-          if (sessionUser && sessionUser.name) {
-            setUser({ firstName: sessionUser.name })
-          }
-        } catch (_) {
-          // not logged in via session
-        } finally {
-          localStorage.removeItem('postOAuthFetchUser')
-          setLoading(false)
+    ; (async () => {
+      try {
+        const sessionUser = await fetchUser()
+        if (sessionUser && (sessionUser.name || sessionUser.firstName)) {
+          setUser({ firstName: sessionUser.name || sessionUser.firstName })
         }
-      })()
-    } else {
-      setLoading(false)
-    }
+      } catch (_) {
+        // not logged in via session
+      } finally {
+        setLoading(false)
+      }
+    })()
   }, [])
 
   function persist(nextUser, nextToken) {
@@ -60,28 +52,7 @@ export function AuthProvider({ children }) {
   }
 
   function oauthLogin(provider = 'google') {
-    const authUrl = `${API_BASE_URL}/oauth2/authorization/${provider}`
-    const popup = window.open(authUrl, 'oauthLogin', 'width=520,height=640,top=120,left=200')
-    const start = Date.now()
-    const maxWaitMs = 120000
-    const intervalMs = 1000
-    const intervalId = setInterval(async () => {
-      const timeout = Date.now() - start > maxWaitMs
-      if (timeout || (popup && popup.closed)) {
-        clearInterval(intervalId)
-        return
-      }
-      try {
-        const sessionUser = await fetchUser()
-        if (sessionUser && (sessionUser.name || sessionUser.firstName)) {
-          setUser({ firstName: sessionUser.name || sessionUser.firstName })
-          try { popup?.close() } catch (_) { }
-          clearInterval(intervalId)
-        }
-      } catch (_) {
-        // not yet authenticated; keep polling
-      }
-    }, intervalMs)
+    window.location.href = `${API_BASE_URL}/oauth2/authorization/${provider}`
   }
 
   async function register(payload) {
