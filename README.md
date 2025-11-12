@@ -5,7 +5,6 @@
 Ovaj projekt je reultat timskog rada u sklopu projeknog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu. 
 
 Cilj projekta StanPlan je izrada aplikacije koja pomaže predstavnicima suvlasnika u stambenim zgradama da lakše organiziraju sastanke, prate odluke i komuniciraju sa stanarima.
-> Obzirom da je ovo zadani projekt navedite i što želite/jeste novo  naučili.
 
 # Funkcijski zahtjevi
 >* kreiranje novog sastanka
