@@ -45,7 +45,7 @@ Cilj projekta StanPlan je izrada aplikacije koja pomaže predstavnicima suvlasni
 
 - **Vito Gašparac** (`vgasp22`):  
   - Sudjelovanje u backendu, implementacija kreiranja korisnika  
-  - Suradnja na poslovnoj logici API-ja
+  - Dokumentacija: izrada funkcionalnih zahtjeva na wiki
 
 - **Luka Sever** (`EngineerDUDE1`, voditelj):  
   - Frontend razvoj (React), dizajn i izrada UI komponenata  
