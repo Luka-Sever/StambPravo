@@ -47,7 +47,7 @@ Cilj projekta StanPlan je izrada aplikacije koja pomaže predstavnicima suvlasni
   - Sudjelovanje u backendu, implementacija kreiranja korisnika  
   - Dokumentacija: izrada funkcionalnih zahtjeva na wiki
 
-- **Luka Sever** (`EngineerDUDE1`, voditelj):  
+- **Luka Sever** (`Luka-Sever`, voditelj):  
   - Frontend razvoj (React), dizajn i izrada UI komponenata  
   - Dodavanje početne stranice, naslov, ikona, CSS stilizacija  
   - Priprema i dorada logotipa  
