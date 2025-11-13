@@ -47,9 +47,8 @@ Cilj projekta StanPlan je izrada aplikacije koja pomaže predstavnicima suvlasni
   - Dokumentacija: izrada funkcionalnih zahtjeva na wiki
 
 - **Luka Sever** (`Luka-Sever`, voditelj):  
-  - Frontend razvoj (React), dizajn i izrada UI komponenata  
+  - Frontend razvoj (React) i izrada UI komponenata  
   - Dodavanje početne stranice, naslov, ikona, CSS stilizacija  
-  - Priprema i dorada logotipa  
   - Opće vizualno oblikovanje korisničkog sučelja
 
 - **Amalija Novalić** (`ami231`):  
@@ -59,12 +58,12 @@ Cilj projekta StanPlan je izrada aplikacije koja pomaže predstavnicima suvlasni
 
 - **Dora Vukelić** (`DoVu4`):  
   - DevOps (priprema i održavanje repozitorija, licenciranje)
-  - Figma dizajn stranice 
+  - Figma dizajn stranice - layout, sučelje, logotip...
   - Dokumentacija: izrada i ažuriranje README, upload UML i sekvencijskih dijagrama  
   - Organizacija datoteka i priprema dodatnih materijala za wiki
 
 - **Diana Agejev** (`di4n444`):  
   - QA (testiranje funkcionalnosti, provjera ispravnosti i konzistentnosti aplikacije)  
-  - Dokumentacija: izrada i ažuriranje README, uredivanje sekvencijskih dijagrama te opis arhitekture i dizajna sustava
+  - Dokumentacija: izrada i ažuriranje README, uređivanje sekvencijskih dijagrama te opis arhitekture i dizajna sustava
 
 
