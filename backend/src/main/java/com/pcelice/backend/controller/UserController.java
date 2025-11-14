@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Profile("security")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     @GetMapping

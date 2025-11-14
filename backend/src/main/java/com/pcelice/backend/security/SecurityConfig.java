@@ -26,6 +26,9 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -39,10 +42,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorizeRequests ->  authorizeRequests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/", "/index.html", "/error", "/webjars/**","/api/admin/**","/admin").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/", "/index.html", "/error", "/webjars/**").permitAll()
+                        .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
+                        .requestMatchers("/api/admin/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/")
                         .loginProcessingUrl("/login")
@@ -58,16 +65,27 @@ public class SecurityConfig {
                 )
                 .logout(config -> config
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
-                        /* .logoutSuccessHandler((req, res, auth) ->
-                               res.setStatus(HttpStatus.NO_CONTENT.value())
-                        )*/
+                        .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpStatus.NO_CONTENT.value()))
                 )
                 .csrf(csrf -> csrf.disable())
-                //.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .exceptionHandling(exc -> exc.authenticationEntryPoint(new Http403ForbiddenEntryPoint()));
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.addAllowedOrigin("http://localhost:8081");
+        configuration.addAllowedOrigin("http://localhost:5173");
+        configuration.addAllowedHeader(CorsConfiguration.ALL);
+        configuration.addAllowedMethod(CorsConfiguration.ALL);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", configuration);
+        // Allow cross-origin logout from the SPA host
+        source.registerCorsConfiguration("/logout", configuration);
+        return source;
     }
 
     private GrantedAuthoritiesMapper authorityMapper() {

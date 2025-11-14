@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/coowner")
+@RequestMapping("/api/coowner")
 public class CoOwnerController {
     @Autowired
     private CoOwnerService coOwnerService;
@@ -27,6 +27,6 @@ public class CoOwnerController {
             return ResponseEntity.badRequest().build();
 
         CoOwner saved = coOwnerService.createCoOwner(coOwner);
-        return ResponseEntity.created(URI.create("/coowner/" + saved.getId())).body(saved);
+		return ResponseEntity.created(URI.create("/api/coowner/" + saved.getId())).body(saved);
     }
 }
