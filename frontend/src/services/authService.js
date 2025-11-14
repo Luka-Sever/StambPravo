@@ -11,7 +11,7 @@ export function register({ role, firstName, lastName, email }) {
 }
 
 export function fetchUser() {
-  return get('/user')
+  return get('/api/user')
 }
 
 export function oauthLogin(provider = 'google') {
