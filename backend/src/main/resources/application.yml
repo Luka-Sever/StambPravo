@@ -2,8 +2,6 @@
 spring:
   profiles:
     active: security
-  config:
-    import: optional:application-local.yml
   application:
     name: backend
   security:
@@ -11,11 +9,11 @@ spring:
       client:
         registration:
           github:
-            client-id: "client-id"
-            client-secret: "client-secret"
+            client-id: ${GITHUB_CLIENT_ID:client-id}
+            client-secret: ${GITHUB_CLIENT_SECRET:client-secret}
           google:
-            client-id: "client-id"
-            client-secret: "client-secret"
+            client-id: ${GOOGLE_CLIENT_ID:client-id}
+            client-secret: ${GOOGLE_CLIENT_SECRET:client-secret}
   h2:
     console:
       enabled: true
@@ -25,4 +23,4 @@ spring:
 
 progi:
   fronted:
-    url: "http://localhost:5173"
+    url: ${FRONTEND_URL:http://localhost:5173}
