@@ -14,13 +14,6 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID:client-id}
             client-secret: ${GOOGLE_CLIENT_SECRET:client-secret}
-  server:
-    servlet:
-      session:
-        cookie:
-          same-site: none
-          secure: true
-          http-only: true
   h2:
     console:
       enabled: ${H2_CONSOLE_ENABLED:true}
@@ -29,6 +22,14 @@ spring:
         web-allow-others: true
   datasource:
     url: ${DATABASE_URL:jdbc:h2:mem:testdb}
+
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true
+        http-only: true
 
 progi:
   fronted:
