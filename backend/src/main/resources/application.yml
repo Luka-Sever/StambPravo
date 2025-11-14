@@ -25,6 +25,8 @@ spring:
     console:
       enabled: ${H2_CONSOLE_ENABLED:true}
       path: /h2-console
+      settings:
+        web-allow-others: true
   datasource:
     url: ${DATABASE_URL:jdbc:h2:mem:testdb}
 
