@@ -33,7 +33,7 @@ function AdminPage() {
                 <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Prezime" required />
                 <select value={role} onChange={(e) => setRole(e.target.value)}>
                     <option value="CO_OWNER">Suvlasnik</option>
-                    <option value="REPRESENTATIVE">Predstavnik</option>
+                    <option value="REP">Predstavnik</option>
                     <option value="ADMIN">Admin</option>
                 </select>
                 <button type="submit">Kreiraj korisnika</button>
