@@ -80,6 +80,7 @@ public class SecurityConfig {
         configuration.addAllowedOrigin(frontendUrl);
         configuration.addAllowedOrigin("http://localhost:5173");
         configuration.addAllowedOrigin("http://localhost:8081");
+        configuration.addAllowedOrigin("https://stanplanweb.onrender.com");
         configuration.addAllowedHeader(CorsConfiguration.ALL);
         configuration.addAllowedMethod(CorsConfiguration.ALL);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
