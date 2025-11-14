@@ -49,7 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/index.html", "/error", "/webjars/**").permitAll()
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
                         .requestMatchers("/api/admin/**").permitAll()
-                        .requestMatchers("/api/**").authenticated()
+                        .requestMatchers("/api/**").permitAll()
                         .anyRequest().permitAll())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/")
