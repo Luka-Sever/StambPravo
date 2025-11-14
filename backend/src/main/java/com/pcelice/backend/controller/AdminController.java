@@ -3,6 +3,7 @@ package com.pcelice.backend.controller;
 import com.pcelice.backend.entities.CoOwner;
 import com.pcelice.backend.service.CoOwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,9 @@ public class AdminController {
     @Autowired
     private CoOwnerService coOwnerService;
 
+    @Value("${progi.fronted.url}")
+    private String frontendUrl;
+
     @PostMapping("/user")
     public ResponseEntity<?> createCoOwner(@RequestBody CoOwner coOwner) {
         try {
@@ -21,5 +25,10 @@ public class AdminController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/debug")
+    public ResponseEntity<?> debug() {
+        return ResponseEntity.ok("Frontend URL: " + frontendUrl);
     }
 }
