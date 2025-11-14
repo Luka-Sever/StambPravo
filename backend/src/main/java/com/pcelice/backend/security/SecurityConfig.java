@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.userdetails.User;
@@ -67,6 +68,9 @@ public class SecurityConfig {
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpStatus.NO_CONTENT.value()))
                 )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
                 .csrf(csrf -> csrf.disable())
                 .exceptionHandling(exc -> exc.authenticationEntryPoint(new Http403ForbiddenEntryPoint()));
 
@@ -77,16 +81,18 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.addAllowedOrigin(frontendUrl);
+        configuration.addAllowedOrigin("https://stanplanweb.onrender.com");
+        configuration.addAllowedOrigin("https://stanplan-136r.onrender.com");
         configuration.addAllowedOrigin("http://localhost:5173");
         configuration.addAllowedOrigin("http://localhost:8081");
-        configuration.addAllowedOrigin("https://stanplanweb.onrender.com");
+        configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedHeader(CorsConfiguration.ALL);
         configuration.addAllowedMethod(CorsConfiguration.ALL);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", configuration);
-        // Allow cross-origin logout from the SPA host
         source.registerCorsConfiguration("/logout", configuration);
+        source.registerCorsConfiguration("/oauth2/**", configuration);
+        source.registerCorsConfiguration("/login/oauth2/**", configuration);
         return source;
     }
 
