@@ -1,39 +1,39 @@
--- schema ver 1.0
+-- schema ver 1.1
 
 -- create user table
-CREATE TABLE COOWNER (
-	CoOwnerId SERIAL PRIMARY KEY,
-	Username VARCHAR(20) NOT NULL UNIQUE,
-	PasswordHash VARCHAR(100) NOT NULL,
-	FirstName VARCHAR(20) NOT NULL,
-	LastName VARCHAR(20) NOT NULL,
-	Email VARCHAR(100) NOT NULL UNIQUE,
-	RoleType VARCHAR(20) NOT NULL,
-	BuildingId INTEGER NOT NULL
+CREATE TABLE CO_OWNER (
+	co_owner_id SERIAL PRIMARY KEY,
+	username VARCHAR(20) NOT NULL UNIQUE,
+	passwd VARCHAR(100) NOT NULL,
+	first_name VARCHAR(20) NOT NULL,
+	last_name VARCHAR(20) NOT NULL,
+	email VARCHAR(100) NOT NULL UNIQUE,
+	role_type VARCHAR(20) NOT NULL,
+	building_id INTEGER NOT NULL
 );
 
 -- create city table
 CREATE TABLE CITY (
-	CityId SERIAL PRIMARY KEY,
-	PostalCode INTEGER NOT NULL UNIQUE,
-	CityName VARCHAR(50) NOT NULL
+	city_id SERIAL PRIMARY KEY,
+	postal_code INTEGER NOT NULL UNIQUE,
+	city_name VARCHAR(50) NOT NULL
 );
 
 -- create building table
 CREATE TABLE BUILDING (
-	BuildingId SERIAL PRIMARY KEY,
-	CityId INTEGER NOT NULL REFERENCES CITY(CityId),
-	Address VARCHAR(100) NOT NULL,
-	RepId INTEGER UNIQUE,
-	CONSTRAINT city_address UNIQUE (CityId, Address)
+	building_id SERIAL PRIMARY KEY,
+	city_id INTEGER NOT NULL REFERENCES CITY(city_id),
+	address VARCHAR(100) NOT NULL,
+	rep_id INTEGER UNIQUE,
+	CONSTRAINT city_address UNIQUE (city_id, address)
 );
 
 -- assign foreign key references
-ALTER TABLE COOWNER
-	ADD CONSTRAINT fk_coowner_building FOREIGN KEY (BuildingId) REFERENCES BUILDING(BuildingId);
+ALTER TABLE CO_OWNER
+	ADD CONSTRAINT fk_coowner_building FOREIGN KEY (building_id) REFERENCES BUILDING(building_id);
 ALTER TABLE BUILDING
-	ADD CONSTRAINT fk_building_rep FOREIGN KEY (RepId) REFERENCES COOWNER(CoOwnerId);
+	ADD CONSTRAINT fk_building_rep FOREIGN KEY (rep_id) REFERENCES CO_OWNER(co_owner_id);
 
 -- create indexes
-CREATE INDEX i_coowner_by_building ON COOWNER (BuildingId);
-CREATE INDEX i_building_by_rep ON BUILDING (RepId);
+CREATE INDEX i_coowner_by_building ON CO_OWNER (building_id);
+CREATE INDEX i_building_by_rep ON BUILDING (rep_id);
