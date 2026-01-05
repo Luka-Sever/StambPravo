@@ -12,9 +12,6 @@ public class CoOwner {
     private Integer coOwnerId;
 
     @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false, unique = true)
     private String passwd;
 
     private String firstName;
@@ -32,12 +29,20 @@ public class CoOwner {
     @JoinColumn(name = "building_id")
     private Building building;
 
-    public int getCoOwnerId() {
+    public Integer getCoOwnerId() {
         return coOwnerId;
     }
 
-    public void setCoOwnerId(int id) {
-        this.coOwnerId = id;
+    public void setCoOwnerId(Integer coOwnerId) {
+        this.coOwnerId = coOwnerId;
+    }
+
+    public String getPasswd() {
+        return passwd;
+    }
+
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
     }
 
     public String getFirstName() {
@@ -70,6 +75,14 @@ public class CoOwner {
 
     public void setRole(RoleType roleType) {
         this.roleType = roleType;
+    }
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
     }
 
     @Override
