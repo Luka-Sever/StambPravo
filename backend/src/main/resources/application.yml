@@ -29,8 +29,7 @@ spring:
         sslmode: require
   jpa:
     hibernate:
-        ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: validate
 
 server:
   servlet:
