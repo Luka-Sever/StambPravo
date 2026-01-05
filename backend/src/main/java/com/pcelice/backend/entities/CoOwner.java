@@ -4,11 +4,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+//@Table(name = "CO_OWNER")
 public class CoOwner {
 
     @Id
     @GeneratedValue
     private Long coOwnerId;
+
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false, unique = true)
+    private String passwd;
 
     private String firstName;
     private String lastName;
@@ -17,15 +24,13 @@ public class CoOwner {
     @NotNull
     private String email;
 
-    @Column(nullable = true)
-    private String password;
-
-    @Column(nullable = true)
-    private String username;
-
     @Enumerated(EnumType.STRING)
     @NotNull
     private RoleType roleType;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "building_id")
+    private Building building;
 
     public Long getCoOwnerId() {
         return coOwnerId;
