@@ -27,6 +27,6 @@ public class CoOwnerController {
             return ResponseEntity.badRequest().build();
 
         CoOwner saved = coOwnerService.createCoOwner(coOwner);
-		return ResponseEntity.created(URI.create("/api/coowner/" + saved.getId())).body(saved);
+		return ResponseEntity.created(URI.create("/api/coowner/" + saved.getCoOwnerId())).body(saved);
     }
 }

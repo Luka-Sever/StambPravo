@@ -8,7 +8,7 @@ public class CoOwner {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long coOwnerId;
 
     private String firstName;
     private String lastName;
@@ -27,12 +27,12 @@ public class CoOwner {
     @NotNull
     private RoleType roleType;
 
-    public Long getId() {
-        return id;
+    public Long getCoOwnerId() {
+        return coOwnerId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCoOwnerId(Long id) {
+        this.coOwnerId = id;
     }
 
     public String getFirstName() {
@@ -70,7 +70,7 @@ public class CoOwner {
     @Override
     public String toString() {
         return "coOwner{" +
-                "id=" + id +
+                "id=" + coOwnerId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +

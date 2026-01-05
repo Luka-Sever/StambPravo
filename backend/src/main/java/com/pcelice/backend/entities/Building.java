@@ -12,7 +12,7 @@ import java.util.Set;
 public class Building {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long buildingId;
 
     @Column(unique=true, nullable=false)
     @Size(min=1, max=20)
@@ -35,12 +35,12 @@ public class Building {
         this.users = new HashSet<>(List.of(coOwnerRep));
     }
 
-    public Long getId() {
-        return id;
+    public Long getBuildingId() {
+        return buildingId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setBuildingId(Long id) {
+        this.buildingId = id;
     }
 
     public String getName() {
@@ -70,7 +70,7 @@ public class Building {
     @Override
     public String toString() {
         return "Building{" +
-                "id=" + id +
+                "id=" + buildingId +
                 ", name='" + name + '\'' +
                 ", coOwnerRep=" + coOwnerRep +
                 ", coOwners=" + users +
