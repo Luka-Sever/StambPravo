@@ -9,7 +9,7 @@ public class CoOwner {
 
     @Id
     @GeneratedValue
-    private Long coOwnerId;
+    private int coOwnerId;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -32,11 +32,11 @@ public class CoOwner {
     @JoinColumn(name = "building_id")
     private Building building;
 
-    public Long getCoOwnerId() {
+    public int getCoOwnerId() {
         return coOwnerId;
     }
 
-    public void setCoOwnerId(Long id) {
+    public void setCoOwnerId(int id) {
         this.coOwnerId = id;
     }
 
