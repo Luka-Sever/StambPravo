@@ -27,6 +27,9 @@ spring:
       maximum-pool-size: 10
       data-source-properties:
         sslmode: require
+  hibernate:
+      ddl-auto: update
+  database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   servlet:
