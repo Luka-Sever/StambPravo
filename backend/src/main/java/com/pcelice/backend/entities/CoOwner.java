@@ -26,7 +26,7 @@ public class CoOwner {
     private RoleType roleType;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "building_id")
+    @JoinColumn(name = "building_id", nullable = true)
     private Building building;
 
     public Integer getCoOwnerId() {
