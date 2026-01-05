@@ -6,8 +6,8 @@ import org.springframework.util.Assert;
 @Entity
 public class Building {
     @Id
-    @GeneratedValue
-    private int buildingId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer buildingId;
 
     @OneToOne
     @JoinColumn(name = "rep_id", unique = true)

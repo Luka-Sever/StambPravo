@@ -8,8 +8,8 @@ import jakarta.validation.constraints.NotNull;
 public class CoOwner {
 
     @Id
-    @GeneratedValue
-    private int coOwnerId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer coOwnerId;
 
     @Column(nullable = false, unique = true)
     private String username;
