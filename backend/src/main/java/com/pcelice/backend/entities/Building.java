@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
 public class Building {
     @Id
     @GeneratedValue
-    private Long buildingId;
+    private int buildingId;
 
     @OneToOne
     @JoinColumn(name = "rep_id", unique = true)
@@ -20,11 +20,11 @@ public class Building {
         this.rep = rep;
     }
 
-    public Long getBuildingId() {
+    public int getBuildingId() {
         return buildingId;
     }
 
-    public void setBuildingId(Long id) {
+    public void setBuildingId(int id) {
         this.buildingId = id;
     }
 
