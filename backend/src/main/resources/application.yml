@@ -22,6 +22,11 @@ spring:
         web-allow-others: true
   datasource:
     url: ${DATABASE_URL:jdbc:h2:mem:testdb}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      data-source-properties:
+        sslmode: require
 
 server:
   servlet:
