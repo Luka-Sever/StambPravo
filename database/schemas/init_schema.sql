@@ -1,8 +1,8 @@
 -- schema ver 1.0
 
 -- create user table
-CREATE TABLE USERS (
-	UserId SERIAL PRIMARY KEY,
+CREATE TABLE COOWNER (
+	CoOwnerId SERIAL PRIMARY KEY,
 	Username VARCHAR(20) NOT NULL UNIQUE,
 	PasswordHash VARCHAR(100) NOT NULL,
 	FirstName VARCHAR(20) NOT NULL,
@@ -29,11 +29,11 @@ CREATE TABLE BUILDING (
 );
 
 -- assign foreign key references
-ALTER TABLE USERS
-	ADD CONSTRAINT fk_user_building FOREIGN KEY (BuildingId) REFERENCES BUILDING(BuildingId);
+ALTER TABLE COOWNER
+	ADD CONSTRAINT fk_coowner_building FOREIGN KEY (BuildingId) REFERENCES BUILDING(BuildingId);
 ALTER TABLE BUILDING
-	ADD CONSTRAINT fk_building_rep FOREIGN KEY (RepId) REFERENCES USERS(UserId);
+	ADD CONSTRAINT fk_building_rep FOREIGN KEY (RepId) REFERENCES COOWNER(CoOwnerId);
 
 -- create indexes
-CREATE INDEX i_coowner_by_building ON USERS (BuildingId);
+CREATE INDEX i_coowner_by_building ON COOWNER (BuildingId);
 CREATE INDEX i_building_by_rep ON BUILDING (RepId);
