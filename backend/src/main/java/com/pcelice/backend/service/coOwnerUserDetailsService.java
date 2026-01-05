@@ -6,6 +6,7 @@ import com.pcelice.backend.repositories.CoOwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,31 +18,28 @@ import static org.springframework.security.core.authority.AuthorityUtils.commaSe
 @Service
 public class coOwnerUserDetailsService implements UserDetailsService {
 
-    @Value("{$progi.admin.password}")
-
-    private String adminPasswordHash;
-
-    @Autowired
-    private CoOwnerService coOwnerService;
-    @Autowired
+   @Autowired
     private CoOwnerRepository coOwnerRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new User(username, adminPasswordHash, authorities(username));
-    }
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-    private List<GrantedAuthority> authorities(String username) {
-        if ("admin".equals(username)) {
-            return commaSeparatedStringToAuthorityList("ROLE_ADMIN");
+        CoOwner user = coOwnerRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        
+        if (user.getRole() == RoleType.REP) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_CO_OWNER"));
         }
-        CoOwner coOwner = coOwnerRepository.findByUsername(username).orElseThrow(
-                () -> new UsernameNotFoundException("No user '" + username + "'")
-                );
-        if (coOwner.getRole().equals(RoleType.REP)) {
-            return commaSeparatedStringToAuthorityList("ROLE_REP, ROLE_COOWNER");
-        }
-        else
-            return commaSeparatedStringToAuthorityList("ROLE_COOWNER");
+
+    
+        return new User(
+                user.getEmail(),
+                user.getPassword(), 
+                authorities
+        );
     }
 }

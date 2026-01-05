@@ -69,11 +69,31 @@
             }
         }
     });
+    
+    $("#loginForm").submit(function(event) {
+        event.preventDefault();
+        var username = $("#username").val();
+        var password = $("#password").val();
 
-    $.get("/user", function(data) {
+        $.post("/login", {
+            email: username,
+            password: password
+        }).done(function() {
+            location.reload();
+        }).fail(function() {
+            $(".error").html("Login failed");
+        });
+    });
+
+    $.get("/api/user", function(data) {
+        if (data && data.name) {
         $("#user").html(data.name);
-        $(".unauthenticated").hide()
-        $(".authenticated").show()
+        $(".unauthenticated").hide();
+        $(".authenticated").show();
+    } else {
+        $(".unauthenticated").show();
+        $(".authenticated").hide();
+    }
     })
 
     $.get("/error", function(data) {

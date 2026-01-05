@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.Collections;
 import java.util.Map;
@@ -27,12 +29,18 @@ public class BackendApplication {
     @Autowired
     private CoOwnerRepository coOwnerRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Bean
     public CommandLineRunner demo(CoOwnerRepository repository) {
         //hardcodeani useri za testiranje
         return (args) -> {
+                        String encodedPassword = passwordEncoder.encode("password123");
+
             CoOwner admin = new CoOwner();
             admin.setEmail("placeholder@gmail.com");
+            admin.setPassword(encodedPassword);
             admin.setFirstName("Admin");
             admin.setLastName("Adminovic");
             admin.setRole(RoleType.ADMIN);
@@ -41,6 +49,7 @@ public class BackendApplication {
 
             CoOwner coOwner1 = new CoOwner();
             coOwner1.setEmail("suvlasnik@example.com");
+            coOwner1.setPassword(encodedPassword);
             coOwner1.setFirstName("Ime");
             coOwner1.setLastName("Prezime");
             coOwner1.setRole(RoleType.CO_OWNER);
@@ -48,6 +57,7 @@ public class BackendApplication {
 
             CoOwner coOwner2 = new CoOwner();
             coOwner2.setEmail("predstavnik@example.com");
+            coOwner2.setPassword(encodedPassword);
             coOwner2.setFirstName("Ime");
             coOwner2.setLastName("Prezimepredstavnik");
             coOwner2.setRole(RoleType.REP);

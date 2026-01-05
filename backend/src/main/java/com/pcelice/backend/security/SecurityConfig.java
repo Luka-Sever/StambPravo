@@ -21,6 +21,7 @@ import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -54,6 +55,10 @@ public class SecurityConfig {
                 .formLogin(formLogin -> formLogin
                         .loginPage("/")
                         .loginProcessingUrl("/login")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
+                        .successHandler((req, res, auth) -> res.setStatus(200))
+                        .failureHandler((req, res, exc) -> res.setStatus(401))
                         .permitAll())
                 .httpBasic(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2
@@ -66,7 +71,10 @@ public class SecurityConfig {
                 )
                 .logout(config -> config
                         .logoutUrl("/logout")
-                        .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpStatus.NO_CONTENT.value()))
+                        .logoutSuccessUrl("/") 
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
@@ -101,7 +109,7 @@ public class SecurityConfig {
         simpleAuthorityMapper.setDefaultAuthority("ROLE_ADMIN");
         return simpleAuthorityMapper;
     }
-
+/* 
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails userDetails = User.withUsername("user")
@@ -111,12 +119,18 @@ public class SecurityConfig {
 
         return new InMemoryUserDetailsManager(userDetails);
     }
+*/
 
-    @Bean
+ @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+  /*   @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
+*/
     @Bean
     @Profile({ "basic-security", "form-security", "security" })
     @Order(Ordered.HIGHEST_PRECEDENCE)

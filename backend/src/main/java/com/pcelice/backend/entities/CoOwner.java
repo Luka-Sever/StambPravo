@@ -66,6 +66,12 @@ public class CoOwner {
     public void setRole(RoleType roleType) {
         this.roleType = roleType;
     }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Override
     public String toString() {
