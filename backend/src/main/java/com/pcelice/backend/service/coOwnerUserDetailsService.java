@@ -31,12 +31,13 @@ public class coOwnerUserDetailsService implements UserDetailsService {
         return new User(username, adminPasswordHash, authorities(username));
     }
 
-    private List<GrantedAuthority> authorities(String username) {
-        if ("admin".equals(username)) {
+    private List<GrantedAuthority> authorities(String email) {
+
+        if (coOwnerRepository.findByEmail(email).get().getRole().equals(RoleType.ADMIN)) {
             return commaSeparatedStringToAuthorityList("ROLE_ADMIN");
         }
-        CoOwner coOwner = coOwnerRepository.findByUsername(username).orElseThrow(
-                () -> new UsernameNotFoundException("No user '" + username + "'")
+        CoOwner coOwner = coOwnerRepository.findByEmail(email).orElseThrow(
+                () -> new UsernameNotFoundException("No user '" + email + "'")
                 );
         if (coOwner.getRole().equals(RoleType.REP)) {
             return commaSeparatedStringToAuthorityList("ROLE_REP, ROLE_COOWNER");

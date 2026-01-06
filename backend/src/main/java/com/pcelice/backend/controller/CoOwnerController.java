@@ -23,7 +23,7 @@ public class CoOwnerController {
     @Secured("ROLE_ADMIN")
     public ResponseEntity<CoOwner> createCoOwner(@RequestBody CoOwner coOwner) {
 
-        if (coOwnerService.findByEmail(coOwner.getEmail()))
+        if (coOwnerService.emailPresent(coOwner.getEmail()))
             return ResponseEntity.badRequest().build();
 
         CoOwner saved = coOwnerService.createCoOwner(coOwner);

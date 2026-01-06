@@ -23,12 +23,7 @@ public class CoOwnerServiceJpa implements CoOwnerService {
     }
 
     @Override
-    public Optional<CoOwner> findByUsername(String username) {
-        return coOwnerRepository.findByUsername(username);
-    }
-
-    @Override
-    public boolean findByEmail(String email) {
+    public boolean emailPresent(String email) {
         return coOwnerRepository.findByEmail(email).isPresent();
     }
 }
