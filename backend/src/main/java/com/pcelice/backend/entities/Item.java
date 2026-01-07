@@ -21,9 +21,6 @@ public class Item {
     @MapsId("meetingId")
     @JoinColumn(name = "meeting_id", nullable = false)
     private Meeting meeting;
-
-    @NotNull
-    private Integer itemNumber;
     
     @NotNull
     private String title;
