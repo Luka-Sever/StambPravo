@@ -20,8 +20,13 @@ public class AdminController {
     @PostMapping("/user")
     public ResponseEntity<?> createCoOwner(@RequestBody CoOwner coOwner) {
         try {
-            CoOwner createdCoOwner = coOwnerService.createCoOwner(coOwner);
-            return ResponseEntity.ok(createdCoOwner);
+            if (!coOwnerService.emailPresent(coOwner.getEmail())) {
+                CoOwner createdCoOwner = coOwnerService.createCoOwner(coOwner);
+                return ResponseEntity.ok(createdCoOwner);
+            }
+            else  {
+                return ResponseEntity.badRequest().body("Email already exists");
+            }
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
