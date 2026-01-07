@@ -23,9 +23,6 @@ public class Item {
     private Meeting meeting;
 
     @NotNull
-    private Integer itemNumber;
-
-    @NotNull
     private String title;
 
     @NotNull
