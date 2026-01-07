@@ -99,7 +99,7 @@ public class SecurityConfig {
 
     private GrantedAuthoritiesMapper authorityMapper() {
         final SimpleAuthorityMapper  simpleAuthorityMapper = new SimpleAuthorityMapper();
-        simpleAuthorityMapper.setDefaultAuthority("ROLE_ADMIN");
+        simpleAuthorityMapper.setDefaultAuthority("ROLE_USER");
         return simpleAuthorityMapper;
     }
 
