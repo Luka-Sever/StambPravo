@@ -47,7 +47,8 @@ function AdminPage() {
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
                 <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="Ime" required />
                 <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Prezime" required />
-                <input type="password" value={password} onChange={(e) => set(e.target.value)} placeholder="Email" required />
+                <input type="password" value={password} onChange={(e) => set(e.target.value)} placeholder="Password" required />
+                <input type="Confirm Password" value={confirmPassword} onChange={(e) => set(e.target.value)} placeholder="Confirm Password" required />
                 <select value={role} onChange={(e) => setRole(e.target.value)}>
                     <option value="CO_OWNER">Suvlasnik</option>
                     <option value="REP">Predstavnik</option>
