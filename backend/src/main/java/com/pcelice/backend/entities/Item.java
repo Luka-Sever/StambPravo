@@ -53,11 +53,14 @@ public class Item {
     }
 
     public Integer getItemNumber() {
-        return itemNumber;
+        return id != null ? id.getItemNumber() : null;
     }
 
     public void setItemNumber(Integer itemNumber) {
-        this.itemNumber = itemNumber;
+        if (id == null) {
+            id = new ItemId();
+        }
+        id.setItemNumber(itemNumber);
     }
 
     public String getTitle() {
