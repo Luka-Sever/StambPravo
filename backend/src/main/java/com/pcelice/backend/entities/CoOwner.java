@@ -1,5 +1,7 @@
 package com.pcelice.backend.entities;
 
+import java.util.Set;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -28,6 +30,22 @@ public class CoOwner {
     @ManyToOne(optional = false)
     @JoinColumn(name = "building_id", nullable = true)
     private Building building;
+
+    @ManyToMany
+    @JoinTable(
+        name = "participation",
+        joinColumns = @JoinColumn(name = "co_owner_id"),
+        inverseJoinColumns = @JoinColumn(name = "meeting_id")
+    )
+    private Set<Meeting> attendingMeetings;
+
+    public Set<Meeting> getAttendingMeetings() {
+        return attendingMeetings;
+    }
+
+    public void setAttendingMeetings(Set<Meeting> attendingMeetings) {
+        this.attendingMeetings = attendingMeetings;
+    }
 
     public Integer getCoOwnerId() {
         return coOwnerId;
