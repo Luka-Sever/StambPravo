@@ -33,6 +33,7 @@ public class Item {
 
     private String conclusion;
 
+    @Enumerated(EnumType.STRING)
     @NotNull
     private ItemStatus status;
 
