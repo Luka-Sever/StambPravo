@@ -40,7 +40,7 @@ public class coOwnerUserDetailsService implements UserDetailsService {
                 () -> new UsernameNotFoundException("No user '" + email + "'")
                 );
         if (coOwner.getRole().equals(RoleType.REP)) {
-            return commaSeparatedStringToAuthorityList("ROLE_REP, ROLE_COOWNER");
+            return commaSeparatedStringToAuthorityList("ROLE_REP");
         }
         else
             return commaSeparatedStringToAuthorityList("ROLE_COOWNER");

@@ -11,7 +11,7 @@ public class CoOwner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer coOwnerId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String passwd;
 
     private String firstName;
