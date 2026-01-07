@@ -20,7 +20,7 @@ CREATE TABLE ITEM (
 	summary VARCHAR(500) NOT NULL,
 	legal INTEGER NOT NULL,
 	conclusion VARCHAR(500),
-	status VARCHAR(20),
+	status VARCHAR(20) NOT NULL,
 	CONSTRAINT pk_item PRIMARY KEY (meeting_id, item_number),
 	CONSTRAINT item_title UNIQUE (meeting_id, title)
 );
