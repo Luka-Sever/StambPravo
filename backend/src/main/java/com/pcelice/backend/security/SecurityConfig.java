@@ -51,7 +51,8 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/**").permitAll()
-                        .anyRequest().permitAll())
+//                        .anyRequest().permitAll()
+                        )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/")
                         .loginProcessingUrl("/login")
