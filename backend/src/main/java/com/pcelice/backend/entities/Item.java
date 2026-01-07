@@ -58,7 +58,7 @@ public class Item {
 
     public void setItemNumber(Integer itemNumber) {
         if (id == null) {
-            id = new ItemId();
+            id = new MeetingItemId();
         }
         id.setItemNumber(itemNumber);
     }
