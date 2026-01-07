@@ -17,7 +17,6 @@ public class Item {
     @EmbeddedId
     private MeetingItemId id;
 
-    @Column(name = "meeting_id")
     @ManyToOne(optional = false)
     @MapsId("meetingId")
     @JoinColumn(name = "meeting_id", nullable = false)
