@@ -42,7 +42,6 @@ public class Meeting {
     @Column(nullable = false)
     private String summary;
 
-    @Column(name = "building_id")
     @ManyToOne(optional = false)
     @JoinColumn(name = "building_id", nullable = false)
     private Building building;
