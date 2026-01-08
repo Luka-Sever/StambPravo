@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createUser } from '../services/adminService';
+import '../App.css';
 
 function AdminPage() {
     const [email, setEmail] = useState('');
@@ -25,7 +26,6 @@ function AdminPage() {
         }
 
         try {
-
             const newUser = { email, firstName, lastName, password, role};
             await createUser(newUser);
             setMessage(`Korisnik ${email} je uspješno kreiran!`);
@@ -41,21 +41,82 @@ function AdminPage() {
     }
 
     return (
-        <div style={{ padding: '2rem' }}>
-            <h2>Dodaj novog korisnika</h2>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
-                <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="Ime" required />
-                <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Prezime" required />
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-                <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm Password" required />
-                <select value={role} onChange={(e) => setRole(e.target.value)}>
-                    <option value="CO_OWNER">Suvlasnik</option>
-                    <option value="REP">Predstavnik</option>
-                </select>
-                <button type="submit">Kreiraj korisnika</button>
-            </form>
-            {message && <p style={{ marginTop: '1rem' }}>{message}</p>}
+        <div className="auth-container">
+            <h2 className="admin-title">Kreiraj korisnika</h2>
+            
+            <div className="auth-card">
+                
+                <form onSubmit={handleSubmit} className="auth-form">
+                    <div className="auth-field">
+                        <input 
+                            type="email" 
+                            value={email} 
+                            onChange={(e) => setEmail(e.target.value)} 
+                            placeholder="Email" 
+                            required 
+                        />
+                    </div>
+                    
+                    <div className="auth-field">
+                        <input 
+                            type="text" 
+                            value={firstName} 
+                            onChange={(e) => setFirstName(e.target.value)} 
+                            placeholder="Ime" 
+                            required 
+                        />
+                    </div>
+
+                    <div className="auth-field">
+                        <input 
+                            type="text" 
+                            value={lastName} 
+                            onChange={(e) => setLastName(e.target.value)} 
+                            placeholder="Prezime" 
+                            required 
+                        />
+                    </div>
+
+                    <div className="auth-field">
+                        <input 
+                            type="password" 
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value)} 
+                            placeholder="Lozinka" 
+                            required 
+                        />
+                    </div>
+
+                    <div className="auth-field">
+                        <input 
+                            type="password" 
+                            value={confirmPassword} 
+                            onChange={(e) => setConfirmPassword(e.target.value)} 
+                            placeholder="Potvrdi lozinku" 
+                            required 
+                        />
+                    </div>
+
+                    <div className="auth-field">
+                        <label className="label-text">Uloga:</label>
+                        <select 
+                            className="role-select"
+                            value={role} 
+                            onChange={(e) => setRole(e.target.value)}
+                        >
+                            <option value="CO_OWNER">Suvlasnik</option>
+                            <option value="REP">Predstavnik</option>
+                            <option value="ADMIN">Administrator</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" className="auth-button dark">
+                        KREIRAJ KORISNIKA
+                    </button>
+                </form>
+
+                {message && <p className="status-message">{message}</p>}
+            </div>
         </div>
     );
 }
