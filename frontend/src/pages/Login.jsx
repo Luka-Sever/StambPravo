@@ -2,7 +2,12 @@ import { useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 
 function Login() {
-  const { oauthLogin, login } = useAuth()
+  const { oauthLogin, login, loading } = useAuth()
+
+    if (loading) {
+        return <div className="loading">Učitavanje...</div>
+    }
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
