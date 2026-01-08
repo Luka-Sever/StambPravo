@@ -1,2 +1,4 @@
 .idea/
 .DS_Store
+.frontend/node_modules
+.frontend/.npm-cache
