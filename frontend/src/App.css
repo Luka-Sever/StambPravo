@@ -129,7 +129,9 @@ nav a:hover {
 .auth-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
 }
 
 .auth-container {
