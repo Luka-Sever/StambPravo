@@ -48,11 +48,11 @@ function Login() {
               PRIJAVI SE
             </button>
 
-            <button id="login" className="auth-button small-btn" type="button" onClick={() => oauthLogin('google')}>
+            <button id="login-google" className="auth-button small-btn" type="button" onClick={() => oauthLogin('google')}>
               GOOGLE PRIJAVA
             </button>
             
-            <button id="login" className="auth-button small-btn" type="button" onClick={() => oauthLogin('github')}>
+            <button id="login-git" className="auth-button small-btn" type="button" onClick={() => oauthLogin('github')}>
               GITHUB PRIJAVA
             </button>
           </form>

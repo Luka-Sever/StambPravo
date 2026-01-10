@@ -27,7 +27,8 @@ public class CoOwner {
     @NotNull
     private RoleType roleType;
 
-    @ManyToOne(optional = false)
+    /// treba biti false u pravoj bazi
+    @ManyToOne(optional = true)
     @JoinColumn(name = "building_id", nullable = true)
     private Building building;
 

@@ -30,20 +30,20 @@ public class BackendApplication {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-//
-//    @Bean
-//    public CommandLineRunner demo(CoOwnerRepository repository) {
-//        //hardcodeani useri za testiranje
-//        return (args) -> {
-//            String encodedPassword = passwordEncoder.encode("password123");
-//
-//            CoOwner admin = new CoOwner();
-//            admin.setEmail("placeholder@gmail.com");
-//            admin.setPasswd(encodedPassword);
-//            admin.setFirstName("Admin");
-//            admin.setLastName("Adminovic");
-//            admin.setRole(RoleType.ADMIN);
-//            repository.save(admin);
+
+    @Bean
+    public CommandLineRunner demo(CoOwnerRepository repository) {
+        //hardcodeani useri za testiranje
+        return (args) -> {
+            String encodedPassword = passwordEncoder.encode("password123");
+
+            CoOwner admin = new CoOwner();
+            admin.setEmail("brunoplese0@gmail.com");
+            admin.setPasswd(encodedPassword);
+            admin.setFirstName("Bruno");
+            admin.setLastName("Plese");
+            admin.setRole(RoleType.ADMIN);
+            repository.save(admin);
 //
 //
 //            CoOwner coOwner1 = new CoOwner();
@@ -61,8 +61,8 @@ public class BackendApplication {
 //            coOwner2.setLastName("Prezimepredstavnik");
 //            coOwner2.setRole(RoleType.REP);
 //            repository.save(coOwner2);
-//        };
-//    }
+        };
+    }
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {  // fix za prihvatit request s frontenda za dodat usera

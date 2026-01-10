@@ -46,12 +46,12 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorizeRequests ->  authorizeRequests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/", "/index.html", "/error", "/webjars/**").permitAll()
+                        .requestMatchers("/", "/login", "/index.html", "/error", "/webjars/**").permitAll()
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/**").authenticated()
-//                        .anyRequest().permitAll()
+                        .anyRequest().permitAll()
                         )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/")
