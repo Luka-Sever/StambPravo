@@ -39,6 +39,7 @@ public class BackendApplication {
 
             CoOwner admin = new CoOwner();
             admin.setEmail("brunoplese0@gmail.com");
+            admin.setUsername("Admin");
             admin.setPasswd(encodedPassword);
             admin.setFirstName("Bruno");
             admin.setLastName("Plese");

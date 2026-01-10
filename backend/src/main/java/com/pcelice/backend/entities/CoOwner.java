@@ -13,6 +13,9 @@ public class CoOwner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer coOwnerId;
 
+    @Column(unique = true, nullable = false)
+    private String username;
+
     @Column(nullable = false)
     private String passwd;
 
@@ -54,6 +57,14 @@ public class CoOwner {
 
     public void setCoOwnerId(Integer coOwnerId) {
         this.coOwnerId = coOwnerId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPasswd() {
