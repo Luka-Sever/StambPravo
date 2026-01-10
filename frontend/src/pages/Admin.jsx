@@ -4,6 +4,7 @@ import '../App.css';
 
 function AdminPage() {
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
@@ -26,10 +27,11 @@ function AdminPage() {
         }
 
         try {
-            const newUser = { email, firstName, lastName, password, role};
+            const newUser = { email, username, firstName, lastName, password, role};
             await createUser(newUser);
-            setMessage(`Korisnik ${email} je uspješno kreiran!`);
+            setMessage(`Korisnik ${username} je uspješno kreiran!`);
             setEmail('');
+            setUsername('');
             setFirstName('');
             setLastName('');
             setPassword('');
@@ -54,6 +56,16 @@ function AdminPage() {
                             onChange={(e) => setEmail(e.target.value)} 
                             placeholder="Email" 
                             required 
+                        />
+                    </div>
+
+                    <div className="auth-field">
+                        <input
+                            type="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder="Username"
+                            required
                         />
                     </div>
                     
