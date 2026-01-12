@@ -1,6 +1,7 @@
 package com.pcelice.backend.security;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,8 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import com.pcelice.backend.service.CustomOidUserService;
+
 
 @Configuration
 @EnableWebSecurity
@@ -44,6 +47,10 @@ public class SecurityConfig {
 
     @Value("${progi.fronted.url}")
     private String frontendUrl;
+
+
+    @Autowired
+    private CustomOidUserService customOidUserService;
 
     @Bean
     @Profile("security")
@@ -71,9 +78,11 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/")
-                        .userInfoEndpoint(userInfo -> userInfo.userAuthoritiesMapper(this.authorityMapper()))
+                        .userInfoEndpoint(userInfo -> userInfo
+                            .oidcUserService(customOidUserService))
                         .successHandler(
                                 (req, res, auth) -> {
+                                    System.out.println("------------------------ OAuth2  Authorities: " + auth.getAuthorities()); // DEBUG
                                     res.sendRedirect(frontendUrl);
                                 })
                 )
@@ -113,11 +122,15 @@ public class SecurityConfig {
         return source;
     }
 
-    private GrantedAuthoritiesMapper authorityMapper() {
-        final SimpleAuthorityMapper  simpleAuthorityMapper = new SimpleAuthorityMapper();
-        simpleAuthorityMapper.setDefaultAuthority("ROLE_USER");
-        return simpleAuthorityMapper;
-    }
+ /* 
+ private GrantedAuthoritiesMapper authorityMapper() {
+    final SimpleAuthorityMapper  simpleAuthorityMapper = new SimpleAuthorityMapper();
+    simpleAuthorityMapper.setDefaultAuthority("ROLE_USER");
+    return simpleAuthorityMapper;
+}
+*/
+
+
 /* 
     @Bean
     public UserDetailsService userDetailsService() {

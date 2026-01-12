@@ -1,5 +1,6 @@
 package com.pcelice.backend.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.Authentication;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pcelice.backend.entities.CoOwner;
+import com.pcelice.backend.repositories.CoOwnerRepository;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
@@ -19,6 +23,8 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+    @Autowired
+    private CoOwnerRepository coOwnerRepository;
 
    @GetMapping
     public Map<String, Object> getCurrentUser(Authentication authentication) {
@@ -28,20 +34,34 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
         Object principal = authentication.getPrincipal();
+        String email = null;
 
         if (principal instanceof OAuth2User) {
             OAuth2User oauth2User = (OAuth2User) principal;
+            email = oauth2User.getAttribute("email");
             response.put("name", oauth2User.getAttribute("name"));
-            response.put("email", oauth2User.getAttribute("email"));
+            response.put("email", email);
             response.put("authType", "google");
         } else if (principal instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) principal;
-            response.put("name", userDetails.getUsername()); 
-            response.put("email", userDetails.getUsername());
-            response.put("roles", userDetails.getAuthorities());
+            email = userDetails.getUsername();
+            response.put("email", email);
             response.put("authType", "database");
         } else {
+            email = authentication.getName();
             response.put("name", authentication.getName());
+        }
+
+        if (email != null) {
+            CoOwner user = coOwnerRepository.findByEmail(email).orElse(null);
+            if (user != null) {
+                response.put("firstName", user.getFirstName());
+                response.put("lastName", user.getLastName());
+                response.put("role", user.getRole());
+            } else {
+
+                response.put("error", "User not registered in system");
+            }
         }
 
         return response;
