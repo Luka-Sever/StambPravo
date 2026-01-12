@@ -38,7 +38,7 @@ public class coOwnerUserDetailsService implements UserDetailsService {
     
         return new User(
                 user.getEmail(),
-                user.getPasswd(), 
+                user.getPassword(), 
                 authorities
         );
     }

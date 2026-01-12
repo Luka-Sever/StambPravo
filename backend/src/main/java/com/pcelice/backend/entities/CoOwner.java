@@ -17,7 +17,7 @@ public class CoOwner {
     private String username;
 
     @Column(nullable = false)
-    private String passwd;
+    private String password;
 
     private String firstName;
     private String lastName;
@@ -67,12 +67,12 @@ public class CoOwner {
         this.username = username;
     }
 
-    public String getPasswd() {
-        return passwd;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswd(String passwd) {
-        this.passwd = passwd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {
@@ -105,12 +105,6 @@ public class CoOwner {
 
     public void setRole(RoleType roleType) {
         this.roleType = roleType;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Building getBuilding() {
