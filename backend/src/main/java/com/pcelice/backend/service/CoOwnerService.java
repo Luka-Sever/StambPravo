@@ -8,7 +8,6 @@ public interface CoOwnerService {
 
     CoOwner createCoOwner(CoOwner coOwner);
 
-    Optional<CoOwner> findByUsername(String username);
+    public boolean emailPresent(String email);
 
-    public boolean findByEmail(String email);
 }

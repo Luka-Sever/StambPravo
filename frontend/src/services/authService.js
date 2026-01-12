@@ -5,9 +5,9 @@ export function login({ email, password }) {
   return post('/auth/login', { email, password })
 }
 
-export function register({ role, firstName, lastName, email }) {
+export function register({ role, firstName, lastName, email , password}) {
   // Backend expects: { firstName, lastName, email, role } at /api/admin/user
-  return post('/api/admin/user', { firstName, lastName, email, role })
+  return post('/api/admin/user', { firstName, lastName, email, password, role })
 }
 
 export function fetchUser() {

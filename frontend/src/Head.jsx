@@ -6,27 +6,29 @@ export default function Head() {
     const navigate = useNavigate()
     const location = useLocation()
     const { isAuthenticated, user, logout } = useAuth()
-    const displayName = user
-        ? `${[user.firstName, user.lastName].filter(Boolean).join(' ')}`.trim()
-        : null
-    const displayRole = user?.role ? ` (${user.role})` : ''
+    
+    const displayName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : null
+    const isAdmin = user?.role === 'ADMIN'
     const isAuthRoute = location.pathname === '/login'
+
     return (
         <div id="head">
-            <img src={logo} className='logo'></img>
+            <img src={logo} className='logo' alt="logo" onClick={() => navigate('/')} style={{cursor: 'pointer'}} />
             <div>
                 {isAuthenticated ? (
                     <>
-                        <span className="user-label">{`${displayName || 'Korisnik'}${displayRole}`}</span>
-                        <button id="login" onClick={logout} style={{ marginLeft: 10 }}>Odjavi se</button>
+                        {isAdmin && (
+                            <button onClick={() => navigate('/admin')} style={{ marginRight: '10px' }}>
+                                Admin
+                            </button>
+                        )}
+                        <span className="user-label">{displayName || 'Korisnik'}</span>
+                        <button onClick={logout} style={{ marginLeft: 10 }}>Odjavi se</button>
                     </>
                 ) : !isAuthRoute ? (
-                    <>
-                        <button id="login" onClick={() => navigate('/login')}>Prijavi se</button>
-                    </>
+                    <button onClick={() => navigate('/login')}>Prijavi se</button>
                 ) : null}
             </div>
         </div>
     );
-
-} 
+}

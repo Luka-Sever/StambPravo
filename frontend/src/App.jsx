@@ -1,41 +1,56 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import './App.css';
 
-import { useAuth } from './context/AuthContext.jsx';
+import { AuthProvider, useAuth } from './context/AuthContext.jsx';
 import Head from './Head';
 import Nav from './Nav';
 import NotLoggedIn from './NotLoggedIn.jsx';
 import AdminPage from './pages/Admin.jsx';
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
-import Welcome from './Welcome';
 
-
-/*
-  TODO: dodati Dark / Light mode
-*/
+// Komponenta koja brani pristup ako korisnik nije ADMIN
+function ProtectedRoute({ children, allowedRoles }) {
+  const { user, isAuthenticated, loading } = useAuth();
+  if (loading) return <div>Učitavanje...</div>;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (allowedRoles && !allowedRoles.includes(user?.role)) return <Navigate to="/" replace />;
+  return children;
+}
 
 function Shell() {
   const location = useLocation()
   const navigate = useNavigate()
-  const hideNav = location.pathname === '/login'
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, loading } = useAuth()
+  
+  const hideNav = location.pathname === '/login' || location.pathname === '/admin'
+
   useEffect(() => {
-    if (isAuthenticated && (location.pathname === '/login')) {
+    if (!loading && isAuthenticated && location.pathname === '/login') {
       navigate('/')
     }
-  }, [isAuthenticated, location.pathname, navigate])
+  }, [isAuthenticated, loading, location.pathname, navigate])
+
+  if (loading) return <div>Učitavanje...</div>
+
   return (
     <>
       <Head />
       {!hideNav && !isAuthenticated && <NotLoggedIn notLoggedIn={true} />}
       {!hideNav && <Nav />}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/welcome" element={<Welcome />} />
+        <Route 
+          path="/admin" 
+          element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <AdminPage />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
     </>
   )
@@ -44,7 +59,9 @@ function Shell() {
 function App() {
   return (
     <BrowserRouter>
-      <Shell />
+      <AuthProvider>
+        <Shell />
+      </AuthProvider>
     </BrowserRouter>
   )
 }

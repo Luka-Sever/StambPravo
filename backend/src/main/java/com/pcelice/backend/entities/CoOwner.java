@@ -1,14 +1,23 @@
 package com.pcelice.backend.entities;
 
+import java.util.Set;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+//@Table(name = "CO_OWNER")
 public class CoOwner {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer coOwnerId;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(nullable = false)
+    private String passwd;
 
     private String firstName;
     private String lastName;
@@ -17,22 +26,53 @@ public class CoOwner {
     @NotNull
     private String email;
 
-    @Column(nullable = true)
-    private String password;
-
-    @Column(nullable = true)
-    private String username;
-
     @Enumerated(EnumType.STRING)
     @NotNull
     private RoleType roleType;
 
-    public Long getId() {
-        return id;
+    /// treba biti false u pravoj bazi
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "building_id", nullable = true)
+    private Building building;
+
+    @ManyToMany
+    @JoinTable(
+        name = "participation",
+        joinColumns = @JoinColumn(name = "co_owner_id"),
+        inverseJoinColumns = @JoinColumn(name = "meeting_id")
+    )
+    private Set<Meeting> attendingMeetings;
+
+    public Set<Meeting> getAttendingMeetings() {
+        return attendingMeetings;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAttendingMeetings(Set<Meeting> attendingMeetings) {
+        this.attendingMeetings = attendingMeetings;
+    }
+
+    public Integer getCoOwnerId() {
+        return coOwnerId;
+    }
+
+    public void setCoOwnerId(Integer coOwnerId) {
+        this.coOwnerId = coOwnerId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPasswd() {
+        return passwd;
+    }
+
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
     }
 
     public String getFirstName() {
@@ -73,10 +113,18 @@ public class CoOwner {
         this.password = password;
     }
 
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
     @Override
     public String toString() {
         return "coOwner{" +
-                "id=" + id +
+                "id=" + coOwnerId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +

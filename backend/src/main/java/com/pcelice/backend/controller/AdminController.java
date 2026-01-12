@@ -5,10 +5,12 @@ import com.pcelice.backend.service.CoOwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin")
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     @Autowired
@@ -20,8 +22,13 @@ public class AdminController {
     @PostMapping("/user")
     public ResponseEntity<?> createCoOwner(@RequestBody CoOwner coOwner) {
         try {
-            CoOwner createdCoOwner = coOwnerService.createCoOwner(coOwner);
-            return ResponseEntity.ok(createdCoOwner);
+            if (!coOwnerService.emailPresent(coOwner.getEmail())) {
+                CoOwner createdCoOwner = coOwnerService.createCoOwner(coOwner);
+                return ResponseEntity.ok(createdCoOwner);
+            }
+            else  {
+                return ResponseEntity.badRequest().body("Email already exists");
+            }
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

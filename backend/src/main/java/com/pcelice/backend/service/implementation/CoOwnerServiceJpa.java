@@ -4,6 +4,7 @@ import com.pcelice.backend.repositories.CoOwnerRepository;
 import com.pcelice.backend.entities.CoOwner;
 import com.pcelice.backend.service.CoOwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,24 +12,34 @@ import java.util.Optional;
 @Service
 public class CoOwnerServiceJpa implements CoOwnerService {
 
+    private void validatePassword(String password) {
+        if (password.length() < 8) {
+            throw new IllegalArgumentException("Password length should be at least 8 characters");
+        }
+    }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private CoOwnerRepository coOwnerRepository;
 
     @Override
     public CoOwner createCoOwner(CoOwner coOwner) {
+
+        validatePassword(coOwner.getPasswd());
+
         if (coOwnerRepository.findByEmail(coOwner.getEmail()).isPresent()) {
             throw new RuntimeException("Email already in use");
         }
+
+        String hashedPassword = passwordEncoder.encode(coOwner.getPasswd());
+        coOwner.setPasswd(hashedPassword);
         return coOwnerRepository.save(coOwner);
     }
 
     @Override
-    public Optional<CoOwner> findByUsername(String username) {
-        return coOwnerRepository.findByUsername(username);
-    }
-
-    @Override
-    public boolean findByEmail(String email) {
+    public boolean emailPresent(String email) {
         return coOwnerRepository.findByEmail(email).isPresent();
     }
 }

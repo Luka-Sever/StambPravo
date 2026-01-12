@@ -19,7 +19,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
 import java.util.Collections;
 import java.util.Map;
 
@@ -36,32 +35,33 @@ public class BackendApplication {
     public CommandLineRunner demo(CoOwnerRepository repository) {
         //hardcodeani useri za testiranje
         return (args) -> {
-                        String encodedPassword = passwordEncoder.encode("password123");
+            String encodedPassword = passwordEncoder.encode("password123");
 
             CoOwner admin = new CoOwner();
-            admin.setEmail("placeholder@gmail.com");
-            admin.setPassword(encodedPassword);
-            admin.setFirstName("Admin");
-            admin.setLastName("Adminovic");
+            admin.setEmail("brunoplese0@gmail.com");
+            admin.setUsername("Admin");
+            admin.setPasswd(encodedPassword);
+            admin.setFirstName("Bruno");
+            admin.setLastName("Plese");
             admin.setRole(RoleType.ADMIN);
             repository.save(admin);
-
-
-            CoOwner coOwner1 = new CoOwner();
-            coOwner1.setEmail("suvlasnik@example.com");
-            coOwner1.setPassword(encodedPassword);
-            coOwner1.setFirstName("Ime");
-            coOwner1.setLastName("Prezime");
-            coOwner1.setRole(RoleType.CO_OWNER);
-            repository.save(coOwner1);
-
-            CoOwner coOwner2 = new CoOwner();
-            coOwner2.setEmail("predstavnik@example.com");
-            coOwner2.setPassword(encodedPassword);
-            coOwner2.setFirstName("Ime");
-            coOwner2.setLastName("Prezimepredstavnik");
-            coOwner2.setRole(RoleType.REP);
-            repository.save(coOwner2);
+//
+//
+//            CoOwner coOwner1 = new CoOwner();
+//            coOwner1.setEmail("suvlasnik@example.com");
+//            coOwner1.setPasswd(encodedPassword);
+//            coOwner1.setFirstName("Ime");
+//            coOwner1.setLastName("Prezime");
+//            coOwner1.setRole(RoleType.CO_OWNER);
+//            repository.save(coOwner1);
+//
+//            CoOwner coOwner2 = new CoOwner();
+//            coOwner2.setEmail("predstavnik@example.com");
+//            coOwner2.setPasswd(encodedPassword);
+//            coOwner2.setFirstName("Ime");
+//            coOwner2.setLastName("Prezimepredstavnik");
+//            coOwner2.setRole(RoleType.REP);
+//            repository.save(coOwner2);
         };
     }
 
