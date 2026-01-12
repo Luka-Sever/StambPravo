@@ -17,6 +17,16 @@ public class CoOwnerServiceJpa implements CoOwnerService {
             throw new IllegalArgumentException("Password length should be at least 8 characters");
         }
     }
+    private void validateUsername(String username) {
+        if (!username.matches("[a-zA-Z0-9_-]+") || username.length() < 5) {
+            throw new IllegalArgumentException("username cannot contain symbols and must be at least 5 characters");
+        }
+    }
+    private void validateName(String firstName, String lastName) {
+        if (!(firstName.matches("[a-zA-Z]+") && lastName.matches("[a-zA-Z]+"))) {
+            throw new IllegalArgumentException("Name and surname cannot contain symbols and numbers");
+        }
+    }
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -28,6 +38,9 @@ public class CoOwnerServiceJpa implements CoOwnerService {
     public CoOwner createCoOwner(CoOwner coOwner) {
 
         validatePassword(coOwner.getPassword());
+        validateUsername(coOwner.getUsername());
+        validateName(coOwner.getFirstName(), coOwner.getLastName());
+
 
         if (coOwnerRepository.findByEmail(coOwner.getEmail()).isPresent()) {
             throw new RuntimeException("Email already in use");

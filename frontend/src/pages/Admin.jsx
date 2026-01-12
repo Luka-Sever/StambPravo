@@ -26,6 +26,16 @@ function AdminPage() {
             return;
         }
 
+        if (!username.match(/^[a-zA-Z0-9_-]+$/) || username.length < 5) {
+            setMessage("Korisnicko ime ne smije sadrzavati simbole i mora imati barem 5 znakova");
+            return;
+        }
+
+        if (!(firstName.match(/^[a-zA-Z]+$/) && lastName.match(/^[a-zA-Z]+$/))) {
+            setMessage("Ime i prezime ne smiju sadrzavati brojeve ili simbole");
+            return;
+        }
+
         try {
             const newUser = { email, username, firstName, lastName, password, role};
             await createUser(newUser);

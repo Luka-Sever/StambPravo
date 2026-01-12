@@ -17,8 +17,8 @@ async function request(path, { method = 'GET', headers = {}, body } = {}) {
   let data = null
   try {
     data = await response.json()
-  } catch {
-    // Non-JSON or empty body; leave data as null
+  } catch(_) {
+      //empty
   }
 
   if (!response.ok) {
