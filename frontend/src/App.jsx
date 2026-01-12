@@ -9,6 +9,10 @@ import NotLoggedIn from './NotLoggedIn.jsx';
 import AdminPage from './pages/Admin.jsx';
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
+import Sastanci from './pages/Sastanci';
+import Diskusije from './pages/Diskusije';
+import Obavijesti from './pages/Obavijesti';
+import NoviSastanak from './pages/NoviSastanak';
 
 // Komponenta koja brani pristup ako korisnik nije ADMIN
 function ProtectedRoute({ children, allowedRoles }) {
@@ -51,6 +55,18 @@ function Shell() {
             </ProtectedRoute>
           } 
         />
+        <Route path="/sastanci" element={<Sastanci />} />
+        <Route path="/diskusije" element={<Diskusije />} />
+        <Route path="/obavijesti" element={<Obavijesti />} />
+        
+        <Route 
+            path="/sastanci/novi" 
+            element={
+              <ProtectedRoute allowedRoles={['ADMIN', 'REP']}>
+                <NoviSastanak />
+              </ProtectedRoute>
+            } 
+          />
       </Routes>
     </>
   )
