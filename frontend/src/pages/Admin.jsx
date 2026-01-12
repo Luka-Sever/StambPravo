@@ -9,7 +9,7 @@ function AdminPage() {
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [role, setRole] = useState('CO_OWNER');
+    const [role, setRole] = useState('');
     const [message, setMessage] = useState('');
 
     async function handleSubmit(event) {
@@ -116,6 +116,7 @@ function AdminPage() {
                             value={role} 
                             onChange={(e) => setRole(e.target.value)}
                         >
+                            <option value="" disabled hidden>Odaberite ulogu</option>
                             <option value="CO_OWNER">Suvlasnik</option>
                             <option value="REP">Predstavnik</option>
                         </select>
