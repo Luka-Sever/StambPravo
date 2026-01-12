@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class CoOwnerServiceJpa implements CoOwnerService {
 
@@ -40,7 +38,6 @@ public class CoOwnerServiceJpa implements CoOwnerService {
         validatePassword(coOwner.getPassword());
         validateUsername(coOwner.getUsername());
         validateName(coOwner.getFirstName(), coOwner.getLastName());
-
 
         if (coOwnerRepository.findByEmail(coOwner.getEmail()).isPresent()) {
             throw new RuntimeException("Email already in use");
