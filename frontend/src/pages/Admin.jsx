@@ -118,7 +118,6 @@ function AdminPage() {
                         >
                             <option value="CO_OWNER">Suvlasnik</option>
                             <option value="REP">Predstavnik</option>
-                            <option value="ADMIN">Administrator</option>
                         </select>
                     </div>
 
