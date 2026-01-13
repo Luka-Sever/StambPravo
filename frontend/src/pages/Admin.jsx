@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { createUser } from '../services/adminService';
 import '../App.css';
+import { createUser } from '../services/adminService';
 
 function AdminPage() {
     const [email, setEmail] = useState('');
@@ -135,9 +135,13 @@ function AdminPage() {
                     <button type="submit" className="auth-button dark">
                         KREIRAJ KORISNIKA
                     </button>
-                </form>
 
-                {message && <p className="status-message">{message}</p>}
+                    {message && (
+                        <p className="status-message" aria-live="polite">
+                            {message}
+                        </p>
+                    )}
+                </form>
             </div>
         </div>
     );
