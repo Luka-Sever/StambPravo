@@ -1,0 +1,42 @@
+[
+  {
+    "id": "m-2025-11-18",
+    "date": "2025-11-18",
+    "title": "Redovni mjesečni sastanak stanara",
+    "notes": "Otvorene teme:\n- Sanacija krova (procjena štete i ponude)\n- Prijedlog ugradnje videoportafona\n- Problemi s parkiranjem u dvorištu\n\nDiskusija:\n- Predstavnik je prezentirao 3 ponude za sanaciju krova. Stanari su tražili dodatno pojašnjenje o garanciji.\n- Dogovoreno je da se prikupi još jedna ponuda za videoportafon.\n- Dogovorena je interna oznaka parkirnih mjesta i evidencija za goste.",
+    "conclusion": "Do idućeg sastanka prikupiti 4. ponudu za krov te definirati prijedlog pravilnika o parkiranju.",
+    "viewedBy": {
+      "ana.horvat@example.com": true,
+      "marko.kovac@example.com": false,
+      "rep": true,
+      "admin": true
+    }
+  },
+  {
+    "id": "m-2025-10-07",
+    "date": "2025-10-07",
+    "title": "Izvanredni sastanak: kvar dizala",
+    "notes": "Otvorene teme:\n- Učestalost kvarova dizala\n- Hitni servis i troškovi\n\nDiskusija:\n- Serviser je potvrdio da je problem u dotrajalom upravljačkom modulu.\n- Raspravljalo se o dvije opcije: parcijalna zamjena modula ili potpuna modernizacija.\n- Dogovoreno je da se do ponedjeljka prikupi ponuda za modernizaciju i plan plaćanja.",
+    "conclusion": "Krenuti s hitnom parcijalnom zamjenom radi sigurnosti; paralelno tražiti ponude za modernizaciju.",
+    "viewedBy": {
+      "ana.horvat@example.com": true,
+      "marko.kovac@example.com": true,
+      "rep": false,
+      "admin": true
+    }
+  },
+  {
+    "id": "m-2025-09-12",
+    "date": "2025-09-12",
+    "title": "Plan održavanja i troškovi za 2026.",
+    "notes": "Otvorene teme:\n- Plan redovnog održavanja\n- Pričuva i očekivani troškovi\n- Čišćenje stubišta\n\nDiskusija:\n- Predloženo povećanje pričuve zbog većih radova u 2026.\n- Više stanara traži transparentniji mjesečni izvještaj.\n- Dogovorena je evaluacija 2 tvrtke za čišćenje i probni mjesec.",
+    "conclusion": "Pripremiti prijedlog povećanja pričuve + novi format mjesečnog izvještaja; odabrati tvrtku za čišćenje do kraja mjeseca.",
+    "viewedBy": {
+      "ana.horvat@example.com": false,
+      "marko.kovac@example.com": false,
+      "rep": false,
+      "admin": true
+    }
+  }
+]
+
