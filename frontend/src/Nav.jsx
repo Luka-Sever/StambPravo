@@ -1,12 +1,20 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export default function Nav() {
     return (
         <nav>
-            <Link to="/">Naslovnica</Link>
-            <Link to="/obavijesti">Obavijesti</Link>
-            <Link to="/diskusije">Diskusije</Link>
-            <Link to="/sastanci">Sastanci</Link>
+            <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : undefined)}>
+                Naslovnica
+            </NavLink>
+            <NavLink to="/obavijesti" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+                Obavijesti
+            </NavLink>
+            <NavLink to="/diskusije" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+                Diskusije
+            </NavLink>
+            <NavLink to="/sastanci" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+                Sastanci
+            </NavLink>
         </nav>
     );
 }

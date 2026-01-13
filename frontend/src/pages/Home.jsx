@@ -37,7 +37,7 @@ function Home() {
   const meetings = useMemo(() => {
     const normalized = (pastMeetingsData || []).map((m) => ({
       ...m,
-      dateObj: new Date(m.date),
+      dateObj: new Date(m.meeting_start_time),
     }))
     normalized.sort((a, b) => b.dateObj - a.dateObj)
     return normalized
@@ -75,13 +75,12 @@ function Home() {
   const formatDate = (dateStr) => {
     const d = new Date(dateStr)
     if (Number.isNaN(d.getTime())) return dateStr
-    return d.toLocaleDateString('hr-HR', { year: 'numeric', month: 'long', day: '2-digit' })
+    return d.toLocaleString('hr-HR')
   }
 
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h1 className="dashboard-title">Dashboard</h1>
         <div className="dashboard-subtitle">
           <span className="dashboard-pill">Arhiva sastanaka</span>
           <span className="dashboard-meta">
@@ -113,7 +112,7 @@ function Home() {
                     <div className="archive-item-title">{m.title}</div>
                     {unread && <span className="badge-unread">Novo</span>}
                   </div>
-                  <div className="archive-item-date">{formatDate(m.date)}</div>
+                  <div className="archive-item-date">{formatDate(m.meeting_start_time)} • {m.meeting_location}</div>
                 </button>
               )
             })}
@@ -139,7 +138,7 @@ function Home() {
             <div className="modal-header">
               <div className="modal-title-wrap">
                 <div className="modal-title">{selected.title}</div>
-                <div className="modal-subtitle">{formatDate(selected.date)}</div>
+                <div className="modal-subtitle">{formatDate(selected.meeting_start_time)} • {selected.meeting_location}</div>
               </div>
 
               <button type="button" className="modal-close" onClick={() => setIsModalOpen(false)}>
@@ -149,13 +148,20 @@ function Home() {
 
             <div className="modal-body">
               <div className="archive-block">
-                <div className="archive-block-title">Bilješke / diskusija</div>
-                <pre className="archive-pre">{selected.notes}</pre>
+                <div className="archive-block-title">Opis</div>
+                <div className="archive-pre">{selected.summary}</div>
               </div>
 
               <div className="archive-block">
-                <div className="archive-block-title">Zaključak</div>
-                <div className="archive-conclusion">{selected.conclusion}</div>
+                <div className="archive-block-title">Točke dnevnog reda</div>
+                <div className="agenda-list">
+                  {(selected.items || []).map((it) => (
+                    <div key={`${selected.id}-${it.item_number}`} className="agenda-item">
+                      <div className="agenda-item-title">{it.item_number}. {it.title}</div>
+                      <div className="agenda-item-summary">{it.summary}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 

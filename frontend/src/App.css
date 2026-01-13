@@ -113,6 +113,13 @@ nav a:hover {
   transform: scale(1.2);
 }
 
+/* Active nav tab */
+nav a.active {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  transform: scale(1.2);
+}
+
 /* Header user label */
 #head .user-label {
   color: #1f2937;
@@ -451,6 +458,31 @@ nav a:hover {
 .archive-empty {
   padding: 12px;
   color: #475569;
+  font-weight: 700;
+}
+
+/* Agenda / točke dnevnog reda */
+.agenda-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agenda-item {
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #f8fafc;
+}
+
+.agenda-item-title {
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.agenda-item-summary {
+  color: #374151;
   font-weight: 700;
 }
 
