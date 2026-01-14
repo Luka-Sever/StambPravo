@@ -72,6 +72,9 @@ export default function NoviSastanak() {
                     <div className="add-item-box">
                         <input type="text" placeholder="Naslov točke" value={newItem.title} onChange={e => setNewItem({...newItem, title: e.target.value})} />
                         <input type="text" placeholder="Opis točke" value={newItem.summary} onChange={e => setNewItem({...newItem, summary: e.target.value})} />
+                        <label className="checkbox-label">
+                            <input type="checkbox" checked={newItem.legal === 1} onChange={e => setNewItem({...newItem, legal: e.target.checked ? 1 : 0})}/>Pravni učinak
+                        </label>
                         <button type="button" className="auth-button outline small-btn" onClick={handleAddItem}>Dodaj točku</button>
                     </div>
                     {meeting.items.map((it, idx) => (
