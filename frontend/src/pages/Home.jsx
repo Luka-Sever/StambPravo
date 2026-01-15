@@ -37,7 +37,7 @@ function Home() {
   const meetings = useMemo(() => {
     const normalized = (pastMeetingsData || []).map((m) => ({
       ...m,
-      dateObj: new Date(m.meeting_start_time),
+      dateObj: new Date(m.meetingStartTime),
     }))
     normalized.sort((a, b) => b.dateObj - a.dateObj)
     return normalized
@@ -112,7 +112,7 @@ function Home() {
                     <div className="archive-item-title">{m.title}</div>
                     {unread && <span className="badge-unread">Novo</span>}
                   </div>
-                  <div className="archive-item-date">{formatDate(m.meeting_start_time)} • {m.meeting_location}</div>
+                  <div className="archive-item-date">{formatDate(m.meetingStartTime)} • {m.meetingLocation}</div>
                 </button>
               )
             })}
@@ -138,7 +138,7 @@ function Home() {
             <div className="modal-header">
               <div className="modal-title-wrap">
                 <div className="modal-title">{selected.title}</div>
-                <div className="modal-subtitle">{formatDate(selected.meeting_start_time)} • {selected.meeting_location}</div>
+                <div className="modal-subtitle">{formatDate(selected.meetingStartTime)} • {selected.meetingLocation}</div>
               </div>
 
               <button type="button" className="modal-close" onClick={() => setIsModalOpen(false)}>

@@ -49,7 +49,7 @@ export default function Obavijesti() {
     const meetings = useMemo(() => {
         const normalized = (pastMeetingsData || []).map((m) => ({
             ...m,
-            dateObj: new Date(m.meeting_start_time),
+            dateObj: new Date(m.meetingStartTime),
         }))
         normalized.sort((a, b) => b.dateObj - a.dateObj)
         return normalized
@@ -107,7 +107,7 @@ export default function Obavijesti() {
                                             <span className="badge-unread">Novo</span>
                                         </div>
                                         <div className="archive-item-date">
-                                            {formatDate(m.meeting_start_time)} • {m.meeting_location}
+                                            {formatDate(m.meetingStartTime)} • {m.meetingLocation}
                                         </div>
                                     </button>
                                 ))
@@ -124,7 +124,7 @@ export default function Obavijesti() {
                             <div className="modal-title-wrap">
                                 <div className="modal-title">{selected.title}</div>
                                 <div className="modal-subtitle">
-                                    {formatDate(selected.meeting_start_time)} • {selected.meeting_location}
+                                    {formatDate(selected.meetingStartTime)} • {selected.meetingLocation}
                                 </div>
                             </div>
                             <button type="button" className="modal-close" onClick={() => setIsModalOpen(false)}>

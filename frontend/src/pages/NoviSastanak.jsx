@@ -1,18 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { meetingService } from '../services/meetingService';
-import { useAuth } from '../context/AuthContext'; 
 
 export default function NoviSastanak() {
     const navigate = useNavigate();
-    const { user } = useAuth(); 
-    
+
     const [meeting, setMeeting] = useState({
-        title: '',
+        meetingEndTime: '',
+        meetingStartTime: '',
+        meetingLocation: '',
         summary: '',
-        meeting_location: '',
-        meeting_start_time: '',
-        building_id: user?.buildingId || 1, // 1 jer nezz dal to imamo zapravo
+        title: '',
         status: 'Pending',
         items: []
     });
@@ -41,16 +39,13 @@ export default function NoviSastanak() {
     const handleSubmit = async (e) => {
         e.preventDefault();        
         try {
-            const start = new Date(meeting.meeting_start_time);
-            const end = new Date(start);
-            end.setHours(start.getHours() + 1);
-
-            const formatSQL = (date) => date.toISOString().slice(0, 19).replace('T', ' ');
-
+            const meetingStartTime = new Date(meeting.meetingStartTime);
+            const meetingEndTime = new Date(meetingStartTime);
+            meetingEndTime.setHours(meetingStartTime.getHours() + 1);
             const finalData = {
                 ...meeting,
-                meeting_start_time: formatSQL(start),
-                meeting_end_time: formatSQL(end)
+                meetingStartTime,
+                meetingEndTime
             };
 
             await meetingService.create(finalData);
@@ -71,11 +66,11 @@ export default function NoviSastanak() {
                 </div>
                 <div className="auth-field">
                     <label>MJESTO</label>
-                    <input type="text" value={meeting.meeting_location} onChange={e => setMeeting({...meeting, meeting_location: e.target.value})} required />
+                    <input type="text" value={meeting.meetingLocation} onChange={e => setMeeting({...meeting, meetingLocation: e.target.value})} required />
                 </div>
                 <div className="auth-field">
                     <label>VRIJEME</label>
-                    <input type="datetime-local" value={meeting.meeting_start_time} onChange={e => setMeeting({...meeting, meeting_start_time: e.target.value})} required />
+                    <input type="datetime-local" value={meeting.meetingStartTime} onChange={e => setMeeting({...meeting, meetingStartTime: e.target.value})} required />
                 </div>
                 <div className="auth-field">
                     <label>OPIS</label>

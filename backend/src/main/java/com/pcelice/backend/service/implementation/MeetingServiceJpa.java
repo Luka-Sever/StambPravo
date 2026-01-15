@@ -6,11 +6,18 @@ import com.pcelice.backend.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MeetingServiceJpa implements MeetingService {
 
     @Autowired
     MeetingRepository meetingRepository;
+
+    @Override
+    public List<Meeting> findAll() {
+        return meetingRepository.findAll();
+    }
 
     @Override
     public Meeting createMeeting(Meeting meeting) {

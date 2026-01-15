@@ -65,7 +65,7 @@ export default function Sastanci() {
                             </div>
                             <p className="meeting-summary">{m.summary}</p>
                             <div className="meeting-info">
-                                <span>📅 {new Date(m.startTime).toLocaleString()}</span>
+                                <span>📅 {(new Date(m.startTime)).toLocaleString()}</span>
                                 <span>📍 {m.location}</span>
                             </div>
                             <div className="meeting-footer">

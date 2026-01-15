@@ -32,8 +32,8 @@ export function createMeetingMock(meeting) {
   const next = {
     id,
     title: meeting.title,
-    meeting_start_time: meeting.meeting_start_time,
-    meeting_location: meeting.meeting_location,
+    meetingStartTime: meeting.meetingStartTime,
+    meetingLocation: meeting.meetingLocation,
     summary: meeting.summary,
     status: meeting.status || 'PLANIRAN',
     items: Array.isArray(meeting.items) ? meeting.items : [],
