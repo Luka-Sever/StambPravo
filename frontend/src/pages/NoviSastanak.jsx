@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { meetingService } from '../services/meetingService';
+import { useAuth } from '../context/AuthContext'; 
 
 export default function NoviSastanak() {
     const navigate = useNavigate();
+    const { user } = useAuth(); 
     
     const [meeting, setMeeting] = useState({
         title: '',
         summary: '',
         meeting_location: '',
         meeting_start_time: '',
+        building_id: user?.buildingId || 1, // 1 jer nezz dal to imamo zapravo
         status: 'Pending',
         items: []
     });
@@ -36,9 +39,21 @@ export default function NoviSastanak() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault();        
         try {
-            await meetingService.create(meeting);
+            const start = new Date(meeting.meeting_start_time);
+            const end = new Date(start);
+            end.setHours(start.getHours() + 1);
+
+            const formatSQL = (date) => date.toISOString().slice(0, 19).replace('T', ' ');
+
+            const finalData = {
+                ...meeting,
+                meeting_start_time: formatSQL(start),
+                meeting_end_time: formatSQL(end)
+            };
+
+            await meetingService.create(finalData);
             alert("Sastanak uspješno kreiran!");
             navigate('/sastanci');
         } catch (err) {
