@@ -28,12 +28,12 @@ public class Meeting {
     @Column(nullable = false)
     private MeetingStatus status;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime meetingStartTime;
 
     private LocalDateTime meetingEndTime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String meetingLocation;
 
     @Column(nullable = false)
@@ -42,8 +42,9 @@ public class Meeting {
     @Column(nullable = false)
     private String summary;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "building_id", nullable = false)
+    /// PROMIJENITI
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "building_id", nullable = true)
     private Building building;
 
     @ManyToMany(mappedBy = "attendingMeetings")

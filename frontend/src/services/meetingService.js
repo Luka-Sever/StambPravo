@@ -4,7 +4,7 @@ export const meetingService = {
     // UC14: Pregled svih sastanaka
     getAll: () => get('/api/meetings'),
     // UC10: Kreiranje novog sastanka
-    create: (data) => post('/api/meetings', data),
+    create: (data) => post('/api/meetings/newMeeting', data),
     // UC12: Objavljivanje
     publish: (id) => post(`/api/meetings/${id}/publish`, {}),
     // UC21: Potvrda sudjelovanja
