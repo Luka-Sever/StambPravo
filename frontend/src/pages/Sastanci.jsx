@@ -19,7 +19,7 @@ export default function Sastanci() {
             const data = await meetingService.getAll();
             setMeetings(data);
         } catch (err) {
-            console.error("Greška:", err);
+            console.error("Greška pri dohvaćanju:", err);
         } finally {
             setLoading(false);
         }
@@ -41,7 +41,6 @@ export default function Sastanci() {
         <div className="page-container">
             <h1 className="admin-title">Sastanci stanara</h1>
 
-            {/* Gumb koji je nedostajao administratoru */}
             {canCreate && (
                 <div className="admin-actions mb-20">
                     <button 
@@ -58,18 +57,25 @@ export default function Sastanci() {
                     <p>Trenutno nema dostupnih sastanaka</p>
                 ) : (
                     meetings.map(m => (
-                        <div key={m.id} className={`meeting-card status-${m.status.toLowerCase()}`}>
+                        <div key={m.id} className={`meeting-card status-${m.status?.toLowerCase() || 'pending'}`}>
                             <div className="meeting-header">
-                                <h3>{m.title}</h3>
+                                <h3>{m.title || "naslov"}</h3>
                                 <span className="status-badge">{m.status}</span>
                             </div>
-                            <p className="meeting-summary">{m.summary}</p>
+                            
+                            <p className="meeting-summary">{m.summary || "opis sastanka"}</p>
+                            
                             <div className="meeting-info">
-                                <span>📅 {(new Date(m.startTime)).toLocaleString()}</span>
-                                <span>📍 {m.location}</span>
+                                <span className="info-item">
+                                    📅 {m.meetingStartTime ? new Date(m.meetingStartTime).toLocaleString('hr-HR') : "Invalid Date"}
+                                </span>
+                                <span className="info-item">📍 {m.meetingLocation || "lokacija"}</span>
                             </div>
+
                             <div className="meeting-footer">
-                                <button className="auth-button outline small-btn">Detalji </button>
+                                <button className="auth-button outline small-btn">
+                                    Detalji
+                                </button>
                                 
                                 {isRepresentative && m.status === 'PLANIRAN' && (
                                     <button 

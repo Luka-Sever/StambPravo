@@ -648,6 +648,58 @@ nav a.active {
     text-align: left;
 }
 
+input[type="text"], 
+input[type="datetime-local"], 
+textarea {
+    color: #111827 !important;
+    background-color: #ffffff !important; 
+    border: 1px solid #d1d5db;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.items-section {
+    margin: 20px 0;
+    padding: 15px;
+    background: #4681f5ae; 
+    border-radius: 8px;
+    text-align: left;
+    color: #ffffff; 
+}
+
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #111827; 
+}
+
+.item-preview-card {
+    background: white;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    color: #111827; 
+    border-left: 4px solid #111827;
+}
+
+.meeting-card {
+    margin-bottom: 30px;
+    background: #ffffff;
+    color: #111827; 
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.meeting-summary {
+    color: #4b5563; /* Sivi tekst za opis */
+    margin: 10px 0;
+}
+
 .meeting-form {
     background: #f9f9f9;
     padding: 20px;
@@ -659,13 +711,6 @@ nav a.active {
     gap: 10px;
 }
 
-.meeting-card {
-    border-left: 10px solid #ccc;
-    background: white;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
 
 .status-objavljen { border-color: #2ecc71; }
 .status-planiran { border-color: #3498db; }
@@ -695,13 +740,12 @@ nav a.active {
 
 /* Sastanci */
 .meeting-item {
-    background: #fff;
+    background: #8e71f5;
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 15px;
     border-left: 6px solid #d1d5db;
     text-align: left;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .status-planiran { border-left-color: #3b82f6; }
@@ -722,18 +766,6 @@ nav a.active {
     margin-top: 15px;
     border-top: 1px solid #f3f4f6;
     padding-top: 15px;
-}
-
-.participation-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.count-label {
-    font-size: 0.9em;
-    font-weight: bold;
-    color: #4b5563;
 }
 
 /* Obavijesti */
