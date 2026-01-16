@@ -5,14 +5,23 @@ function Login() {
   const { oauthLogin, login, loading } = useAuth()
   const [loginToken, setLoginToken] = useState('')
   const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
 
   if (loading) {
     return <div className="loading">Učitavanje...</div>
   }
 
-  const handleEmailUsernameLogin = (e) => {
+  const handleEmailUsernameLogin = async (e) => {
     e.preventDefault()
-    login({ loginToken, password })
+    setMessage('')
+    
+    try {
+      await login({ loginToken, password })
+    } catch {
+      setMessage('Nevažeći podaci za prijavu. Molimo pokušajte ponovno.')
+      setLoginToken('')
+      setPassword('')
+    }
   }
 
   return (
@@ -23,7 +32,7 @@ function Login() {
         <div className="auth-card">
           <form onSubmit={handleEmailUsernameLogin} className="auth-form">
             <div className="auth-field">
-              <label>EMAIL</label>
+              <label>EMAIL ILI KORISNIČKO IME</label>
               <input 
                 type="loginToken"
                 value={loginToken}
@@ -55,6 +64,12 @@ function Login() {
             <button id="login-git" className="auth-button small-btn" type="button" onClick={() => oauthLogin('github')}>
               GITHUB PRIJAVA
             </button>
+
+            {message && (
+              <p className="status-message" aria-live="polite">
+                {message}
+              </p>
+            )}
           </form>
         </div>
       </div>
