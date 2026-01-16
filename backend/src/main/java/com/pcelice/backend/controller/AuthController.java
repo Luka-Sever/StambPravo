@@ -39,8 +39,11 @@ public class AuthController {
                                                        HttpServletRequest request, 
                                                        HttpServletResponse response) {
 
+        System.out.println("LOGIN TOKEN = [" + loginRequest.getLoginToken() + "]");
+        System.out.println("PASSWORD = [" + loginRequest.getPassword() + "]");
+
         UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(
-                loginRequest.getEmail(), loginRequest.getPassword());
+                loginRequest.getLoginToken(), loginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(token);
 
 
@@ -53,10 +56,21 @@ public class AuthController {
 
 
         Map<String, Object> body = new HashMap<>();
-        body.put("email", authentication.getName());
-        
+        CoOwner user;
 
-        CoOwner user = coOwnerRepository.findByEmail(authentication.getName()).orElse(null);
+        if (authentication.getName().contains("@")) {
+            body.put("email", authentication.getName());
+
+            user = coOwnerRepository.findByEmail(authentication.getName()).orElse(null);
+
+        }
+        else {
+            body.put("username", authentication.getName());
+
+            user = coOwnerRepository.findByUsername(authentication.getName()).orElse(null);
+
+        }
+
         if (user != null) {
             body.put("firstName", user.getFirstName());
             body.put("lastName", user.getLastName());

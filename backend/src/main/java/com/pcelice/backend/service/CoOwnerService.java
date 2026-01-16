@@ -10,4 +10,6 @@ public interface CoOwnerService {
 
     public boolean emailPresent(String email);
 
+    public boolean usernamePresent(String username);
+
 }

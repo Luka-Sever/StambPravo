@@ -22,11 +22,13 @@ public class coOwnerUserDetailsService implements UserDetailsService {
     private CoOwnerRepository coOwnerRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String loginToken) throws UsernameNotFoundException {
 
-        CoOwner user = coOwnerRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        CoOwner user = coOwnerRepository.findByEmail(loginToken).orElse(null);
 
+        if (user == null) {
+            user = coOwnerRepository.findByUsername(loginToken).orElseThrow(() -> new UsernameNotFoundException("No user with email or username " + loginToken));
+        }
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));

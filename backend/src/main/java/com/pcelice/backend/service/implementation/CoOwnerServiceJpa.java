@@ -52,4 +52,9 @@ public class CoOwnerServiceJpa implements CoOwnerService {
     public boolean emailPresent(String email) {
         return coOwnerRepository.findByEmail(email).isPresent();
     }
+
+    @Override
+    public boolean usernamePresent(String username) {
+        return coOwnerRepository.findByUsername(username).isPresent();
+    }
 }

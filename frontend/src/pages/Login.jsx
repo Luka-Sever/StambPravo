@@ -3,16 +3,16 @@ import { useAuth } from '../context/AuthContext.jsx'
 
 function Login() {
   const { oauthLogin, login, loading } = useAuth()
-  const [email, setEmail] = useState('')
+  const [loginToken, setLoginToken] = useState('')
   const [password, setPassword] = useState('')
 
   if (loading) {
     return <div className="loading">Učitavanje...</div>
   }
 
-  const handleEmailLogin = (e) => {
+  const handleEmailUsernameLogin = (e) => {
     e.preventDefault()
-    login({ email, password })
+    login({ loginToken, password })
   }
 
   return (
@@ -21,14 +21,14 @@ function Login() {
 
       <div className="auth-container">
         <div className="auth-card">
-          <form onSubmit={handleEmailLogin} className="auth-form">
+          <form onSubmit={handleEmailUsernameLogin} className="auth-form">
             <div className="auth-field">
               <label>EMAIL</label>
               <input 
-                type="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                placeholder="Unesite email"
+                type="loginToken"
+                value={loginToken}
+                onChange={(e) => setLoginToken(e.target.value)}
+                placeholder="Unesite email ili korisničko ime"
                 required
               />
             </div>

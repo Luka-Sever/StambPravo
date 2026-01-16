@@ -1,8 +1,8 @@
 import { API_BASE_URL } from '../config/api.js'
 import { get, post } from './httpClient.js'
 
-export function login({ email, password }) {
-  return post('/auth/login', { email, password })
+export function login({ loginToken, password }) {
+  return post('/auth/login', { loginToken, password })
 }
 
 export function register({ role, firstName, lastName, email , password}) {

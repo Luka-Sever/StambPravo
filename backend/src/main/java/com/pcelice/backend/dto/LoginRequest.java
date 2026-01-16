@@ -2,15 +2,15 @@ package com.pcelice.backend.dto;
 
 
 public class LoginRequest {
-    private String email;
+    private String loginToken;
     private String password;
 
-    public String getEmail() {
-        return email;
+    public String getLoginToken() {
+        return loginToken;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLoginToken(String loginToken) {
+        this.loginToken = loginToken;
     }
 
     public String getPassword() {
