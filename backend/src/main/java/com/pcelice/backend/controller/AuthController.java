@@ -39,21 +39,15 @@ public class AuthController {
                                                        HttpServletRequest request, 
                                                        HttpServletResponse response) {
 
-        System.out.println("LOGIN TOKEN = [" + loginRequest.getLoginToken() + "]");
-        System.out.println("PASSWORD = [" + loginRequest.getPassword() + "]");
-
         UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(
                 loginRequest.getLoginToken(), loginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(token);
-
 
         SecurityContext sc = SecurityContextHolder.createEmptyContext();
         sc.setAuthentication(authentication);
         SecurityContextHolder.setContext(sc);
 
-
         securityContextRepository.saveContext(sc, request, response);
-
 
         Map<String, Object> body = new HashMap<>();
         CoOwner user;
@@ -70,13 +64,11 @@ public class AuthController {
             user = coOwnerRepository.findByUsername(authentication.getName()).orElse(null);
 
         }
-
         if (user != null) {
             body.put("firstName", user.getFirstName());
             body.put("lastName", user.getLastName());
             body.put("role", user.getRole());
         }
-
         return ResponseEntity.ok(body);
     }
 }

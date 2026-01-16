@@ -35,7 +35,7 @@ public class coOwnerUserDetailsService implements UserDetailsService {
         if (user.getRole() == RoleType.REP) {
             authorities.add(new SimpleGrantedAuthority("ROLE_CO_OWNER"));
         }
-        
+
         return new User(
                 user.getEmail(),
                 user.getPassword(), 
