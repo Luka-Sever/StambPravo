@@ -24,11 +24,10 @@ public class coOwnerUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String loginToken) throws UsernameNotFoundException {
 
-        CoOwner user = coOwnerRepository.findByEmail(loginToken).orElse(null);
-
-        if (user == null) {
-            user = coOwnerRepository.findByUsername(loginToken).orElseThrow(() -> new UsernameNotFoundException("No user with email or username " + loginToken));
-        }
+        CoOwner user = coOwnerRepository.findByEmail(loginToken)
+                .orElse(coOwnerRepository.findByUsername(loginToken)
+                .orElseThrow(()
+                -> new UsernameNotFoundException("No user with email or username " + loginToken)));
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
@@ -36,8 +35,7 @@ public class coOwnerUserDetailsService implements UserDetailsService {
         if (user.getRole() == RoleType.REP) {
             authorities.add(new SimpleGrantedAuthority("ROLE_CO_OWNER"));
         }
-
-    
+        
         return new User(
                 user.getEmail(),
                 user.getPassword(), 
