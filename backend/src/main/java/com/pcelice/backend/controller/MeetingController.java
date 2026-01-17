@@ -24,8 +24,4 @@ public class MeetingController {
     public ResponseEntity<Meeting> createMeeting(@RequestBody Meeting meeting) {
         return ResponseEntity.ok(meetingService.createMeeting(meeting));
     }
-
-
-
-
 }

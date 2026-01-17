@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     Optional<Meeting> findByTitle(String title);
+
+    Optional<Meeting> findByMeetingId(Integer id);
 }

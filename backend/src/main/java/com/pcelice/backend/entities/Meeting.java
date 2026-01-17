@@ -1,6 +1,8 @@
 package com.pcelice.backend.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -49,6 +51,14 @@ public class Meeting {
 
     @ManyToMany(mappedBy = "attendingMeetings")
     private Set<CoOwner> attendingCoOwners;
+
+    @OneToMany(
+            mappedBy = "meeting",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+
+    private List<Item> items = new ArrayList<>();
 
     public Integer getMeetingId() {
         return meetingId;
@@ -112,5 +122,13 @@ public class Meeting {
 
     public void setBuilding(Building building) {
         this.building = building;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 }
