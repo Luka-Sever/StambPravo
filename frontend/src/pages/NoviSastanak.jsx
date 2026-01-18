@@ -11,7 +11,7 @@ export default function NoviSastanak() {
         meetingLocation: '',
         summary: '',
         title: '',
-        status: 'Pending',
+        status: 'PLANIRAN',
         items: []
     });
 
@@ -27,8 +27,8 @@ export default function NoviSastanak() {
             ...meeting.items, 
             { 
                 ...newItem, 
-                item_number: meeting.items.length + 1, 
-                status: 'Pending' 
+                itemNumber: meeting.items.length + 1, 
+                status: 'PLANIRAN'
             }
         ];
         
@@ -38,14 +38,26 @@ export default function NoviSastanak() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();        
+
+        if (!meeting.title || !meeting.meetingLocation || !meeting.meetingStartTime || !meeting.summary) {
+            alert("Sva polja moraju biti popunjena!");
+            return;
+        }
+
+        if (meeting.items.length === 0) {
+            alert("Sastanak mora imati barem jednu točku dnevnog reda prije objave!");
+            return;
+        }
+
         try {
-            const meetingStartTime = new Date(meeting.meetingStartTime);
-            const meetingEndTime = new Date(meetingStartTime);
-            meetingEndTime.setHours(meetingStartTime.getHours() + 1);
+            const start = new Date(meeting.meetingStartTime);
+            const end = new Date(start);
+            end.setHours(start.getHours() + 1);
+
             const finalData = {
                 ...meeting,
-                meetingStartTime,
-                meetingEndTime
+                meetingStartTime: start.toISOString(),
+                meetingEndTime: end.toISOString()
             };
 
             await meetingService.create(finalData);
