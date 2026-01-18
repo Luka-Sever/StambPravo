@@ -12,4 +12,6 @@ public interface CoOwnerService {
 
     public boolean usernamePresent(String username);
 
+    void changePassword(String email, String currentPassword, String newPassword);
+
 }
