@@ -63,7 +63,7 @@ export default function Sastanci() {
 
             <div className="meeting-list">
                 {meetings.map(m => {
-                    if (!hasPrivileges && m.status !== 'OBJAVLJEN' && m.status !== 'ARHIVIRAN') return null;
+                    if (!hasPrivileges && m.status !== 'Active' && m.status !== 'Archived') return null;
                     const mId = m.meetingId || m.id;
 
                     return (
@@ -84,12 +84,15 @@ export default function Sastanci() {
                                 <div className="meeting-items-section">
                                     <h4>Točke dnevnog reda:</h4>
                                     <div className="items-group">
-                                        {m.items?.map((item) => (
-                                            <div key={item.itemNumber || item.id?.itemNumber} className="item-display-simple">
-                                                <strong>{item.itemNumber || item.id?.itemNumber}. {item.title} {item.legal === 1 && <span>(Glasanje)</span>}</strong>
-                                                <p className="item-description-text">{item.summary}</p>
-                                            </div>
-                                        ))}
+                                        {m.items?.map((item) => {
+                                            const itemNum =  item.itemNumber;
+                                            return (
+                                                <div key={itemNum} className="item-display-simple">
+                                                    <strong>{itemNum}. {item.title} {item.legal === 1 && <span>(glasanje)</span>}</strong>
+                                                    <p className="item-description-text">{item.summary}</p>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             )}
@@ -101,7 +104,7 @@ export default function Sastanci() {
 
                                 {hasPrivileges && (
                                     <div className="admin-footer-btns">
-                                        {(m.status === 'PLANIRAN' || m.status === 'Pending') && (
+                                        {m.status === 'Pending' && (
                                             <>
                                                 <button className="auth-button dark small-btn" onClick={() => handleAction(meetingService.publish, mId, "Sastanak objavljen!")}>
                                                     Objavi
@@ -111,8 +114,7 @@ export default function Sastanci() {
                                                 </button>
                                             </>
                                         )}
-
-                                        {m.status === 'OBJAVLJEN' && (
+                                        {m.status === 'Active' && (
                                             <button className="auth-button primary small-btn" onClick={() => handleAction(meetingService.archive, mId, "Sastanak arhiviran!")}>
                                                 Arhiviraj
                                             </button>
@@ -120,7 +122,7 @@ export default function Sastanci() {
                                     </div>
                                 )}
 
-                                {!hasPrivileges && m.status === 'OBJAVLJEN' && (
+                                {!hasPrivileges && m.status === 'Active' && (
                                     <button className="auth-button primary small-btn" onClick={() => handleAction(meetingService.confirmParticipation, mId, "Sudjelovanje potvrđeno!")}>
                                         Sudjelovat ću
                                     </button>

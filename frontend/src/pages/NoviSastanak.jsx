@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { meetingService } from '../services/meetingService';
+import { useAuth } from '../context/AuthContext';
 
 export default function NoviSastanak() {
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     const [meeting, setMeeting] = useState({
         meetingEndTime: '',
@@ -11,7 +13,7 @@ export default function NoviSastanak() {
         meetingLocation: '',
         summary: '',
         title: '',
-        status: 'PLANIRAN',
+        status: 'Pending', 
         items: []
     });
 
@@ -27,8 +29,8 @@ export default function NoviSastanak() {
             ...meeting.items, 
             { 
                 ...newItem, 
-                itemNumber: meeting.items.length + 1, 
-                status: 'PLANIRAN'
+                item_number: meeting.items.length + 1, 
+                status: 'Pending' 
             }
         ];
         
@@ -56,6 +58,7 @@ export default function NoviSastanak() {
 
             const finalData = {
                 ...meeting,
+                building_id: user?.buildingId || 1,
                 meetingStartTime: start.toISOString(),
                 meetingEndTime: end.toISOString()
             };
