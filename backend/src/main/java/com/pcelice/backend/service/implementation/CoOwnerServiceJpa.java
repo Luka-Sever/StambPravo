@@ -57,22 +57,4 @@ public class CoOwnerServiceJpa implements CoOwnerService {
     public boolean usernamePresent(String username) {
         return coOwnerRepository.findByUsername(username).isPresent();
     }
-
-    @Override
-    public void changePassword(String email, String currentPassword, String newPassword) {
-    CoOwner user = coOwnerRepository.findByEmail(email)
-        .orElseThrow(() -> new RuntimeException("User not found"));
-    
-    
-    if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
-        throw new RuntimeException("Current password is incorrect");
-    }
-    
-    validatePassword(newPassword);
-    
-    user.setPassword(passwordEncoder.encode(newPassword));
-    coOwnerRepository.save(user);
-}
-
-
 }

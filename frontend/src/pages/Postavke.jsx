@@ -25,10 +25,12 @@ export default function Postavke() {
         }
 
         try {
-            await changePassword({ 
-                currentPassword: data.current, 
-                newPassword: data.new 
-            });
+            const changePasswordData = {
+                username: user.username,
+                oldPassword: data.current,
+                newPassword: data.new
+            }
+            await changePassword(changePasswordData);
             alert("Lozinka uspješno promijenjena!");
             navigate('/');
         } catch (err) {

@@ -31,9 +31,11 @@ export function AuthProvider({ children }) {
       try {
         const sessionUser = await fetchUser()
         if (sessionUser) {
-          setUser({ 
+          setUser({
+            username: sessionUser.username,
             firstName: sessionUser.firstName || sessionUser.name, 
             lastName: sessionUser.lastName || '',
+            email: sessionUser.email,
             role: sessionUser.role 
           })
         }
@@ -48,7 +50,9 @@ export function AuthProvider({ children }) {
     const nextToken = data?.token || data?.accessToken || null
     const nextUser = data?.user || (data?.firstName ? { 
       firstName: data.firstName, 
-      lastName: data.lastName, 
+      lastName: data.lastName,
+      username: data.username,
+      email: data.email,
       role: data.role 
     } : null)
     persist(nextUser, nextToken)
@@ -60,8 +64,10 @@ export function AuthProvider({ children }) {
     const nextToken = data?.token || data?.accessToken || null
     const nextUser = data?.user || (data?.firstName ? { 
       firstName: data.firstName, 
-      lastName: data.lastName, 
-      role: data.role 
+      lastName: data.lastName,
+      username: data.username,
+      email: data.email,
+      role: data.role
     } : null)
     if (nextToken || nextUser) persist(nextUser, nextToken)
     return { user: nextUser, token: nextToken, raw: data }

@@ -6,6 +6,7 @@ import com.pcelice.backend.repositories.CoOwnerRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,20 +54,27 @@ public class AuthController {
         CoOwner user;
 
         if (authentication.getName().contains("@")) {
-            body.put("email", authentication.getName());
 
+            body.put("email", authentication.getName());
             user = coOwnerRepository.findByEmail(authentication.getName()).orElse(null);
 
         }
         else {
-            body.put("username", authentication.getName());
 
+            body.put("username", authentication.getName());
             user = coOwnerRepository.findByUsername(authentication.getName()).orElse(null);
 
         }
-        if (user != null) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "User not found"));
+        }
+        else {
+
             body.put("firstName", user.getFirstName());
             body.put("lastName", user.getLastName());
+            body.put("email", user.getEmail());
+            body.put("username", user.getUsername());
             body.put("role", user.getRole());
         }
         return ResponseEntity.ok(body);

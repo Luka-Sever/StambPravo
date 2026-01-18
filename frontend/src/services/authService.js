@@ -22,6 +22,6 @@ export function logout() {
   return post('/logout', {})
 }
 
-export function changePassword(passwordData) {
-  return post('/api/user/change-password', passwordData);
+export function changePassword(changePasswordData) {
+  return post('/api/user/change-password', changePasswordData);
 }

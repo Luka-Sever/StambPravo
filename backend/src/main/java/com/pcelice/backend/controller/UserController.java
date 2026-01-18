@@ -1,20 +1,14 @@
 package com.pcelice.backend.controller;
 
+import com.pcelice.backend.dto.changePasswordData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.pcelice.backend.dto.ChangePasswordRequest;
+import org.springframework.web.bind.annotation.*;
 import com.pcelice.backend.entities.CoOwner;
 import com.pcelice.backend.repositories.CoOwnerRepository;
 
@@ -27,13 +21,14 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private CoOwnerRepository coOwnerRepository;
 
-    @Autowired
-    private com.pcelice.backend.service.CoOwnerService coOwnerService;
-
-   @GetMapping
+    @GetMapping
     public Map<String, Object> getCurrentUser(Authentication authentication) {
         if (authentication == null) {
             return Collections.emptyMap();
@@ -41,13 +36,15 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
         Object principal = authentication.getPrincipal();
-        String email = null;
+        String email;
 
         if (principal instanceof OAuth2User) {
             OAuth2User oauth2User = (OAuth2User) principal;
             email = oauth2User.getAttribute("email");
             response.put("name", oauth2User.getAttribute("name"));
             response.put("email", email);
+            response.put("role", oauth2User.getAttribute("role"));
+            response.put("username", oauth2User.getAttribute("username"));
             response.put("authType", "google");
         } else if (principal instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) principal;
@@ -64,42 +61,32 @@ public class UserController {
             if (user != null) {
                 response.put("firstName", user.getFirstName());
                 response.put("lastName", user.getLastName());
+                response.put("email", user.getEmail());
+                response.put("username", user.getUsername());
                 response.put("role", user.getRole());
             } else {
-
                 response.put("error", "User not registered in system");
             }
         }
-
         return response;
     }
-    
+
     @PostMapping("/change-password")
-public ResponseEntity<?> changePassword(
-    @RequestBody ChangePasswordRequest request,
-    Authentication authentication
-) {
-    try {
-        String email = null;
-        Object principal = authentication.getPrincipal();
-        
-        if (principal instanceof OAuth2User) {
-            email = ((OAuth2User) principal).getAttribute("email");
-        } else if (principal instanceof UserDetails) {
-            email = ((UserDetails) principal).getUsername();
-        } else {
-            email = authentication.getName();
+    public void changePassword(@RequestBody changePasswordData changePasswordData) throws Exception {
+
+        CoOwner coOwner = coOwnerRepository.findByUsername(changePasswordData.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+
+        if (!passwordEncoder.matches(changePasswordData.getOldPassword(), coOwner.getPassword())) {
+            throw new Exception("Incorrect password");
         }
-        
-        if (email == null) {
-            return ResponseEntity.badRequest().body("Could not determine user");
-        }
-        
-        coOwnerService.changePassword(email, request.getCurrentPassword(), request.getNewPassword());
-        return ResponseEntity.ok().body("Password changed successfully");
-        
-    } catch (RuntimeException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+
+        coOwner.setPassword(passwordEncoder.encode(changePasswordData.getNewPassword()));
+        coOwnerRepository.save(coOwner);
+
     }
-}
+
+    @GetMapping("/debug")
+    public Authentication debug(Authentication auth) {
+        return auth;
+    }
 }

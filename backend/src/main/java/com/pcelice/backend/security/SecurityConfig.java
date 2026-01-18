@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        /// PROMIJENITI U REP
+                        .requestMatchers("/api/user/**").hasRole("ADMIN")
                         .requestMatchers("/api/meetings/**").hasRole("ADMIN")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
@@ -109,6 +109,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/auth/**", configuration);
         source.registerCorsConfiguration("/oauth2/**", configuration);
         source.registerCorsConfiguration("/login/oauth2/**", configuration);
+        source.registerCorsConfiguration("/user/**", configuration);
         return source;
     }
 
