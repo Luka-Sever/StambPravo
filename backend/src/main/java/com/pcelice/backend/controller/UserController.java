@@ -11,11 +11,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import com.pcelice.backend.entities.CoOwner;
 import com.pcelice.backend.repositories.CoOwnerRepository;
-
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
-
 
 @Profile("security")
 @RestController
