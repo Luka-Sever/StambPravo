@@ -13,6 +13,7 @@ import Sastanci from './pages/Sastanci';
 import Diskusije from './pages/Diskusije';
 import Obavijesti from './pages/Obavijesti';
 import NoviSastanak from './pages/NoviSastanak';
+import Postavke from './pages/Postavke.jsx';
 
 // Komponenta koja brani pristup ako korisnik nije ADMIN
 function ProtectedRoute({ children, allowedRoles }) {
@@ -28,8 +29,7 @@ function Shell() {
   const navigate = useNavigate()
   const { isAuthenticated, loading } = useAuth()
   
-  const hideNav = location.pathname === '/login' || location.pathname === '/admin'
-
+  const hideNav = location.pathname === '/login' || location.pathname === '/admin' || location.pathname === '/postavke';
   useEffect(() => {
     if (!loading && isAuthenticated && location.pathname === '/login') {
       navigate('/')
@@ -58,7 +58,7 @@ function Shell() {
         <Route path="/sastanci" element={<Sastanci />} />
         <Route path="/diskusije" element={<Diskusije />} />
         <Route path="/obavijesti" element={<Obavijesti />} />
-        
+        <Route path="/postavke" element={<Postavke />} />
         <Route 
             path="/sastanci/novi" 
             element={

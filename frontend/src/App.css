@@ -1010,3 +1010,11 @@ textarea {
     background: #ebf8ff;
     color: #3182ce;
 }
+
+.user-profile-header {
+   color: rgba(49, 47, 47, 0.888);
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 8px;
+}
