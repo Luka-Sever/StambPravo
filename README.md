@@ -1,5 +1,5 @@
-# StambPravo
-> Aplikacija za rješavanje pravnih odnosa vezanih za stambene ustanove.
+# StanPlan
+> Aplikacija za pomoć predstavnicima stanara u rješavanju pitanja oko zgrade
 
 # Opis projekta
 Ovaj projekt je reultat timskog rada u sklopu projeknog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu. 
