@@ -8,4 +8,6 @@ public interface MeetingService {
     Meeting createMeeting(Meeting meeting);
 
     List<Meeting> findAll();
+
+    Meeting publishMeeting(Integer meetingId);
 }

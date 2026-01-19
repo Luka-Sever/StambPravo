@@ -7,8 +7,9 @@ import com.pcelice.backend.repositories.MeetingRepository;
 import com.pcelice.backend.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @RestController
@@ -50,4 +51,14 @@ public class MeetingController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PostMapping("/{id}/publish")
+    @PreAuthorize("hasAnyRole('ADMIN', 'REP')")
+        public ResponseEntity<?> publishMeeting(@PathVariable Integer id) {
+        try {
+          Meeting published = meetingService.publishMeeting(id);
+            return ResponseEntity.ok(published);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+}
 }

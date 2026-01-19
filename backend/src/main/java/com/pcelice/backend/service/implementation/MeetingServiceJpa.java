@@ -3,6 +3,7 @@ package com.pcelice.backend.service.implementation;
 import com.pcelice.backend.entities.Item;
 import com.pcelice.backend.entities.Meeting;
 import com.pcelice.backend.entities.MeetingItemId;
+import com.pcelice.backend.entities.MeetingStatus;
 import com.pcelice.backend.repositories.MeetingRepository;
 import com.pcelice.backend.service.MeetingService;
 import jakarta.transaction.Transactional;
@@ -37,6 +38,15 @@ public class MeetingServiceJpa implements MeetingService {
             item.setId(meetingItemId);
         }
 
+        return meetingRepository.save(meeting);
+    }
+    @Override
+    @Transactional
+    public Meeting publishMeeting(Integer meetingId) {
+        Meeting meeting = meetingRepository.findByMeetingId(meetingId)
+           .orElseThrow(() -> new RuntimeException("Meeting not found"));
+    
+        meeting.setStatus(MeetingStatus.Public);
         return meetingRepository.save(meeting);
     }
 }
