@@ -7,6 +7,6 @@ export function createBuilding(buildingData) {
 }
 
 // Dodavanje predstavnika zgradi
-export function addRepToBuilding({ buildingId, repEmail }) {
-  return post('/api/building/addRep', { buildingId, repEmail });
+export function addRepToBuilding(addRepData) {
+  return post('/api/building/addRep', addRepData);
 }

@@ -39,7 +39,7 @@ public class AdminController {
         }
     }
 
-    @PostMapping("building")
+    @PostMapping("/building")
     public ResponseEntity<?> createBuilding(@RequestBody Building buiding) {
         try {
             if(!buildingService.idPresent(buiding.getBuildingId())) {
