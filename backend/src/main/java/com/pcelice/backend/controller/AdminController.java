@@ -1,7 +1,9 @@
 package com.pcelice.backend.controller;
 
 import com.pcelice.backend.entities.CoOwner;
+import com.pcelice.backend.service.BuildingService;
 import com.pcelice.backend.service.CoOwnerService;
+import com.pcelice.backend.entities.Building;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,9 @@ public class AdminController {
 
     @Autowired
     private CoOwnerService coOwnerService;
+
+    @Autowired
+    private BuildingService buildingService;
 
     @Value("${progi.fronted.url}")
     private String frontendUrl;
@@ -30,6 +35,22 @@ public class AdminController {
                 return ResponseEntity.badRequest().body("Email already exists");
             }
         } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("building")
+    public ResponseEntity<?> createBuilding(@RequestBody Building buiding) {
+        try {
+            if(!buildingService.idPresent(buiding.getBuildingId())) {
+                Building building = buildingService.createBuilding(buiding);
+                return ResponseEntity.ok(building);
+            }
+            else  {
+                return ResponseEntity.badRequest().body("Building already exists");
+            }
+        }
+        catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
