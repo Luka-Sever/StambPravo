@@ -13,5 +13,9 @@ export const meetingService = {
     addItem: (meetingId, itemData) => post(`/api/meetings/${meetingId}/items`, itemData),
 
     remove: (id) => post(`/api/meetings/${id}/delete`, {}),
-    archive: (id) => post(`/api/meetings/${id}/archive`, {})
+    archive: (id) => post(`/api/meetings/${id}/archive`, {}),
+
+    finish: (id) => post(`/api/meetings/${id}/finish`, {}),
+    updateItemConclusion: (mId, itemNum, data) => post(`/api/meetings/${mId}/items/${itemNum}/conclusion`, data)
+        
 };
