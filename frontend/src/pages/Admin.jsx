@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import '../App.css';
 import { createUser } from '../services/adminService';
+import { createBuilding, addRepToBuilding } from '../services/buildingService';
 
 function AdminPage() {
     const [email, setEmail] = useState('');
@@ -11,6 +12,15 @@ function AdminPage() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [role, setRole] = useState('');
     const [message, setMessage] = useState('');
+
+    // Nova stanja za zgradu
+    const [address, setAddress] = useState('');
+    const [cityId, setCityId] = useState('');
+    const [buildingMessage, setBuildingMessage] = useState('');
+    // Nova stanja za dodavanje predstavnika
+    const [repEmail, setRepEmail] = useState('');
+    const [buildingIdForRep, setBuildingIdForRep] = useState('');
+    const [repMessage, setRepMessage] = useState('');
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -52,12 +62,46 @@ function AdminPage() {
         }
     }
 
+    // Dodavanje nove zgrade
+    async function handleCreateBuilding(e) {
+        e.preventDefault();
+        setBuildingMessage('');
+        if (!address || !cityId) {
+            setBuildingMessage('Adresa i grad su obavezni');
+            return;
+        }
+        try {
+            await createBuilding({ address, cityId: Number(cityId) });
+            setBuildingMessage('Zgrada uspješno kreirana!');
+            setAddress('');
+            setCityId('');
+        } catch (err) {
+            setBuildingMessage(err.message || 'Greška pri kreiranju zgrade');
+        }
+    }
+
+    // Dodavanje predstavnika zgradi
+    async function handleAddRep(e) {
+        e.preventDefault();
+        setRepMessage('');
+        if (!buildingIdForRep || !repEmail) {
+            setRepMessage('ID zgrade i email predstavnika su obavezni');
+            return;
+        }
+        try {
+            await addRepToBuilding({ buildingId: Number(buildingIdForRep), repEmail });
+            setRepMessage('Predstavnik uspješno dodan zgradi!');
+            setBuildingIdForRep('');
+            setRepEmail('');
+        } catch (err) {
+            setRepMessage(err.message || 'Greška pri dodavanju predstavnika');
+        }
+    }
+
     return (
         <div className="auth-container">
             <h2 className="admin-title">Kreiraj korisnika</h2>
-            
             <div className="auth-card">
-                
                 <form onSubmit={handleSubmit} className="auth-form">
                     <div className="auth-field">
                         <input 
@@ -141,6 +185,34 @@ function AdminPage() {
                             {message}
                         </p>
                     )}
+                </form>
+            </div>
+
+            <h2 className="admin-title">Kreiraj zgradu</h2>
+            <div className="auth-card">
+                <form onSubmit={handleCreateBuilding} className="auth-form">
+                    <div className="auth-field">
+                        <input type="text" value={address} onChange={e => setAddress(e.target.value)} placeholder="Adresa" required />
+                    </div>
+                    <div className="auth-field">
+                        <input type="number" value={cityId} onChange={e => setCityId(e.target.value)} placeholder="ID grada" required />
+                    </div>
+                    <button type="submit" className="auth-button dark">KREIRAJ ZGRADU</button>
+                    {buildingMessage && <p className="status-message">{buildingMessage}</p>}
+                </form>
+            </div>
+
+            <h2 className="admin-title">Dodaj predstavnika zgradi</h2>
+            <div className="auth-card">
+                <form onSubmit={handleAddRep} className="auth-form">
+                    <div className="auth-field">
+                        <input type="number" value={buildingIdForRep} onChange={e => setBuildingIdForRep(e.target.value)} placeholder="ID zgrade" required />
+                    </div>
+                    <div className="auth-field">
+                        <input type="email" value={repEmail} onChange={e => setRepEmail(e.target.value)} placeholder="Email predstavnika" required />
+                    </div>
+                    <button type="submit" className="auth-button dark">DODAJ PREDSTAVNIKA</button>
+                    {repMessage && <p className="status-message">{repMessage}</p>}
                 </form>
             </div>
         </div>
