@@ -24,10 +24,10 @@ public class BuildingController {
     @PostMapping("/addRep")
     public void addRep(@RequestBody addRepData addRepData) {
 
-        CoOwner rep = coOwnerRepository.findByEmail(addRepData.getRep().getEmail()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-        Building building = buildingRepository.findByBuildingId(addRepData.getBuilding().getBuildingId()).orElseThrow(() -> new UsernameNotFoundException("Building not found"));
+        CoOwner rep = coOwnerRepository.findByEmail(addRepData.getRepEmail()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        Building building = buildingRepository.findByBuildingId(addRepData.getBuildingId()).orElseThrow(() -> new UsernameNotFoundException("Building not found"));
 
-        if (addRepData.getBuilding().getRep() == null) {
+        if (building.getRep() == null) {
             building.setRep(rep);
         }
 

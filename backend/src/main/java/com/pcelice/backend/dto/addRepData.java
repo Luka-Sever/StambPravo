@@ -1,26 +1,23 @@
 package com.pcelice.backend.dto;
 
-import com.pcelice.backend.entities.Building;
-import com.pcelice.backend.entities.CoOwner;
-
 public class addRepData {
 
-    private CoOwner rep;
-    private Building building;
+    private Integer buildingId;
+    private String repEmail;
 
-    public CoOwner getRep() {
-        return rep;
+    public Integer getBuildingId() {
+        return buildingId;
     }
 
-    public void setRep(CoOwner rep) {
-        this.rep = rep;
+    public void setBuildingId(Integer buildingId) {
+        this.buildingId = buildingId;
     }
 
-    public Building getBuilding() {
-        return building;
+    public String getRepEmail() {
+        return repEmail;
     }
 
-    public void setBuilding(Building building) {
-        this.building = building;
+    public void setRepEmail(String repEmail) {
+        this.repEmail = repEmail;
     }
 }
