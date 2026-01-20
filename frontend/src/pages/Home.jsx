@@ -13,10 +13,19 @@ function Home() {
   }, [user, isAuthenticated])
 
   const storageKey = useMemo(() => `pastMeetingsViewed:${userKey}`, [userKey])
-  const [viewedOverrides, setViewedOverrides] = useState({})
   const [selectedId, setSelectedId] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  
+  const [viewedOverrides, setViewedOverrides] = useState(() => {
+    return JSON.parse(localStorage.getItem(storageKey)) ||  []
+  });
 
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(viewedOverrides)), [viewedOverrides];
+  })
+
+  /**
+   * 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(storageKey)
@@ -25,15 +34,19 @@ function Home() {
       setViewedOverrides({})
     }
   }, [storageKey])
+  
+  */
+/**
+ * 
+useEffect(() => {
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(viewedOverrides))
+  } catch {
+    // ignore
+  }
+}, [storageKey, viewedOverrides])
 
-  useEffect(() => {
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(viewedOverrides))
-    } catch {
-      // ignore
-    }
-  }, [storageKey, viewedOverrides])
-
+*/
   const meetings = useMemo(() => {
     const normalized = (pastMeetingsData || []).map((m) => ({
       ...m,
@@ -45,9 +58,9 @@ function Home() {
 
   const isViewed = (meeting) => {
     if (!meeting?.id) return true
-    if (viewedOverrides[meeting.id] !== undefined) return !!viewedOverrides[meeting.id]
+    if (viewedOverrides[meeting.id] !== undefined) return viewedOverrides[meeting.id]
     const fromMock = meeting?.viewedBy?.[userKey]
-    if (fromMock !== undefined) return !!fromMock
+    if (fromMock !== undefined) return fromMock
     // fallback: if userKey isn't present in mock, treat as not viewed
     return false
   }
