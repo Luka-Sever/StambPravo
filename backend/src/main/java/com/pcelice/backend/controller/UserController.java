@@ -1,8 +1,12 @@
 package com.pcelice.backend.controller;
 
 import com.pcelice.backend.dto.changePasswordData;
+import com.pcelice.backend.entities.Building;
+import com.pcelice.backend.repositories.BuildingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.expression.ExpressionException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +18,7 @@ import com.pcelice.backend.repositories.CoOwnerRepository;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Profile("security")
 @RestController
@@ -25,6 +30,9 @@ public class UserController {
 
     @Autowired
     private CoOwnerRepository coOwnerRepository;
+
+    @Autowired
+    private BuildingRepository buildingRepository;
 
     @GetMapping
     public Map<String, Object> getCurrentUser(Authentication authentication) {
@@ -81,6 +89,20 @@ public class UserController {
         coOwner.setPassword(passwordEncoder.encode(changePasswordData.getNewPassword()));
         coOwnerRepository.save(coOwner);
 
+    }
+
+    @PostMapping("/add-coOwner")
+    @PreAuthorize("hasAnyRole('REP', 'ADMIN')")
+    public void addCoOwner(@RequestBody String coOwnerEmail, String repEmail) throws Exception {
+
+        CoOwner rep = coOwnerRepository.findByEmail(repEmail).orElseThrow(() -> new Exception("User not found"));
+
+        Building building = buildingRepository.findByBuildingId(rep.getBuilding().getBuildingId()).orElseThrow(() -> new Exception("Building not found"));
+
+        CoOwner coOwner = coOwnerRepository.findByEmail(coOwnerEmail).orElseThrow(() -> new Exception("User not found"));
+
+        coOwner.setBuilding(building);
+        coOwnerRepository.save(coOwner);
     }
 
     @GetMapping("/debug")
