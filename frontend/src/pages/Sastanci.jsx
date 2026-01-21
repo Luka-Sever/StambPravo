@@ -21,7 +21,7 @@ export default function Sastanci() {
             const data = await meetingService.getAll();
             setMeetings(data || []);
         } catch (err) {
-            console.error("Greška pri dohvaćanju:", err);
+            console.error("Greška pri dohvaćanju sastanaka:", err);
         } finally {
             setLoading(false);
         }

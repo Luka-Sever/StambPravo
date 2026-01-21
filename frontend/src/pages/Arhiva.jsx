@@ -1,41 +1,30 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useAuth } from '../context/AuthContext.jsx'
-import pastMeetingsData from '../mocks/pastMeetings.json'
+import { meetingService } from '../services/meetingService.js'
 
-export default function Obavijesti() {
-    const { user, isAuthenticated } = useAuth()
+export default function Arhiva() {
     const [loading, setLoading] = useState(true)
-    const [viewedOverrides, setViewedOverrides] = useState({})
+    const [error, setError] = useState(null)
+    const [meetings, setMeetings] = useState([])
+
     const [selectedId, setSelectedId] = useState(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const userKey = useMemo(() => {
-        const email = user?.email
-        const username = user?.username
-        const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(' ').trim()
-        return email || username || fullName || user?.role?.toLowerCase() || (isAuthenticated ? 'user' : 'anon')
-    }, [user, isAuthenticated])
-
-    const storageKey = useMemo(() => `pastMeetingsViewed:${userKey}`, [userKey])
-
     useEffect(() => {
-        try {
-            const raw = localStorage.getItem(storageKey)
-            setViewedOverrides(raw ? JSON.parse(raw) : {})
-        } catch {
-            setViewedOverrides({})
-        } finally {
-            setLoading(false)
-        }
-    }, [storageKey])
-
-    useEffect(() => {
-        try {
-            localStorage.setItem(storageKey, JSON.stringify(viewedOverrides))
-        } catch {
-            // ignore
-        }
-    }, [storageKey, viewedOverrides])
+        let cancelled = false
+        ;(async () => {
+            try {
+                setLoading(true)
+                setError(null)
+                const data = await meetingService.getAll()
+                if (!cancelled) setMeetings(Array.isArray(data) ? data : [])
+            } catch (e) {
+                if (!cancelled) setError(e?.message || 'Greška pri dohvaćanju sastanaka.')
+            } finally {
+                if (!cancelled) setLoading(false)
+            }
+        })()
+        return () => { cancelled = true }
+    }, [])
 
     useEffect(() => {
         if (!isModalOpen) return
@@ -46,29 +35,25 @@ export default function Obavijesti() {
         return () => window.removeEventListener('keydown', onKeyDown)
     }, [isModalOpen])
 
-    const meetings = useMemo(() => {
-        const normalized = (pastMeetingsData || []).map((m) => ({
-            ...m,
-            dateObj: new Date(m.meetingStartTime),
-        }))
-        normalized.sort((a, b) => b.dateObj - a.dateObj)
-        return normalized
-    }, [])
-
-    const isViewed = (meeting) => {
-        if (!meeting?.id) return true
-        if (viewedOverrides[meeting.id] !== undefined) return !!viewedOverrides[meeting.id]
-        const fromMock = meeting?.viewedBy?.[userKey]
-        if (fromMock !== undefined) return !!fromMock
-        return false
-    }
-
-    const unreadMeetings = useMemo(() => meetings.filter((m) => !isViewed(m)), [meetings, viewedOverrides, userKey])
+    const archivedMeetings = useMemo(() => {
+        return (meetings || [])
+            .map((m) => ({
+                id: m.meetingId ?? m.id,
+                title: m.title,
+                summary: m.summary,
+                status: m.status,
+                meetingStartTime: m.meetingStartTime,
+                meetingLocation: m.meetingLocation,
+                items: m.items || [],
+            }))
+            .filter((m) => m.id != null && m.status === 'Archived')
+            .sort((a, b) => new Date(b.meetingStartTime || 0) - new Date(a.meetingStartTime || 0))
+    }, [meetings])
 
     const selected = useMemo(() => {
         if (!selectedId) return null
-        return meetings.find((m) => m.id === selectedId) || null
-    }, [meetings, selectedId])
+        return archivedMeetings.find((m) => m.id === selectedId) || null
+    }, [archivedMeetings, selectedId])
 
     const formatDate = (dateStr) => {
         const d = new Date(dateStr)
@@ -78,20 +63,24 @@ export default function Obavijesti() {
 
     return (
         <div className="page-container">
-            <h1 className="admin-title">Obavijesti</h1>
+            <h1 className="admin-title">Arhivirani sastanci</h1>
 
             {loading ? (
                 <div className="archive">
                     <div className="archive-empty">Učitavanje...</div>
                 </div>
+            ) : error ? (
+                <div className="archive">
+                    <div className="archive-empty">{error}</div>
+                </div>
             ) : (
                 <div className="archive">
                     <div className="archive-grid">
                         <div className="archive-list">
-                            {unreadMeetings.length === 0 ? (
-                                <div className="archive-empty">Nema nepročitanih sastanaka.</div>
+                            {archivedMeetings.length === 0 ? (
+                                <div className="archive-empty">Nema arhiviranih sastanaka.</div>
                             ) : (
-                                unreadMeetings.map((m) => (
+                                archivedMeetings.map((m) => (
                                     <button
                                         key={m.id}
                                         type="button"
@@ -99,12 +88,11 @@ export default function Obavijesti() {
                                         onClick={() => {
                                             setSelectedId(m.id)
                                             setIsModalOpen(true)
-                                            setViewedOverrides((prev) => ({ ...prev, [m.id]: true }))
                                         }}
                                     >
                                         <div className="archive-item-top">
                                             <div className="archive-item-title">{m.title}</div>
-                                            <span className="badge-unread">Novo</span>
+                                            <span className="status-badge status-badge--arhiviran">ARHIVIRAN</span>
                                         </div>
                                         <div className="archive-item-date">
                                             {formatDate(m.meetingStartTime)} • {m.meetingLocation}
@@ -141,12 +129,19 @@ export default function Obavijesti() {
                             <div className="archive-block">
                                 <div className="archive-block-title">Točke dnevnog reda</div>
                                 <div className="agenda-list">
-                                    {(selected.items || []).map((it) => (
-                                        <div key={`${selected.id}-${it.item_number}`} className="agenda-item">
-                                            <div className="agenda-item-title">{it.item_number}. {it.title}</div>
-                                            <div className="agenda-item-summary">{it.summary}</div>
-                                        </div>
-                                    ))}
+                                    {(selected.items || []).length === 0 ? (
+                                        <div className="archive-empty">Nema točaka dnevnog reda.</div>
+                                    ) : (
+                                        (selected.items || []).map((it) => {
+                                            const num = it.itemNumber ?? it.id?.itemNumber ?? it.item_number
+                                            return (
+                                                <div key={`${selected.id}-${num ?? it.title}`} className="agenda-item">
+                                                    <div className="agenda-item-title">{num ? `${num}. ` : ''}{it.title}</div>
+                                                    <div className="agenda-item-summary">{it.summary}</div>
+                                                </div>
+                                            )
+                                        })
+                                    )}
                                 </div>
                             </div>
                         </div>

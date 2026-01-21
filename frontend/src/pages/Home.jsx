@@ -1,80 +1,57 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useAuth } from '../context/AuthContext.jsx'
-import pastMeetingsData from '../mocks/pastMeetings.json'
+import { meetingService } from '../services/meetingService.js'
 
 function Home() {
-  const { user, isAuthenticated } = useAuth()
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [meetings, setMeetings] = useState([])
 
-  const userKey = useMemo(() => {
-    const email = user?.email
-    const username = user?.username
-    const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(' ').trim()
-    return email || username || fullName || user?.role?.toLowerCase() || (isAuthenticated ? 'user' : 'anon')
-  }, [user, isAuthenticated])
-
-  const storageKey = useMemo(() => `pastMeetingsViewed:${userKey}`, [userKey])
   const [selectedId, setSelectedId] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  
-  const [viewedOverrides, setViewedOverrides] = useState(() => {
-    return JSON.parse(localStorage.getItem(storageKey)) ||  []
-  });
 
   useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(viewedOverrides)), [viewedOverrides];
-  })
-
-  /**
-   * 
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(storageKey)
-      setViewedOverrides(raw ? JSON.parse(raw) : {})
-    } catch {
-      setViewedOverrides({})
+    let cancelled = false
+    ;(async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const data = await meetingService.getAll()
+        if (!cancelled) setMeetings(Array.isArray(data) ? data : [])
+      } catch (e) {
+        if (!cancelled) setError(e?.message || 'Greška pri dohvaćanju sastanaka.')
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    })()
+    return () => {
+      cancelled = true
     }
-  }, [storageKey])
-  
-  */
-/**
- * 
-useEffect(() => {
-  try {
-    localStorage.setItem(storageKey, JSON.stringify(viewedOverrides))
-  } catch {
-    // ignore
-  }
-}, [storageKey, viewedOverrides])
-
-*/
-  const meetings = useMemo(() => {
-    const normalized = (pastMeetingsData || []).map((m) => ({
-      ...m,
-      dateObj: new Date(m.meetingStartTime),
-    }))
-    normalized.sort((a, b) => b.dateObj - a.dateObj)
-    return normalized
   }, [])
 
-  const isViewed = (meeting) => {
-    if (!meeting?.id) return true
-    if (viewedOverrides[meeting.id] !== undefined) return viewedOverrides[meeting.id]
-    const fromMock = meeting?.viewedBy?.[userKey]
-    if (fromMock !== undefined) return fromMock
-    // fallback: if userKey isn't present in mock, treat as not viewed
-    return false
-  }
-
-  const filtered = useMemo(() => {
-    return meetings
+  const normalized = useMemo(() => {
+    return (meetings || [])
+      .map((m) => ({
+        id: m.meetingId ?? m.id,
+        title: m.title,
+        summary: m.summary,
+        status: m.status,
+        meetingStartTime: m.meetingStartTime,
+        meetingLocation: m.meetingLocation,
+        items: m.items || [],
+      }))
+      .filter((m) => m.id != null)
+      .sort((a, b) => new Date(b.meetingStartTime || 0) - new Date(a.meetingStartTime || 0))
   }, [meetings])
 
-  const unreadCount = useMemo(() => filtered.filter((m) => !isViewed(m)).length, [filtered, viewedOverrides, userKey])
+  const active = useMemo(
+    () => normalized.filter((m) => m.status !== 'Archived'),
+    [normalized]
+  )
 
   const selected = useMemo(() => {
     if (!selectedId) return null
-    return meetings.find((m) => m.id === selectedId) || null
-  }, [meetings, selectedId])
+    return normalized.find((m) => m.id === selectedId) || null
+  }, [normalized, selectedId])
 
   useEffect(() => {
     if (!isModalOpen) return
@@ -95,49 +72,53 @@ useEffect(() => {
     <div className="dashboard">
       <div className="dashboard-header">
         <div className="dashboard-subtitle">
-          <span className="dashboard-pill">Arhiva sastanaka</span>
+          <span className="dashboard-pill">Sastanci</span>
           <span className="dashboard-meta">
-            {filtered.length} ukupno • {unreadCount} nepročitano
+            {active.length} ukupno
           </span>
         </div>
       </div>
 
-      <section className="archive">
-
-
-        <div className="archive-grid">
-          <div className="archive-list" aria-label="Popis proteklih sastanaka">
-            {filtered.map((m) => {
-              const unread = !isViewed(m)
-              return (
-                <button
-                  key={m.id}
-                  type="button"
-                  className="archive-item"
-                  onClick={() => {
-                    setSelectedId(m.id)
-                    setIsModalOpen(true)
-                    // otvaranje modala = smatra se pročitanim
-                    setViewedOverrides((prev) => ({ ...prev, [m.id]: true }))
-                  }}
-                >
-                  <div className="archive-item-top">
-                    <div className="archive-item-title">{m.title}</div>
-                    {unread && <span className="badge-unread">Novo</span>}
-                  </div>
-                  <div className="archive-item-date">{formatDate(m.meetingStartTime)} • {m.meetingLocation}</div>
-                </button>
-              )
-            })}
-
-            {filtered.length === 0 && (
-              <div className="archive-empty">
-                Nema dostupnih sastanaka u arhivi.
+      {loading ? (
+        <section className="archive">
+          <div className="archive-empty">Učitavanje...</div>
+        </section>
+      ) : error ? (
+        <section className="archive">
+          <div className="archive-empty">{error}</div>
+        </section>
+      ) : (
+        <>
+          <section className="archive">
+            <div className="archive-block-title">Novi sastanci</div>
+            <div className="archive-grid">
+              <div className="archive-list" aria-label="Popis novih sastanaka">
+                {active.length === 0 ? (
+                  <div className="archive-empty">Nema novih sastanaka.</div>
+                ) : (
+                  active.map((m) => (
+                    <button
+                      key={m.id}
+                      type="button"
+                      className="archive-item"
+                      onClick={() => {
+                        setSelectedId(m.id)
+                        setIsModalOpen(true)
+                      }}
+                    >
+                      <div className="archive-item-top">
+                        <div className="archive-item-title">{m.title}</div>
+                        <span className="badge-unread">Novo</span>
+                      </div>
+                      <div className="archive-item-date">{formatDate(m.meetingStartTime)} • {m.meetingLocation}</div>
+                    </button>
+                  ))
+                )}
               </div>
-            )}
-          </div>
-        </div>
-      </section>
+            </div>
+          </section>
+        </>
+      )}
 
       {isModalOpen && selected && (
         <div
@@ -168,27 +149,24 @@ useEffect(() => {
               <div className="archive-block">
                 <div className="archive-block-title">Točke dnevnog reda</div>
                 <div className="agenda-list">
-                  {(selected.items || []).map((it) => (
-                    <div key={`${selected.id}-${it.item_number}`} className="agenda-item">
-                      <div className="agenda-item-title">{it.item_number}. {it.title}</div>
-                      <div className="agenda-item-summary">{it.summary}</div>
-                    </div>
-                  ))}
+                  {(selected.items || []).length === 0 ? (
+                    <div className="archive-empty">Nema točaka dnevnog reda.</div>
+                  ) : (
+                    (selected.items || []).map((it) => {
+                      const num = it.itemNumber ?? it.id?.itemNumber ?? it.item_number
+                      return (
+                        <div key={`${selected.id}-${num ?? it.title}`} className="agenda-item">
+                          <div className="agenda-item-title">{num ? `${num}. ` : ''}{it.title}</div>
+                          <div className="agenda-item-summary">{it.summary}</div>
+                        </div>
+                      )
+                    })
+                  )}
                 </div>
               </div>
             </div>
 
             <div className="modal-footer">
-              <button
-                type="button"
-                className="auth-button outline"
-                onClick={() => {
-                  setViewedOverrides((prev) => ({ ...prev, [selected.id]: false }))
-                  setIsModalOpen(false)
-                }}
-              >
-                Označi kao nepročitano
-              </button>
               <button type="button" className="auth-button dark" onClick={() => setIsModalOpen(false)}>
                 Zatvori
               </button>

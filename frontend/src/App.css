@@ -768,7 +768,7 @@ textarea {
     padding-top: 15px;
 }
 
-/* Obavijesti */
+/* Arhiva */
 .news-item {
     padding: 15px;
     border-bottom: 1px solid #e5e7eb;
@@ -835,7 +835,7 @@ textarea {
     font-weight: bold;
 }
 
-/* Obavijesti Page */
+/* Arhiva Page */
 .news-list {
     display: flex;
     flex-direction: column;

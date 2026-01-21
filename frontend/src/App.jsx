@@ -11,7 +11,7 @@ import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import Sastanci from './pages/Sastanci';
 import Diskusije from './pages/Diskusije';
-import Obavijesti from './pages/Obavijesti';
+import Arhiva from './pages/Arhiva';
 import NoviSastanak from './pages/NoviSastanak';
 import Postavke from './pages/Postavke.jsx';
 
@@ -57,7 +57,7 @@ function Shell() {
         />
         <Route path="/sastanci" element={<Sastanci />} />
         <Route path="/diskusije" element={<Diskusije />} />
-        <Route path="/obavijesti" element={<Obavijesti />} />
+        <Route path="/arhiva" element={<Arhiva />} />
         <Route path="/postavke" element={<Postavke />} />
         <Route 
             path="/sastanci/novi" 

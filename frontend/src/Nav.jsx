@@ -6,8 +6,8 @@ export default function Nav() {
             <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : undefined)}>
                 Naslovnica
             </NavLink>
-            <NavLink to="/obavijesti" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-                Obavijesti
+            <NavLink to="/arhiva" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+                Arhiva
             </NavLink>
             <NavLink to="/diskusije" className={({ isActive }) => (isActive ? 'active' : undefined)}>
                 Diskusije

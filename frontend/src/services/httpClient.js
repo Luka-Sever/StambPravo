@@ -6,19 +6,31 @@ function buildUrl(path) {
 }
 
 async function request(path, { method = 'GET', headers = {}, body } = {}) {
+  const url = buildUrl(path)
   const finalHeaders = { 'Content-Type': 'application/json', ...headers }
-  const response = await fetch(buildUrl(path), {
-    method,
-    headers: finalHeaders,
-    credentials: 'include',
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  })
+  let response
+  try {
+    response = await fetch(url, {
+      method,
+      headers: finalHeaders,
+      credentials: 'include',
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    })
+  } catch (err) {
+    throw err
+  }
 
   let data = null
+  let rawText = null
   try {
-    data = await response.json()
-  } catch(_) {
-      //empty
+    const clone = response.clone()
+    try {
+      data = await response.json()
+    } catch {
+      rawText = await clone.text()
+    }
+  } catch (_) {
+    //empty
   }
 
   if (!response.ok) {
@@ -26,6 +38,9 @@ async function request(path, { method = 'GET', headers = {}, body } = {}) {
     const error = new Error(message)
     error.status = response.status
     error.data = data
+    error.url = url
+    error.method = method
+    error.rawText = rawText
     throw error
   }
 
