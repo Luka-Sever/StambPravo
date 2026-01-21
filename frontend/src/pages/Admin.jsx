@@ -71,10 +71,12 @@ function AdminPage() {
             return;
         }
         try {
-            await createBuilding({ address, cityId: Number(cityId) });
+            const newBuilding = { address, cityId, repEmail }
+            await createBuilding(newBuilding);
             setBuildingMessage('Zgrada uspješno kreirana!');
             setAddress('');
             setCityId('');
+            setRepEmail('');
         } catch (err) {
             setBuildingMessage(err.message || 'Greška pri kreiranju zgrade');
         }
@@ -195,7 +197,7 @@ function AdminPage() {
                         <input type="text" value={address} onChange={e => setAddress(e.target.value)} placeholder="Adresa" required />
                     </div>
                     <div className="auth-field">
-                        <input type="number" value={cityId} onChange={e => setCityId(e.target.value)} placeholder="ID grada" required />
+                        <input type="number" step="any" value={cityId} onChange={e => setCityId(e.target.value)} placeholder="Poštanski broj" required />
                     </div>
                     <button type="submit" className="auth-button dark">KREIRAJ ZGRADU</button>
                     {buildingMessage && <p className="status-message">{buildingMessage}</p>}
