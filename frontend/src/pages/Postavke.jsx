@@ -7,13 +7,16 @@ import { addRepToBuilding } from '../services/buildingService';
 export default function Postavke() {
     const navigate = useNavigate(); 
     const { user } = useAuth(); 
-    
+
     const [data, setData] = useState({ current: '', new: '', confirm: '' });
     const [message, setMessage] = useState('');
 
     const [tenantEmail, setTenantEmail] = useState('');
     const [tenantMessage, setTenantMessage] = useState('');
 
+    const buildingInfo = user?.building; 
+    const buildingId = buildingInfo?.buildingId || user?.buildingId;
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage('');
@@ -46,7 +49,7 @@ export default function Postavke() {
         e.preventDefault();
         setTenantMessage('');
         try {
-            await addRepToBuilding({ buildingId: user.buildingId, repEmail: tenantEmail });
+            await addRepToBuilding({ buildingId: buildingId, repEmail: tenantEmail });
             setTenantMessage('Stanar uspješno dodan u zgradu!');
             setTenantEmail('');
         } catch (err) {

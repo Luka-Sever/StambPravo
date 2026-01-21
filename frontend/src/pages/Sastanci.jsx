@@ -9,6 +9,7 @@ export default function Sastanci() {
     const [expandedId, setExpandedId] = useState(null);
     const [conclusions, setConclusions] = useState({});
     const [newItem, setNewItem] = useState({ title: '', summary: '', legal: 0 });
+    const [joinedMeetings, setJoinedMeetings] = useState(new Set());
 
     const hasPrivileges = user?.role === 'ADMIN' || user?.role === 'REP';
 
@@ -27,10 +28,13 @@ export default function Sastanci() {
         }
     };
 
-    const handleAction = async (actionFn, id, successMsg) => {
+    const handleAction = async (actionFn, id, successMsg, isParticipation = false) => {
         try {
             await actionFn(id); 
             alert(successMsg);
+            if (isParticipation) {
+                setJoinedMeetings(prev => new Set(prev).add(id));
+            }
             loadMeetings(); 
         } catch (err) {
             alert(err.message);
@@ -80,16 +84,16 @@ export default function Sastanci() {
         return legalItemsMissingConclusion.length === 0;
     };
 
-    const saveConclusion = async (mId, itemNumber) => {
-        const text = conclusions[`${mId}-${itemNumber}`];
-        if (!text && !status) {
-            alert("Unesite tekst zaključka!");
+    const saveConclusion = async (mId, itemNumber, item) => {
+        const key = `${mId}-${itemNumber}`;
+        const text = (conclusions[key] !== undefined ? conclusions[key] : item.conclusion) || '';
+        if (!text) {
+            alert("Unesite zaključak!");
             return;
         }
         try {
             await meetingService.updateItemConclusion(mId, itemNumber, { 
-                conclusion: text,
-                status: status 
+                conclusion: text
             });
             alert("Zaključak spremljen!");
             loadMeetings();
@@ -157,30 +161,26 @@ export default function Sastanci() {
                                                     <strong>{itemNum}. {item.title} {item.legal === 1 && <span className="legal-mark">(pravni učinak)</span>}</strong>
                                                     <p className="item-description-text">{item.summary}</p>
                                                     
-                                                    {m.status === 'Obavljen' && hasPrivileges ? (
+                                                    {m.status === 'Obavljen' && hasPrivileges && item.legal === 1 ? (
                                                         <div className="conclusion-input-box">
-                                                        {item.legal === 1 ? (
+                                                            <div className="vote-select-row">
+                                                                <label> Upišite Ishod (Izglasan/Odbijen): 
+                                                                </label>
+                                                            </div>
                                                             <textarea 
-                                                                placeholder="Unesite zaključak..."
+                                                                placeholder="Izglasan/Odbijen."
                                                                 defaultValue={item.conclusion}
                                                                 onChange={(e) => setConclusions({...conclusions, [`${mId}-${itemNum}`]: e.target.value})}
                                                             />
-                                                            ) : null }
-                                                         {item.legal === 1 ? (
-                                                                <div className="vote-buttons">
-                                                                    <button className="auth-button small-btn success" onClick={() => saveConclusion(mId, itemNum, 'Izglasan')}>Izglasan</button>
-                                                                    <button className="auth-button small-btn danger" onClick={() => saveConclusion(mId, itemNum, 'Odbijen')}>Odbijen</button>
-                                                                </div>
-                                                            ) : null }
+                                                            <div className="vote-buttons">
+                                                                <button className="auth-button small-btn success" onClick={() => saveConclusion(mId, itemNum, item)}>Spremi</button>
+                                                            </div>
                                                         </div>
-                                                    ) : (
-                                                        item.conclusion && (
-                                                            <p className="conclusion-text">
-                                                                <b>Zaključak:</b> {item.conclusion} 
-                                                                {item.status && <span className={`vote-status ${item.status.toLowerCase()}`}> </span>}
+                                                    ) : m.status === 'Archived' && item.legal === 1 && item.conclusion ? (
+                                                        <p className="conclusion-text">
+                                                            <b>Zaključak:</b> {item.conclusion}
                                                         </p>
-                                                        )
-                                                    )}
+                                                    ) : null}
                                                 </div>
                                             );
                                         })}
@@ -218,7 +218,6 @@ export default function Sastanci() {
                                         {m.status === 'Obavljen' && (
                                             <button 
                                                 className="auth-button primary small-btn" 
-                                                disabled={!canArchive(m)}
                                                 title={!canArchive(m) ? "Morate popuniti zaključke za sve pravne točke!" : ""}
                                                 onClick={() => handleAction(meetingService.archive, mId, "Sastanak arhiviran i mail poslan!")}
                                             >
@@ -231,9 +230,10 @@ export default function Sastanci() {
                                 {!hasPrivileges && m.status === 'Public' && (
                                     <button 
                                         className="auth-button primary small-btn" 
-                                        onClick={() => handleAction(meetingService.confirmParticipation, mId, "Sudjelovanje uspješno potvrđeno!")}
+                                        disabled={joinedMeetings.has(mId)}
+                                        onClick={() => handleAction(meetingService.confirmParticipation, mId, "Sudjelovanje uspješno potvrđeno!", true)}
                                     >
-                                        ✅ Sudjelovat ću
+                                        {joinedMeetings.has(mId) ? '✓ Prijavljeni' : '✅ Sudjelovat ću'}
                                     </button>
                                 )}
                             </div>

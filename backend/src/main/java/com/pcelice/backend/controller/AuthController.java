@@ -76,6 +76,10 @@ public class AuthController {
             body.put("email", user.getEmail());
             body.put("username", user.getUsername());
             body.put("role", user.getRole());
+            if (user.getBuilding() != null) {
+                body.put("buildingId", user.getBuilding().getBuildingId());
+                body.put("buildingAddress", user.getBuilding().getAddress());
+            }
         }
         return ResponseEntity.ok(body);
     }

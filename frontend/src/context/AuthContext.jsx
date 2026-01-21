@@ -36,7 +36,10 @@ export function AuthProvider({ children }) {
             firstName: sessionUser.firstName || sessionUser.name, 
             lastName: sessionUser.lastName || '',
             email: sessionUser.email,
-            role: sessionUser.role 
+            role: sessionUser.role,
+            buildingId: sessionUser.buildingId,
+            buildingAddress: sessionUser.buildingAddress,
+            building: sessionUser.building || (sessionUser.buildingId ? { buildingId: sessionUser.buildingId, address: sessionUser.buildingAddress } : null)
           })
         }
       } catch { /* ignore */ } finally {
@@ -53,7 +56,10 @@ export function AuthProvider({ children }) {
       lastName: data.lastName,
       username: data.username,
       email: data.email,
-      role: data.role 
+      role: data.role,
+      buildingId: data.buildingId,
+      buildingAddress: data.buildingAddress,
+      building: data.building || (data.buildingId ? { buildingId: data.buildingId, address: data.buildingAddress } : null)
     } : null)
     persist(nextUser, nextToken)
     return { user: nextUser, token: nextToken, raw: data }

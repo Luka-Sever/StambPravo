@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-//@Table(name = "CO_OWNER")
+@Table(name = "CO_OWNER")
 public class CoOwner {
 
     @Id
@@ -31,7 +31,7 @@ public class CoOwner {
     private RoleType roleType;
 
     /// treba biti false u pravoj bazi
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "building_id", nullable = true)
     private Building building;
 
