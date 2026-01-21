@@ -15,6 +15,46 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/meetings")
 public class MeetingController {
+    import com.pcelice.backend.dto.ConclusionRequest;
+    @PostMapping("/{id}/participate")
+    public ResponseEntity<?> participateMeeting(@PathVariable Integer id) {
+        try {
+            Meeting meeting = meetingService.participateMeeting(id);
+            return ResponseEntity.ok(meeting);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/delete")
+    public ResponseEntity<?> deleteMeeting(@PathVariable Integer id) {
+        try {
+            meetingService.deleteMeeting(id);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/finish")
+    public ResponseEntity<?> finishMeeting(@PathVariable Integer id) {
+        try {
+            Meeting meeting = meetingService.finishMeeting(id);
+            return ResponseEntity.ok(meeting);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{mId}/items/{itemNum}/conclusion")
+    public ResponseEntity<?> updateItemConclusion(@PathVariable Integer mId, @PathVariable Integer itemNum, @RequestBody(required = true) ConclusionRequest conclusionRequest) {
+        try {
+            Meeting meeting = meetingService.updateItemConclusion(mId, itemNum, conclusionRequest.getConclusion());
+            return ResponseEntity.ok(meeting);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @Autowired
     private MeetingService meetingService;

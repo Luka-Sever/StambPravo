@@ -18,11 +18,72 @@ import java.util.List;
 
 @Service
 public class MeetingServiceJpa implements MeetingService {
+            @Override
+            @Transactional
+            public Meeting participateMeeting(Integer meetingId) {
+                Meeting meeting = meetingRepository.findByMeetingId(meetingId)
+                    .orElseThrow(() -> new RuntimeException("Meeting not found"));
+                // Dodaj logiku za sudjelovanje (npr. povećaj broj sudionika)
+                meeting.setParticipantsCount((meeting.getParticipantsCount() == null ? 0 : meeting.getParticipantsCount()) + 1);
+                return meetingRepository.save(meeting);
+            }
+
+            @Override
+            @Transactional
+            public void deleteMeeting(Integer meetingId) {
+                Meeting meeting = meetingRepository.findByMeetingId(meetingId)
+                    .orElseThrow(() -> new RuntimeException("Meeting not found"));
+                meetingRepository.delete(meeting);
+            }
+
+            @Override
+            @Transactional
+            public Meeting finishMeeting(Integer meetingId) {
+                Meeting meeting = meetingRepository.findByMeetingId(meetingId)
+                    .orElseThrow(() -> new RuntimeException("Meeting not found"));
+                meeting.setStatus(MeetingStatus.Obavljen);
+                return meetingRepository.save(meeting);
+            }
+
+            @Override
+            @Transactional
+            public Meeting updateItemConclusion(Integer meetingId, Integer itemNumber, String conclusion) {
+                Meeting meeting = meetingRepository.findByMeetingId(meetingId)
+                    .orElseThrow(() -> new RuntimeException("Meeting not found"));
+                if (meeting.getItems() == null || meeting.getItems().isEmpty()) {
+                    throw new RuntimeException("Meeting has no items");
+                }
+                boolean found = false;
+                for (Item item : meeting.getItems()) {
+                    if (item.getId() != null && item.getId().getItemNumber() == itemNumber) {
+                        item.setConclusion(conclusion);
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    throw new RuntimeException("Item not found");
+                }
+                return meetingRepository.save(meeting);
+            }
         @Override
         @Transactional
         public Meeting archiveMeeting(Integer meetingId) {
             Meeting meeting = meetingRepository.findByMeetingId(meetingId)
                .orElseThrow(() -> new RuntimeException("Meeting not found"));
+
+            // Provjera: sve pravne točke moraju imati zaključak
+            boolean allLegalHaveConclusion = true;
+            if (meeting.getItems() != null) {
+                for (Item item : meeting.getItems()) {
+                    if (item.getLegal() == 1 && (item.getConclusion() == null || item.getConclusion().trim().isEmpty())) {
+                        allLegalHaveConclusion = false;
+                        break;
+                    }
+                }
+            }
+            if (!allLegalHaveConclusion) {
+                throw new RuntimeException("Nisu dodani zaključci za sve pravne točke!");
+            }
 
             meeting.setStatus(MeetingStatus.Archived);
             Meeting savedMeeting = meetingRepository.save(meeting);

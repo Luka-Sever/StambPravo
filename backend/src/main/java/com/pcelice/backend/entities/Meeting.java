@@ -21,6 +21,15 @@ import jakarta.persistence.*;
     }
 )
 public class Meeting {
+    private Integer participantsCount = 0;
+
+    public Integer getParticipantsCount() {
+        return participantsCount;
+    }
+
+    public void setParticipantsCount(Integer participantsCount) {
+        this.participantsCount = participantsCount;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
