@@ -1,5 +1,6 @@
 package com.pcelice.backend;
 
+import com.pcelice.backend.entities.Building;
 import com.pcelice.backend.entities.CoOwner;
 import com.pcelice.backend.entities.RoleType;
 import com.pcelice.backend.repositories.CoOwnerRepository;
@@ -36,6 +37,7 @@ public class BackendApplication {
             admin.setPassword(encodedPassword);
             admin.setFirstName("Bruno");
             admin.setLastName("Plese");
+            admin.setBuilding(new Building());
             admin.setRole(RoleType.ADMIN);
             repository.save(admin);
         };
