@@ -2,6 +2,7 @@ package com.pcelice.backend.controller;
 import com.pcelice.backend.dto.ConclusionRequest;
 
 import com.pcelice.backend.entities.Item;
+import com.pcelice.backend.entities.ItemStatus;
 import com.pcelice.backend.entities.Meeting;
 import com.pcelice.backend.entities.MeetingItemId;
 import com.pcelice.backend.repositories.MeetingRepository;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/meetings")
@@ -81,11 +83,23 @@ public class MeetingController {
         if (meeting != null) {
             MeetingItemId meetingItemId = new MeetingItemId();
             meetingItemId.setMeetingId(meetingId);
-            meetingItemId.setItemNumber(meeting.getItems().getLast().getItemNumber() + 1);
+            int nextItemNumber = meeting.getItems() == null || meeting.getItems().isEmpty()
+                    ? 1
+                    : meeting.getItems().stream()
+                    .map(Item::getItemNumber)
+                    .filter(Objects::nonNull)
+                    .max(Integer::compareTo)
+                    .orElse(0) + 1;
+            meetingItemId.setItemNumber(nextItemNumber);
+
+            // defaults
+            if (item.getStatus() == null) item.setStatus(ItemStatus.Pending);
+            if (item.getLegal() == null) item.setLegal(0);
+
             item.setMeeting(meeting);
             item.setId(meetingItemId);
             meeting.getItems().add(item);
-            return ResponseEntity.ok(meeting);
+            return ResponseEntity.ok(meetingRepository.save(meeting));
         }
         else  {
             return ResponseEntity.notFound().build();
