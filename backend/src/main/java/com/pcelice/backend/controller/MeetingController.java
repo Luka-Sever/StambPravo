@@ -1,4 +1,5 @@
 package com.pcelice.backend.controller;
+import com.pcelice.backend.dto.ConclusionRequest;
 
 import com.pcelice.backend.entities.Item;
 import com.pcelice.backend.entities.Meeting;
@@ -15,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/meetings")
 public class MeetingController {
-    import com.pcelice.backend.dto.ConclusionRequest;
     @PostMapping("/{id}/participate")
     public ResponseEntity<?> participateMeeting(@PathVariable Integer id) {
         try {
@@ -93,22 +93,23 @@ public class MeetingController {
     }
     @PostMapping("/{id}/publish")
     @PreAuthorize("hasAnyRole('ADMIN', 'REP')")
-        public ResponseEntity<?> publishMeeting(@PathVariable Integer id) {
+    public ResponseEntity<?> publishMeeting(@PathVariable Integer id) {
         try {
-          Meeting published = meetingService.publishMeeting(id);
+            Meeting published = meetingService.publishMeeting(id);
             return ResponseEntity.ok(published);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-}
-        @PostMapping("/{id}/archive")
-        @PreAuthorize("hasAnyRole('ADMIN', 'REP')")
-        public ResponseEntity<?> archiveMeeting(@PathVariable Integer id) {
-            try {
-                Meeting archived = meetingService.archiveMeeting(id);
-                return ResponseEntity.ok(archived);
-            } catch (RuntimeException e) {
-                return ResponseEntity.badRequest().body(e.getMessage());
-            }
+    }
+
+    @PostMapping("/{id}/archive")
+    @PreAuthorize("hasAnyRole('ADMIN', 'REP')")
+    public ResponseEntity<?> archiveMeeting(@PathVariable Integer id) {
+        try {
+            Meeting archived = meetingService.archiveMeeting(id);
+            return ResponseEntity.ok(archived);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
 }
