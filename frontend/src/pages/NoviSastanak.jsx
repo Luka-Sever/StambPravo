@@ -14,40 +14,14 @@ export default function NoviSastanak() {
         summary: '',
         title: '',
         status: 'Pending', 
-        items: []
+        items: [] 
     });
-
-    const [newItem, setNewItem] = useState({ title: '', summary: '', legal: 0 });
-
-    const handleAddItem = () => {
-        if (!newItem.title || !newItem.summary) {
-            alert("Točka mora imati naslov i opis!");
-            return;
-        }
-        
-        const updatedItems = [
-            ...meeting.items, 
-            { 
-                ...newItem, 
-                item_number: meeting.items.length + 1, 
-                status: 'Pending' 
-            }
-        ];
-        
-        setMeeting({ ...meeting, items: updatedItems });
-        setNewItem({ title: '', summary: '', legal: 0 });
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();        
 
         if (!meeting.title || !meeting.meetingLocation || !meeting.meetingStartTime || !meeting.summary) {
             alert("Sva polja moraju biti popunjena!");
-            return;
-        }
-
-        if (meeting.items.length === 0) {
-            alert("Sastanak mora imati barem jednu točku dnevnog reda prije objave!");
             return;
         }
 
@@ -64,7 +38,7 @@ export default function NoviSastanak() {
             };
 
             await meetingService.create(finalData);
-            alert("Sastanak uspješno kreiran!");
+            alert("Sastanak uspješno planiran! Sada mu možete dodati točke dnevnog reda.");
             navigate('/sastanci');
         } catch (err) {
             alert("Greška pri spremanju: " + err.message);
@@ -91,24 +65,8 @@ export default function NoviSastanak() {
                     <label>OPIS</label>
                     <input type="text" value={meeting.summary} onChange={e => setMeeting({...meeting, summary: e.target.value})} required />
                 </div>
-
-                <div className="items-section">
-                    <h3>Točke dnevnog reda</h3>
-                    <div className="add-item-box">
-                        <input type="text" placeholder="Naslov točke" value={newItem.title} onChange={e => setNewItem({...newItem, title: e.target.value})} />
-                        <input type="text" placeholder="Opis točke" value={newItem.summary} onChange={e => setNewItem({...newItem, summary: e.target.value})} />
-                        <label className="checkbox-label">
-                            <input type="checkbox" checked={newItem.legal === 1} onChange={e => setNewItem({...newItem, legal: e.target.checked ? 1 : 0})}/>Pravni učinak
-                        </label>
-                        <button type="button" className="auth-button outline small-btn" onClick={handleAddItem}>Dodaj točku</button>
-                    </div>
-                    {meeting.items.map((it, idx) => (
-                        <div key={idx} className="item-preview-card">
-                            {it.item_number}. {it.title} {it.legal === 1 && <b>(Pravni)</b>}
-                        </div>
-                    ))}
-                </div>
-                <button type="submit" className="auth-button primary">SPREMI SASTANAK</button>
+                
+                <button type="submit" className="auth-button primary">KREIRAJ SASTANAK</button>
             </form>
         </div>
     );

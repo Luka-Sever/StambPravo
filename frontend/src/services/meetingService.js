@@ -11,7 +11,7 @@ export const meetingService = {
     confirmParticipation: (id) => post(`/api/meetings/${id}/participate`, {}),
     // UC18: Dodavanje točke dnevnog reda (ako se dodaje naknadno)
     addItem: (meetingId, itemData) => post(`/api/meetings/${meetingId}/items`, itemData),
-
+    
     remove: (id) => post(`/api/meetings/${id}/delete`, {}),
     archive: (id) => post(`/api/meetings/${id}/archive`, {}),
 
