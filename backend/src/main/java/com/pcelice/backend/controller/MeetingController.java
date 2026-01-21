@@ -61,4 +61,14 @@ public class MeetingController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 }
+        @PostMapping("/{id}/archive")
+        @PreAuthorize("hasAnyRole('ADMIN', 'REP')")
+        public ResponseEntity<?> archiveMeeting(@PathVariable Integer id) {
+            try {
+                Meeting archived = meetingService.archiveMeeting(id);
+                return ResponseEntity.ok(archived);
+            } catch (RuntimeException e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+        }
 }

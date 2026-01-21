@@ -18,6 +18,26 @@ import java.util.List;
 
 @Service
 public class MeetingServiceJpa implements MeetingService {
+        @Override
+        @Transactional
+        public Meeting archiveMeeting(Integer meetingId) {
+            Meeting meeting = meetingRepository.findByMeetingId(meetingId)
+               .orElseThrow(() -> new RuntimeException("Meeting not found"));
+
+            meeting.setStatus(MeetingStatus.Archived);
+            Meeting savedMeeting = meetingRepository.save(meeting);
+
+            // Slanje emaila svim suvlasnicima zgrade
+            Building building = meeting.getBuilding();
+            if (building != null) {
+                List<CoOwner> buildingCoOwners = coOwnerRepository.findByBuilding_BuildingId(building.getBuildingId());
+                System.out.println("Sending archive emails to " + buildingCoOwners.size() + " co-owners in building " + building.getBuildingId());
+                for (CoOwner coOwner : buildingCoOwners) {
+                    emailService.sendMeetingPublishedNotification(coOwner.getEmail(), savedMeeting); // možeš napraviti posebnu metodu za arhivu
+                }
+            }
+            return savedMeeting;
+        }
     @Autowired
     private EmailService emailService;
 

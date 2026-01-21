@@ -10,4 +10,5 @@ public interface MeetingService {
     List<Meeting> findAll();
 
     Meeting publishMeeting(Integer meetingId);
+    Meeting archiveMeeting(Integer meetingId);
 }
