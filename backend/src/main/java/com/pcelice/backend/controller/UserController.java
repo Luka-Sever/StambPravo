@@ -70,6 +70,10 @@ public class UserController {
                 response.put("email", user.getEmail());
                 response.put("username", user.getUsername());
                 response.put("role", user.getRole());
+                if (user.getBuilding() != null) {
+                    response.put("buildingId", user.getBuilding().getBuildingId());
+                    response.put("buildingAddress", user.getBuilding().getAddress());
+                }
             } else {
                 response.put("error", "User not registered in system");
             }
