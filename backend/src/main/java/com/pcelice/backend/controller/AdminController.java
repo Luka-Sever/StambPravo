@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import com.pcelice.backend.repositories.BuildingRepository;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -22,6 +23,9 @@ public class AdminController {
 
     @Autowired
     private BuildingService buildingService;
+    
+    @Autowired
+    private BuildingRepository buildingRepository;
 
     @Value("${progi.fronted.url}")
     private String frontendUrl;
@@ -31,10 +35,14 @@ public class AdminController {
     @PostMapping("/user")
     public ResponseEntity<?> createCoOwner(@RequestBody CoOwner coOwner) {
 
-        System.out.println(coOwner.toString());
 
         try {
             if (!coOwnerService.emailPresent(coOwner.getEmail())) {
+                if (coOwner.getBuilding() != null && coOwner.getBuilding().getBuildingId() != null) {
+                Building building = buildingRepository.findByBuildingId(coOwner.getBuilding().getBuildingId())
+                .orElseThrow(() -> new RuntimeException("Building not found"));
+                coOwner.setBuilding(building);
+            }
                 CoOwner createdCoOwner = coOwnerService.createCoOwner(coOwner);
                 return ResponseEntity.ok(createdCoOwner);
             }
@@ -70,6 +78,11 @@ public class AdminController {
         catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/buildings")
+    public ResponseEntity<?> getAllBuildings() {
+        return ResponseEntity.ok(buildingRepository.findAll());
     }
 
     @GetMapping("/debug")

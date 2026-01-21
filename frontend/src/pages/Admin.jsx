@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../App.css';
 import { createUser } from '../services/adminService';
-import { createBuilding, addRepToBuilding } from '../services/buildingService';
+import { createBuilding, addRepToBuilding, getAllBuildings } from '../services/buildingService';
 
 function AdminPage() {
     const [email, setEmail] = useState('');
@@ -13,6 +13,7 @@ function AdminPage() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [role, setRole] = useState('');
     const [message, setMessage] = useState('');
+    const [buildings, setBuildings] = useState([]);
 
 
     // Nova stanja za zgradu
@@ -23,6 +24,20 @@ function AdminPage() {
     const [repEmail, setRepEmail] = useState('');
     const [buildingIdForRep, setBuildingIdForRep] = useState('');
     const [repMessage, setRepMessage] = useState('');
+
+
+    useEffect(() => {
+        fetchBuildings();
+    }, []);
+
+    async function fetchBuildings() {
+        try {
+            const data = await getAllBuildings();
+            setBuildings(data);
+        } catch (error) {
+            console.error('Error fetching buildings:', error);
+        }
+    }
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -51,7 +66,7 @@ function AdminPage() {
         try {
 
             const bId = buildingId === '' ? null : Number(buildingId);
-            const newUser = { email, username, firstName, lastName, buildingId: bId, password, role};
+            const newUser = { email, username, firstName, lastName, building: bId ? { buildingId: bId } : null, password, role: role};
 
             await createUser(newUser);
             setMessage(`Korisnik ${username} je uspješno kreiran!`);
@@ -83,6 +98,8 @@ function AdminPage() {
             setAddress('');
             setCityId('');
             setRepEmail('');
+            fetchBuildings();
+
         } catch (err) {
             setBuildingMessage(err.message || 'Greška pri kreiranju zgrade');
         }
@@ -151,15 +168,6 @@ function AdminPage() {
                         />
                     </div>
 
-                    <div className="auth-field">
-                        <input
-                            type="number"
-                            step="any"
-                            value={buildingId}
-                            onChange={(e) => setBuildingId(e.target.value)}
-                            placeholder="ID zgrade"
-                        />
-                    </div>
 
                     <div className="auth-field">
                         <input 
@@ -182,12 +190,19 @@ function AdminPage() {
                     </div>
 
                     <div className="auth-field">
-                        <input 
-                            type="number" 
+                        <label className="label-text">Zgrada:</label>
+                        <select 
+                            className="role-select"
                             value={buildingId} 
-                            onChange={(e) => setBuildingId(e.target.value)} 
-                            placeholder="ID Zgrade" 
-                        />
+                            onChange={(e) => setBuildingId(e.target.value)}
+                        >
+                            <option value="">Odaberite zgradu</option>
+                            {buildings.map(building => (
+                                <option key={building.buildingId} value={building.buildingId}>
+                                    ID {building.buildingId} - {building.address}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="auth-field">
@@ -235,13 +250,7 @@ function AdminPage() {
                             required
                         />
                     </div>
-                    <div className="auth-field">
-                        <input
-                            type="text"
-                            value={repEmail} onChange={e => setRepEmail(e.target.value)}
-                            placeholder="Email predstavnika"
-                        />
-                    </div>
+
                     <button type="submit" className="auth-button dark">KREIRAJ ZGRADU</button>
                     {buildingMessage && <p className="status-message">{buildingMessage}</p>}
                 </form>

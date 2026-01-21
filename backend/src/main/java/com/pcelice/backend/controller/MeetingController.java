@@ -1,17 +1,20 @@
 package com.pcelice.backend.controller;
 import com.pcelice.backend.dto.ConclusionRequest;
-
+import com.pcelice.backend.entities.CoOwner;
 import com.pcelice.backend.entities.Item;
 import com.pcelice.backend.entities.ItemStatus;
 import com.pcelice.backend.entities.Meeting;
 import com.pcelice.backend.entities.MeetingItemId;
+import com.pcelice.backend.repositories.CoOwnerRepository;
 import com.pcelice.backend.repositories.MeetingRepository;
 import com.pcelice.backend.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.core.Authentication;
+import com.pcelice.backend.repositories.CoOwnerRepository;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -62,16 +65,31 @@ public class MeetingController {
     private MeetingService meetingService;
     @Autowired
     private MeetingRepository meetingRepository;
-
+    @Autowired
+    private CoOwnerRepository coOwnerRepository;
     @GetMapping
     public List<Meeting> getAllMeetings() {
         return meetingService.findAll();
     }
 
     @PostMapping("/newMeeting")
-    public ResponseEntity<Meeting> createMeeting(@RequestBody Meeting meeting) {
-        return ResponseEntity.ok(meetingService.createMeeting(meeting));
+    public ResponseEntity<Meeting> createMeeting(
+        @RequestBody Meeting meeting,
+        Authentication authentication) {
+    
+
+    if (authentication != null && (meeting.getBuilding() == null || meeting.getBuilding().getBuildingId() == null)) {
+        String email = authentication.getName();
+        CoOwner creator = coOwnerRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        if (creator.getBuilding() != null) {
+            meeting.setBuilding(creator.getBuilding());
+        }
     }
+    
+    return ResponseEntity.ok(meetingService.createMeeting(meeting));
+}
 
     @PostMapping("/{meetingId}/items")
     public ResponseEntity<Meeting> addItem(
