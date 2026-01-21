@@ -8,6 +8,7 @@ function AdminPage() {
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [buildingId, setBuildingId] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [role, setRole] = useState('');
@@ -47,13 +48,14 @@ function AdminPage() {
         }
 
         try {
-            const newUser = { email, username, firstName, lastName, password, role};
+            const newUser = { email, username, firstName, lastName, buildingId, password, role};
             await createUser(newUser);
             setMessage(`Korisnik ${username} je uspješno kreiran!`);
             setEmail('');
             setUsername('');
             setFirstName('');
             setLastName('');
+            setBuildingId('')
             setPassword('');
             setConfirmPassword('');
         } catch (error) {
@@ -146,6 +148,16 @@ function AdminPage() {
                     </div>
 
                     <div className="auth-field">
+                        <input
+                            type="number"
+                            step="any"
+                            value={buildingId}
+                            onChange={(e) => setBuildingId(e.target.value)}
+                            placeholder="ID zgrade"
+                        />
+                    </div>
+
+                    <div className="auth-field">
                         <input 
                             type="password" 
                             value={password} 
@@ -194,10 +206,28 @@ function AdminPage() {
             <div className="auth-card">
                 <form onSubmit={handleCreateBuilding} className="auth-form">
                     <div className="auth-field">
-                        <input type="text" value={address} onChange={e => setAddress(e.target.value)} placeholder="Adresa" required />
+                        <input
+                            type="text"
+                            value={address} onChange={e => setAddress(e.target.value)}
+                            placeholder="Adresa"
+                            required
+                        />
                     </div>
                     <div className="auth-field">
-                        <input type="number" step="any" value={cityId} onChange={e => setCityId(e.target.value)} placeholder="Poštanski broj" required />
+                        <input
+                            type="number"
+                            step="any"
+                            value={cityId} onChange={e => setCityId(e.target.value)}
+                            placeholder="Poštanski broj"
+                            required
+                        />
+                    </div>
+                    <div className="auth-field">
+                        <input
+                            type="text"
+                            value={repEmail} onChange={e => setRepEmail(e.target.value)}
+                            placeholder="Email predstavnika"
+                        />
                     </div>
                     <button type="submit" className="auth-button dark">KREIRAJ ZGRADU</button>
                     {buildingMessage && <p className="status-message">{buildingMessage}</p>}

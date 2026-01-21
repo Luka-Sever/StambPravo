@@ -1,6 +1,8 @@
 package com.pcelice.backend.controller;
 
+import com.pcelice.backend.dto.createBuildingData;
 import com.pcelice.backend.entities.CoOwner;
+import com.pcelice.backend.repositories.CoOwnerRepository;
 import com.pcelice.backend.service.BuildingService;
 import com.pcelice.backend.service.CoOwnerService;
 import com.pcelice.backend.entities.Building;
@@ -23,9 +25,14 @@ public class AdminController {
 
     @Value("${progi.fronted.url}")
     private String frontendUrl;
+    @Autowired
+    private CoOwnerRepository coOwnerRepository;
 
     @PostMapping("/user")
     public ResponseEntity<?> createCoOwner(@RequestBody CoOwner coOwner) {
+
+        System.out.println(coOwner.toString());
+
         try {
             if (!coOwnerService.emailPresent(coOwner.getEmail())) {
                 CoOwner createdCoOwner = coOwnerService.createCoOwner(coOwner);
@@ -40,11 +47,21 @@ public class AdminController {
     }
 
     @PostMapping("/building")
-    public ResponseEntity<?> createBuilding(@RequestBody Building buiding) {
+    public ResponseEntity<?> createBuilding(@RequestBody createBuildingData createBuildingData)
+    {
         try {
-            if(!buildingService.idPresent(buiding.getBuildingId())) {
-                Building building = buildingService.createBuilding(buiding);
-                return ResponseEntity.ok(building);
+            Building building = new Building();
+            building.setAddress(createBuildingData.getAddress());
+            building.setCityId(createBuildingData.getCityId());
+
+            if (createBuildingData.getRepEmail() != null) {
+                building.setRep(coOwnerRepository.findByEmail(createBuildingData.getRepEmail()).orElse(null));
+            }
+
+            if(!buildingService.idPresent(building.getBuildingId())) {
+
+                Building newBuilding = buildingService.createBuilding(building);
+                return ResponseEntity.ok(newBuilding);
             }
             else  {
                 return ResponseEntity.badRequest().body("Building already exists");

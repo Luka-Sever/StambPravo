@@ -7,6 +7,6 @@ export function createBuilding(buildingData) {
 }
 
 // Dodavanje predstavnika zgradi
-export function addRepToBuilding(addRepData) {
+export function addRepToBuilding( addRepData ) {
   return post('/api/building/addRep', addRepData);
 }
