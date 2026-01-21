@@ -11,18 +11,18 @@ function Home() {
 
   useEffect(() => {
     let cancelled = false
-    ;(async () => {
-      try {
-        setLoading(true)
-        setError(null)
-        const data = await meetingService.getAll()
-        if (!cancelled) setMeetings(Array.isArray(data) ? data : [])
-      } catch (e) {
-        if (!cancelled) setError(e?.message || 'Greška pri dohvaćanju sastanaka.')
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    })()
+      ; (async () => {
+        try {
+          setLoading(true)
+          setError(null)
+          const data = await meetingService.getAll()
+          if (!cancelled) setMeetings(Array.isArray(data) ? data : [])
+        } catch (e) {
+          if (!cancelled) setError(e?.message || 'Greška pri dohvaćanju sastanaka.')
+        } finally {
+          if (!cancelled) setLoading(false)
+        }
+      })()
     return () => {
       cancelled = true
     }
