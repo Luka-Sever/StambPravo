@@ -182,15 +182,6 @@ function AdminPage() {
                     </div>
 
                     <div className="auth-field">
-                        <input 
-                            type="number" 
-                            value={buildingId} 
-                            onChange={(e) => setBuildingId(e.target.value)} 
-                            placeholder="ID Zgrade" 
-                        />
-                    </div>
-
-                    <div className="auth-field">
                         <label className="label-text">Uloga:</label>
                         <select 
                             className="role-select"
