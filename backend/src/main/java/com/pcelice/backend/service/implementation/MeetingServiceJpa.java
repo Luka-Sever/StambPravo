@@ -1,10 +1,14 @@
 package com.pcelice.backend.service.implementation;
 
+import com.pcelice.backend.entities.Building;
+import com.pcelice.backend.entities.CoOwner;
 import com.pcelice.backend.entities.Item;
 import com.pcelice.backend.entities.Meeting;
 import com.pcelice.backend.entities.MeetingItemId;
 import com.pcelice.backend.entities.MeetingStatus;
+import com.pcelice.backend.repositories.CoOwnerRepository;
 import com.pcelice.backend.repositories.MeetingRepository;
+import com.pcelice.backend.service.EmailService;
 import com.pcelice.backend.service.MeetingService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,11 @@ import java.util.List;
 
 @Service
 public class MeetingServiceJpa implements MeetingService {
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private CoOwnerRepository coOwnerRepository;
 
     @Autowired
     MeetingRepository meetingRepository;
@@ -47,6 +56,19 @@ public class MeetingServiceJpa implements MeetingService {
            .orElseThrow(() -> new RuntimeException("Meeting not found"));
     
         meeting.setStatus(MeetingStatus.Public);
-        return meetingRepository.save(meeting);
+        Meeting savedMeeting = meetingRepository.save(meeting);
+        
+        // Send email only to co-owners in the same building
+        Building building = meeting.getBuilding();
+        if (building != null) {
+            List<CoOwner> buildingCoOwners = coOwnerRepository.findByBuilding_BuildingId(building.getBuildingId());
+            System.out.println("Sending emails to " + buildingCoOwners.size() + " co-owners in building " + building.getBuildingId());
+        
+        for (CoOwner coOwner : buildingCoOwners) {
+            emailService.sendMeetingPublishedNotification(coOwner.getEmail(), savedMeeting);
+        }
+    }
+        
+        return savedMeeting;
     }
 }

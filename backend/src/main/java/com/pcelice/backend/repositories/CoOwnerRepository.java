@@ -2,6 +2,7 @@ package com.pcelice.backend.repositories;
 import com.pcelice.backend.entities.CoOwner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
+import java.util.List;
 
 public interface CoOwnerRepository extends JpaRepository<CoOwner, Long> {
 
@@ -9,4 +10,5 @@ public interface CoOwnerRepository extends JpaRepository<CoOwner, Long> {
 
     Optional<CoOwner> findByUsername(String username);
 
+    List<CoOwner> findByBuilding_BuildingId(Integer buildingId);
 }
