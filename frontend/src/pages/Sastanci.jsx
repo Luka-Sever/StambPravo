@@ -127,7 +127,7 @@ export default function Sastanci() {
                             <div className="meeting-info">
                                 <span className="info-item">📅 {new Date(m.meetingStartTime).toLocaleString('hr-HR')}</span>
                                 <span className="info-item">📍 {m.meetingLocation}</span>
-                                {(m.status === 'Public' || m.status === 'Finished') && (
+                                {(m.status === 'Public' || m.status === 'Obavljen') && (
                                     <span className="info-item participant-count">
                                          Sudionika: <strong>{m.participantsCount || 0}</strong>
                                     </span>
@@ -157,28 +157,28 @@ export default function Sastanci() {
                                                     <strong>{itemNum}. {item.title} {item.legal === 1 && <span className="legal-mark">(pravni učinak)</span>}</strong>
                                                     <p className="item-description-text">{item.summary}</p>
                                                     
-                                                    {m.status === 'Finished' && hasPrivileges ? (
+                                                    {m.status === 'Obavljen' && hasPrivileges ? (
                                                         <div className="conclusion-input-box">
+                                                        {item.legal === 1 ? (
                                                             <textarea 
                                                                 placeholder="Unesite zaključak..."
                                                                 defaultValue={item.conclusion}
                                                                 onChange={(e) => setConclusions({...conclusions, [`${mId}-${itemNum}`]: e.target.value})}
                                                             />
-                                                            {item.legal === 1 ? (
+                                                            ) : null }
+                                                         {item.legal === 1 ? (
                                                                 <div className="vote-buttons">
                                                                     <button className="auth-button small-btn success" onClick={() => saveConclusion(mId, itemNum, 'Izglasan')}>Izglasan</button>
                                                                     <button className="auth-button small-btn danger" onClick={() => saveConclusion(mId, itemNum, 'Odbijen')}>Odbijen</button>
                                                                 </div>
-                                                            ) : (
-                                                                <button className="auth-button small-btn" onClick={() => saveConclusion(mId, itemNum)}>Spremi zaključak</button>
-                                                            )}
+                                                            ) : null }
                                                         </div>
                                                     ) : (
                                                         item.conclusion && (
                                                             <p className="conclusion-text">
                                                                 <b>Zaključak:</b> {item.conclusion} 
-                                                                {item.status && <span className={`vote-status ${item.status.toLowerCase()}`}> ({item.status})</span>}
-                                                            </p>
+                                                                {item.status && <span className={`vote-status ${item.status.toLowerCase()}`}> </span>}
+                                                        </p>
                                                         )
                                                     )}
                                                 </div>
@@ -215,7 +215,7 @@ export default function Sastanci() {
                                             </button>
                                         )}
 
-                                        {m.status === 'Finished' && (
+                                        {m.status === 'Obavljen' && (
                                             <button 
                                                 className="auth-button primary small-btn" 
                                                 disabled={!canArchive(m)}
