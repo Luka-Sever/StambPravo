@@ -14,6 +14,7 @@ function AdminPage() {
     const [role, setRole] = useState('');
     const [message, setMessage] = useState('');
 
+
     // Nova stanja za zgradu
     const [address, setAddress] = useState('');
     const [cityId, setCityId] = useState('');
@@ -48,7 +49,10 @@ function AdminPage() {
         }
 
         try {
-            const newUser = { email, username, firstName, lastName, buildingId, password, role};
+
+            const bId = buildingId === '' ? null : Number(buildingId);
+            const newUser = { email, username, firstName, lastName, buildingId: bId, password, role};
+
             await createUser(newUser);
             setMessage(`Korisnik ${username} je uspješno kreiran!`);
             setEmail('');
@@ -174,6 +178,15 @@ function AdminPage() {
                             onChange={(e) => setConfirmPassword(e.target.value)} 
                             placeholder="Potvrdi lozinku" 
                             required 
+                        />
+                    </div>
+
+                    <div className="auth-field">
+                        <input 
+                            type="number" 
+                            value={buildingId} 
+                            onChange={(e) => setBuildingId(e.target.value)} 
+                            placeholder="ID Zgrade" 
                         />
                     </div>
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { useAuth } from '../context/AuthContext.jsx';
 import { changePassword } from '../services/authService.js';
+import { addRepToBuilding } from '../services/buildingService'; 
 
 export default function Postavke() {
     const navigate = useNavigate(); 
@@ -9,6 +10,9 @@ export default function Postavke() {
     
     const [data, setData] = useState({ current: '', new: '', confirm: '' });
     const [message, setMessage] = useState('');
+
+    const [tenantEmail, setTenantEmail] = useState('');
+    const [tenantMessage, setTenantMessage] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,16 +42,31 @@ export default function Postavke() {
         }
     };
 
+    const handleAddTenant = async (e) => {
+        e.preventDefault();
+        setTenantMessage('');
+        try {
+            await addRepToBuilding({ buildingId: user.buildingId, repEmail: tenantEmail });
+            setTenantMessage('Stanar uspješno dodan u zgradu!');
+            setTenantEmail('');
+        } catch (err) {
+            setTenantMessage(err.message || 'Greška pri dodavanju stanara');
+        }
+    };
+
     return (
         <div className="auth-wrapper">
             <h1 className="page-title">POSTAVKE</h1>
-            
+
             <div className="user-profile-header">
                 <p>Prijavljeni ste kao: <strong>{user?.firstName} {user?.lastName}</strong></p>
                 <p>Korisničko ime: <strong>{user?.username}</strong></p>
+                <p>Uloga: <strong>{user?.role === 'REP' ? 'Predstavnik' : user?.role === 'ADMIN' ? 'Administrator' : 'Suvlasnik'}</strong></p>
+                <p>ID zgrade: <strong>{user?.buildingId}</strong></p>
             </div>
 
-            <div className="auth-container">
+            <div className="auth-container settings-stack">
+                <h2 className="admin-title">PROMIJENI LOZINKU</h2>
                 <div className="auth-card">  
                     <form onSubmit={handleSubmit} className="auth-form">
                         <div className="auth-field">
@@ -73,6 +92,28 @@ export default function Postavke() {
                         {message && <p className="status-message">{message}</p>}
                     </form>
                 </div>
+
+                {user?.role === 'REP' || user?.role === 'ADMIN' && (
+                    <>
+                        <h2 className="admin-title" style={{ marginTop: '40px' }}>DODAJ STANARA U ZGRADU</h2>
+                        <div className="auth-card">
+                            <form onSubmit={handleAddTenant} className="auth-form">
+                                <div className="auth-field">
+                                    <label>EMAIL STANARA</label>
+                                    <input 
+                                        type="email" 
+                                        value={tenantEmail} 
+                                        onChange={(e) => setTenantEmail(e.target.value)} 
+                                        placeholder="Email stanara" 
+                                        required 
+                                    />
+                                </div>
+                                <button type="submit" className="auth-button primary small-btn">DODAJ STANARA</button>
+                                {tenantMessage && <p className="status-message">{tenantMessage}</p>}
+                            </form>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );
