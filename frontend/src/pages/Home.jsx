@@ -108,7 +108,6 @@ function Home() {
                     >
                       <div className="archive-item-top">
                         <div className="archive-item-title">{m.title}</div>
-                        <span className="badge-unread">Novo</span>
                       </div>
                       <div className="archive-item-date">{formatDate(m.meetingStartTime)} • {m.meetingLocation}</div>
                     </button>
