@@ -45,8 +45,8 @@ public class SeleniumTest {
 
     @Test
     public void title() {
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
         driver.get("http://localhost:5173/");
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
         String title = driver.getTitle();
         assertEquals("StanPlan", title);
