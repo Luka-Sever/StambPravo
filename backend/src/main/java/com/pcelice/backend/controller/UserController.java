@@ -84,11 +84,11 @@ public class UserController {
 
         CoOwner coOwner = coOwnerRepository.findByUsername(changePasswordData.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
-        if (!passwordEncoder.matches(changePasswordData.getOldPassword(), coOwner.getPasswrd())) {
+        if (!passwordEncoder.matches(changePasswordData.getOldPassword(), coOwner.getPasswd())) {
             throw new Exception("Incorrect password");
         }
 
-        coOwner.setPasswrd(passwordEncoder.encode(changePasswordData.getNewPassword()));
+        coOwner.setPasswd(passwordEncoder.encode(changePasswordData.getNewPassword()));
         coOwnerRepository.save(coOwner);
 
     }
