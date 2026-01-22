@@ -17,7 +17,7 @@ public class CoOwner {
     private String username;
 
     @Column(nullable = false)
-    private String password;
+    private String passwrd;
 
     private String firstName;
     private String lastName;
@@ -67,12 +67,12 @@ public class CoOwner {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswrd() {
+        return passwrd;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswrd(String password) {
+        this.passwrd = password;
     }
 
     public String getFirstName() {
