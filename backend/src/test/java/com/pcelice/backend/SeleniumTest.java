@@ -25,7 +25,7 @@ public class SeleniumTest {
     @Test
     public void tryLogin() {
         driver.get("http://localhost:5173/login");
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(1500));
         List<WebElement> credentials = driver.findElements(By.cssSelector("input"));
         WebElement login = driver.findElement(By.id("register"));
 

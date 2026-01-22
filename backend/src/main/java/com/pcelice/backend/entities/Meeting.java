@@ -55,7 +55,7 @@ public class Meeting {
 
     /// PROMIJENITI
     @ManyToOne(optional = true)
-    @JoinColumn(name = "building_id", nullable = true)
+    @JoinColumn(name = "building_id", nullable = false)
     private Building building;
 
     @ManyToMany(mappedBy = "attendingMeetings")

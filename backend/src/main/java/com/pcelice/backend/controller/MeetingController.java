@@ -78,13 +78,15 @@ public class MeetingController {
         Authentication authentication) {
     
 
-    if (authentication != null && (meeting.getBuilding() == null || meeting.getBuilding().getBuildingId() == null)) {
+    if (authentication != null && meeting.getBuilding() == null) {
         String email = authentication.getName();
         CoOwner creator = coOwnerRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("User not found"));
         
         if (creator.getBuilding() != null) {
             meeting.setBuilding(creator.getBuilding());
+        } else {
+            throw new RuntimeException("User cannot create Meeting");
         }
     }
     
