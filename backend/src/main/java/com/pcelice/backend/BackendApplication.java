@@ -27,9 +27,9 @@ public class BackendApplication {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Bean
-    public CommandLineRunner demo(CoOwnerRepository repository) {
-        //hardcodeani useri za testiranje
+//    @Bean
+//    public CommandLineRunner demo(CoOwnerRepository repository) {
+//        //hardcodeani useri za testiranje
 //        return (args) -> {
 //            String encodedPassword = passwordEncoder.encode("password123");
 //
@@ -42,7 +42,7 @@ public class BackendApplication {
 //            admin.setRole(RoleType.ADMIN);
 //            repository.save(admin);
 //        };
-    }
+//    }
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {  // fix za prihvatit request s frontenda za dodat usera
