@@ -1,12 +1,15 @@
 package com.pcelice.backend.controller;
 
+import com.pcelice.backend.dto.addRepData;
 import com.pcelice.backend.dto.createBuildingData;
 import com.pcelice.backend.dto.createCoOwner;
 import com.pcelice.backend.entities.CoOwner;
+import com.pcelice.backend.entities.RoleType;
 import com.pcelice.backend.repositories.CoOwnerRepository;
 import com.pcelice.backend.service.BuildingService;
 import com.pcelice.backend.service.CoOwnerService;
 import com.pcelice.backend.entities.Building;
+import com.pcelice.backend.service.implementation.BuildingServiceJpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +44,8 @@ public class AdminController {
         try {
             if (!coOwnerService.emailPresent(coOwnerTemp.getEmail()) && !coOwnerService.usernamePresent(coOwnerTemp.getUsername())) {
 
+                Building building = null;
+
                 coOwner.setEmail(coOwnerTemp.getEmail());
                 coOwner.setUsername(coOwnerTemp.getUsername());
                 coOwner.setFirstName(coOwnerTemp.getFirstName());
@@ -49,13 +54,22 @@ public class AdminController {
                 coOwner.setRole(coOwnerTemp.getRole());
 
                 if (coOwnerTemp.getBuildingId() != null) {
-                Building building = buildingRepository.findByBuildingId(coOwnerTemp.getBuildingId())
-                .orElseThrow(() -> new RuntimeException("Building not found"));
+                    building = buildingRepository.findByBuildingId(coOwnerTemp.getBuildingId())
+                    .orElseThrow(() -> new RuntimeException("Building not found"));
+                    coOwner.setBuilding(building);
+                }
 
-                coOwner.setBuilding(building);
-
-            }
                 CoOwner createdCoOwner = coOwnerService.createCoOwner(coOwner);
+
+                if (coOwner.getRole().equals(RoleType.REP) && (building != null && building.getRep() == null)) {
+
+                    addRepData addRepData  = new addRepData();
+                    addRepData.setBuildingId(building.getBuildingId());
+                    addRepData.setRepEmail(coOwner.getEmail());
+
+                    buildingService.addRep(addRepData);
+                }
+
                 return ResponseEntity.ok(createdCoOwner);
             }
             else  {
