@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface BuildingRepository extends JpaRepository<Building, Integer> {
 
     Optional<Building> findByBuildingId(Integer buildingId);
+
+    Optional<Building> findByCityIdAndAddress(Integer cityId, String address);
 }

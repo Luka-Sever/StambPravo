@@ -2,6 +2,7 @@ package com.pcelice.backend.entities;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,15 +22,6 @@ import jakarta.persistence.*;
     }
 )
 public class Meeting {
-    private Integer participantsCount = 0;
-
-    public Integer getParticipantsCount() {
-        return participantsCount;
-    }
-
-    public void setParticipantsCount(Integer participantsCount) {
-        this.participantsCount = participantsCount;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +47,7 @@ public class Meeting {
 
     /// PROMIJENITI
     @ManyToOne(optional = true)
-    @JoinColumn(name = "building_id", nullable = true)
+    @JoinColumn(name = "building_id", nullable = false)
     private Building building;
 
     @ManyToMany(mappedBy = "attendingMeetings")
@@ -140,4 +132,14 @@ public class Meeting {
     public void setItems(List<Item> items) {
         this.items = items;
     }
+
+    public Set<CoOwner> getAttendingCoOwners() {
+        if (this.attendingCoOwners == null) {
+            this.attendingCoOwners = new HashSet<>();
+        }
+        return attendingCoOwners;
+    }
+
+    public void setAttendingCoOwners(Set<CoOwner> attendingCoOwners) { this.attendingCoOwners = attendingCoOwners; }
+
 }

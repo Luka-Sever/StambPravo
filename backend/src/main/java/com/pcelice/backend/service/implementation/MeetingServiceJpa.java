@@ -18,71 +18,73 @@ import java.util.List;
 
 @Service
 public class MeetingServiceJpa implements MeetingService {
-            @Override
-            @Transactional
-            public Meeting participateMeeting(Integer meetingId) {
-                Meeting meeting = meetingRepository.findByMeetingId(meetingId)
+        @Override
+        @Transactional
+        public Meeting participateMeeting(Integer meetingId, Integer coOwnerId) {
+            Meeting meeting = meetingRepository.findByMeetingId(meetingId)
                     .orElseThrow(() -> new RuntimeException("Meeting not found"));
-                // Dodaj logiku za sudjelovanje (npr. povećaj broj sudionika)
-                meeting.setParticipantsCount((meeting.getParticipantsCount() == null ? 0 : meeting.getParticipantsCount()) + 1);
-                return meetingRepository.save(meeting);
-            }
+            CoOwner attendee = coOwnerRepository.findByCoOwnerId(coOwnerId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            meeting.getAttendingCoOwners().add(attendee);
+            attendee.getAttendingMeetings().add(meeting);
 
-            @Override
-            @Transactional
-            public void deleteMeeting(Integer meetingId) {
-                Meeting meeting = meetingRepository.findByMeetingId(meetingId)
-                    .orElseThrow(() -> new RuntimeException("Meeting not found"));
-                meetingRepository.delete(meeting);
-            }
+            return meetingRepository.save(meeting);
+        }
 
-            @Override
-            @Transactional
-            public Meeting finishMeeting(Integer meetingId) {
-                Meeting meeting = meetingRepository.findByMeetingId(meetingId)
-                    .orElseThrow(() -> new RuntimeException("Meeting not found"));
-                meeting.setStatus(MeetingStatus.Obavljen);
-                return meetingRepository.save(meeting);
-            }
+        @Override
+        @Transactional
+        public void deleteMeeting(Integer meetingId) {
+            Meeting meeting = meetingRepository.findByMeetingId(meetingId)
+                .orElseThrow(() -> new RuntimeException("Meeting not found"));
+            meetingRepository.delete(meeting);
+        }
 
-            @Override
-            @Transactional
-            public Meeting updateItemConclusion(Integer meetingId, Integer itemNumber, String conclusion) {
-                Meeting meeting = meetingRepository.findByMeetingId(meetingId)
-                    .orElseThrow(() -> new RuntimeException("Meeting not found"));
-                if (meeting.getItems() == null || meeting.getItems().isEmpty()) {
-                    throw new RuntimeException("Meeting has no items");
-                }
-                boolean found = false;
-                for (Item item : meeting.getItems()) {
-                    if (item.getId() != null && item.getId().getItemNumber() == itemNumber) {
-                        item.setConclusion(conclusion);
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    throw new RuntimeException("Item not found");
-                }
-                return meetingRepository.save(meeting);
+        @Override
+        @Transactional
+        public Meeting finishMeeting(Integer meetingId) {
+            Meeting meeting = meetingRepository.findByMeetingId(meetingId)
+                .orElseThrow(() -> new RuntimeException("Meeting not found"));
+            meeting.setStatus(MeetingStatus.Obavljen);
+            return meetingRepository.save(meeting);
+        }
+
+        @Override
+        @Transactional
+        public Meeting updateItemConclusion(Integer meetingId, Integer itemNumber, String conclusion) {
+            Meeting meeting = meetingRepository.findByMeetingId(meetingId)
+                .orElseThrow(() -> new RuntimeException("Meeting not found"));
+            if (meeting.getItems() == null || meeting.getItems().isEmpty()) {
+                throw new RuntimeException("Meeting has no items");
             }
+            boolean found = false;
+            for (Item item : meeting.getItems()) {
+                if (item.getId() != null && item.getId().getItemNumber() == itemNumber) {
+                    item.setConclusion(conclusion);
+                    found = true;
+                }
+            }
+            if (!found) {
+                throw new RuntimeException("Item not found");
+            }
+            return meetingRepository.save(meeting);
+        }
         @Override
         @Transactional
         public Meeting archiveMeeting(Integer meetingId) {
             Meeting meeting = meetingRepository.findByMeetingId(meetingId)
                .orElseThrow(() -> new RuntimeException("Meeting not found"));
 
-            // Provjera: sve pravne točke moraju imati zaključak
             boolean allLegalHaveConclusion = true;
             if (meeting.getItems() != null) {
                 for (Item item : meeting.getItems()) {
-                    if (item.getLegal() == 1 && (item.getConclusion() == null || item.getConclusion().trim().isEmpty())) {
+                    if (item.getConclusion() == null || item.getConclusion().trim().isEmpty()) {
                         allLegalHaveConclusion = false;
                         break;
                     }
                 }
             }
             if (!allLegalHaveConclusion) {
-                throw new RuntimeException("Nisu dodani zaključci za sve pravne točke!");
+                throw new RuntimeException("Nisu dodani zaključci za sve točke!");
             }
 
             meeting.setStatus(MeetingStatus.Archived);
@@ -90,12 +92,17 @@ public class MeetingServiceJpa implements MeetingService {
 
             // Slanje emaila svim suvlasnicima zgrade
             Building building = meeting.getBuilding();
-            if (building != null) {
-                List<CoOwner> buildingCoOwners = coOwnerRepository.findByBuilding_BuildingId(building.getBuildingId());
-                System.out.println("Sending archive emails to " + buildingCoOwners.size() + " co-owners in building " + building.getBuildingId());
+            if (building != null && building.getBuildingId() != null) {
+                Integer bId = building.getBuildingId();
+                List<CoOwner> buildingCoOwners = coOwnerRepository.findByBuilding_BuildingId(bId);
+                System.out.println("Sending archive emails to " + buildingCoOwners.size() + " co-owners in building " + bId);
                 for (CoOwner coOwner : buildingCoOwners) {
+                    if (coOwner.getBuilding() == null || coOwner.getBuilding().getBuildingId() == null) continue;
+                    if (!bId.equals(coOwner.getBuilding().getBuildingId())) continue;
                     emailService.sendMeetingPublishedNotification(coOwner.getEmail(), savedMeeting); // možeš napraviti posebnu metodu za arhivu
                 }
+            } else {
+                System.out.println("Skipping archive emails: meeting has no buildingId");
             }
             return savedMeeting;
         }
@@ -141,14 +148,19 @@ public class MeetingServiceJpa implements MeetingService {
         
         // Send email only to co-owners in the same building
         Building building = meeting.getBuilding();
-        if (building != null) {
-            List<CoOwner> buildingCoOwners = coOwnerRepository.findByBuilding_BuildingId(building.getBuildingId());
-            System.out.println("Sending emails to " + buildingCoOwners.size() + " co-owners in building " + building.getBuildingId());
-        
-        for (CoOwner coOwner : buildingCoOwners) {
-            emailService.sendMeetingPublishedNotification(coOwner.getEmail(), savedMeeting);
+        if (building != null && building.getBuildingId() != null) {
+            Integer bId = building.getBuildingId();
+            List<CoOwner> buildingCoOwners = coOwnerRepository.findByBuilding_BuildingId(bId);
+            System.out.println("Sending emails to " + buildingCoOwners.size() + " co-owners in building " + bId);
+
+            for (CoOwner coOwner : buildingCoOwners) {
+                if (coOwner.getBuilding() == null || coOwner.getBuilding().getBuildingId() == null) continue;
+                if (!bId.equals(coOwner.getBuilding().getBuildingId())) continue;
+                emailService.sendMeetingPublishedNotification(coOwner.getEmail(), savedMeeting);
+            }
+        } else {
+            System.out.println("Skipping emails: meeting has no buildingId");
         }
-    }
         
         return savedMeeting;
     }

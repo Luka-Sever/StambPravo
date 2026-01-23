@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/user/**").hasRole("ADMIN")
+                        .requestMatchers("/api/user/**").hasAnyRole("ADMIN","REP", "CO_OWNER")
                         .requestMatchers("/api/meetings/**").hasAnyRole("ADMIN","REP","CO_OWNER")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
@@ -101,6 +101,7 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("http://localhost:5173");
         configuration.addAllowedOrigin("http://localhost:8081");
         configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("https://progistanblog.azurewebsites.net/api/stanplan/discussions/positive");
         configuration.addAllowedHeader(CorsConfiguration.ALL);
         configuration.addAllowedMethod(CorsConfiguration.ALL);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -110,6 +111,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/oauth2/**", configuration);
         source.registerCorsConfiguration("/login/oauth2/**", configuration);
         source.registerCorsConfiguration("/user/**", configuration);
+        source.registerCorsConfiguration("/api/meetings/**", configuration);
         return source;
     }
 

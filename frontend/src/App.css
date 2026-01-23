@@ -1011,6 +1011,11 @@ textarea {
     color: #3182ce;
 }
 
+.status-badge.joined {
+    background: #4caf50;
+    color: white;
+}
+
 .user-profile-header {
    color: rgba(49, 47, 47, 0.888);
     text-align: left;
