@@ -5,7 +5,7 @@ import com.pcelice.backend.entities.Meeting;
 import java.util.List;
 
 public interface MeetingService {
-        Meeting participateMeeting(Integer meetingId);
+        Meeting participateMeeting(Integer meetingId, Integer coOwnerId);
         void deleteMeeting(Integer meetingId);
         Meeting finishMeeting(Integer meetingId);
         Meeting updateItemConclusion(Integer meetingId, Integer itemNumber, String conclusion);

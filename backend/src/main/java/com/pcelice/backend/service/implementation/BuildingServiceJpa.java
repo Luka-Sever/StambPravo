@@ -15,7 +15,8 @@ public class BuildingServiceJpa implements BuildingService {
 
     @Override
     public Building createBuilding(Building building) {
-        if (buildingRepository.findByBuildingId(building.getBuildingId()).isPresent()) {
+        if (buildingRepository.findByBuildingId(building.getBuildingId()).isPresent()
+                || buildingRepository.findByCityIdAndAddress(building.getCityId(), building.getAddress()).isPresent()) {
             throw new RuntimeException("Building already exists");
         }
         return buildingRepository.save(building);
