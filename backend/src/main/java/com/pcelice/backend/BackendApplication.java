@@ -30,18 +30,18 @@ public class BackendApplication {
     @Bean
     public CommandLineRunner demo(CoOwnerRepository repository) {
         //hardcodeani useri za testiranje
-        return (args) -> {
-            String encodedPassword = passwordEncoder.encode("password123");
-
-            CoOwner admin = new CoOwner();
-            admin.setEmail("brunoplese0@gmail.com");
-            admin.setUsername("Admin");
-            admin.setPasswd(encodedPassword);
-            admin.setFirstName("Bruno");
-            admin.setLastName("Plese");
-            admin.setRole(RoleType.ADMIN);
-            repository.save(admin);
-        };
+//        return (args) -> {
+//            String encodedPassword = passwordEncoder.encode("password123");
+//
+//            CoOwner admin = new CoOwner();
+//            admin.setEmail("brunoplese0@gmail.com");
+//            admin.setUsername("Admin");
+//            admin.setPasswd(encodedPassword);
+//            admin.setFirstName("Bruno");
+//            admin.setLastName("Plese");
+//            admin.setRole(RoleType.ADMIN);
+//            repository.save(admin);
+//        };
     }
 
     @Bean
