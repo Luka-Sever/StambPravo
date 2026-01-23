@@ -74,7 +74,7 @@ public class MeetingIntegrationTest {
         rep.setUsername("rep1");
         rep.setFirstName("Rep");
         rep.setLastName("One");
-        rep.setPassword(passwordEncoder.encode(repPass));
+        rep.setPasswd(passwordEncoder.encode(repPass));
         rep.setRole(RoleType.REP);
         rep.setBuilding(b1);
         coOwnerRepository.save(rep);
@@ -117,7 +117,7 @@ public class MeetingIntegrationTest {
         rep.setUsername("rep2");
         rep.setFirstName("Rep");
         rep.setLastName("Two");
-        rep.setPassword(passwordEncoder.encode(repPass));
+        rep.setPasswd(passwordEncoder.encode(repPass));
         rep.setRole(RoleType.REP);
         rep.setBuilding(b1);
         coOwnerRepository.save(rep);
@@ -171,7 +171,7 @@ public class MeetingIntegrationTest {
         rep.setUsername("rep3");
         rep.setFirstName("Rep");
         rep.setLastName("Three");
-        rep.setPassword(passwordEncoder.encode(repPass));
+        rep.setPasswd(passwordEncoder.encode(repPass));
         rep.setRole(RoleType.REP);
         rep.setBuilding(b1);
         coOwnerRepository.save(rep);
@@ -181,7 +181,7 @@ public class MeetingIntegrationTest {
         coOwnerSame.setUsername("co1");
         coOwnerSame.setFirstName("Co");
         coOwnerSame.setLastName("One");
-        coOwnerSame.setPassword(passwordEncoder.encode("password123"));
+        coOwnerSame.setPasswd(passwordEncoder.encode("password123"));
         coOwnerSame.setRole(RoleType.CO_OWNER);
         coOwnerSame.setBuilding(b1);
         coOwnerRepository.save(coOwnerSame);
@@ -191,7 +191,7 @@ public class MeetingIntegrationTest {
         coOwnerOther.setUsername("co2");
         coOwnerOther.setFirstName("Co");
         coOwnerOther.setLastName("Two");
-        coOwnerOther.setPassword(passwordEncoder.encode("password123"));
+        coOwnerOther.setPasswd(passwordEncoder.encode("password123"));
         coOwnerOther.setRole(RoleType.CO_OWNER);
         coOwnerOther.setBuilding(b2);
         coOwnerRepository.save(coOwnerOther);
@@ -231,7 +231,7 @@ public class MeetingIntegrationTest {
         rep.setUsername("rep4");
         rep.setFirstName("Rep");
         rep.setLastName("Four");
-        rep.setPassword(passwordEncoder.encode(repPass));
+        rep.setPasswd(passwordEncoder.encode(repPass));
         rep.setRole(RoleType.REP);
         rep.setBuilding(b1);
         coOwnerRepository.save(rep);
