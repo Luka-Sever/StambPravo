@@ -29,6 +29,13 @@ public class BuildingController {
 
         if (building.getRep() == null) {
             building.setRep(rep);
+        } else {
+            currentRep = building.getRep();
+            currentRep.setRole(RoleType.CO_OWNER);
+            building.setRep(rep);
+        }
+        if (rep.getRole() == RoleType.CO_OWNER) {
+            rep.setRole(RoleType.REP);
         }
 
         buildingRepository.save(building);
