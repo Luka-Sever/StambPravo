@@ -29,7 +29,8 @@ function Shell() {
   const navigate = useNavigate()
   const { isAuthenticated, loading } = useAuth()
 
-  const hideNav = location.pathname === '/login' || location.pathname === '/admin' || location.pathname === '/postavke';
+  const isAuthRoute = location.pathname === '/login'
+  const hideNav = isAuthRoute || location.pathname === '/admin' || location.pathname === '/postavke';
   useEffect(() => {
     if (!loading && isAuthenticated && location.pathname === '/login') {
       navigate('/')
@@ -42,32 +43,34 @@ function Shell() {
     <>
       <Head />
       {!hideNav && !isAuthenticated && <NotLoggedIn notLoggedIn={true} />}
-      {!hideNav && <Nav />}
+      {!hideNav && isAuthenticated && <Nav />}
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute allowedRoles={['ADMIN']}>
-              <AdminPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/sastanci" element={<Sastanci />} />
-        <Route path="/diskusija" element={<Diskusija />} />
-        <Route path="/arhiva" element={<Arhiva />} />
-        <Route path="/postavke" element={<Postavke />} />
-        <Route
-          path="/sastanci/novi"
-          element={
-            <ProtectedRoute allowedRoles={['ADMIN', 'REP']}>
-              <NoviSastanak />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+      {(isAuthenticated || isAuthRoute) && (
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute allowedRoles={['ADMIN']}>
+                <AdminPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/sastanci" element={<Sastanci />} />
+          <Route path="/diskusija" element={<Diskusija />} />
+          <Route path="/arhiva" element={<Arhiva />} />
+          <Route path="/postavke" element={<Postavke />} />
+          <Route
+            path="/sastanci/novi"
+            element={
+              <ProtectedRoute allowedRoles={['ADMIN', 'REP']}>
+                <NoviSastanak />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      )}
     </>
   )
 }

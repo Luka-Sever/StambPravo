@@ -34,7 +34,7 @@ function Login() {
             <div className="auth-field">
               <label>EMAIL ILI KORISNIČKO IME</label>
               <input 
-                type="textl"
+                type="text"
                 value={loginToken}
                 onChange={(e) => setLoginToken(e.target.value)}
                 placeholder="Unesite email ili korisničko ime"

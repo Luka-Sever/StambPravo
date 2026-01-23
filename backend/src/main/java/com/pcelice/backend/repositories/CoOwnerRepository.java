@@ -10,5 +10,7 @@ public interface CoOwnerRepository extends JpaRepository<CoOwner, Long> {
 
     Optional<CoOwner> findByUsername(String username);
 
+    Optional<CoOwner> findByCoOwnerId(Integer coOwnerId);
+
     List<CoOwner> findByBuilding_BuildingId(Integer buildingId);
 }
