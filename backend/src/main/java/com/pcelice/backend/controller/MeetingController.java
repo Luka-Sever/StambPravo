@@ -27,12 +27,21 @@ public class MeetingController {
     @PostMapping("/{id}/participate")
 
     public ResponseEntity<?> participateMeeting(@PathVariable Integer id, Authentication authentication) {
+
+        Object principal = authentication.getPrincipal();
+        String email;
+        if (principal instanceof UserDetails user) {
+            email = user.getUsername();
+        }
+        else if (principal instanceof DefaultOAuth2User oauthUser) {
+            email = oauthUser.getAttributes().get("email").toString();
+        }
+        else email = null;
+
         try {
-            CoOwner coOwner  = null;
-            if (authentication != null) {
-                coOwner = coOwnerRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RuntimeException("Korisnik ne može sudjelovati u sastanku."));
-                System.out.println(coOwner);
-            }
+            CoOwner coOwner;
+            coOwner = coOwnerRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Korisnik ne može sudjelovati u sastanku."));
+            System.out.println(coOwner);
 
             Meeting meeting = meetingService.participateMeeting(id, coOwner.getCoOwnerId());
             return ResponseEntity.ok(meeting);
