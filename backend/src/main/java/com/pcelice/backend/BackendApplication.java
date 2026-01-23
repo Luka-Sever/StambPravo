@@ -37,7 +37,6 @@ public class BackendApplication {
             admin.setPasswd(encodedPassword);
             admin.setFirstName("Bruno");
             admin.setLastName("Plese");
-            admin.setBuilding(new Building());
             admin.setRole(RoleType.ADMIN);
             repository.save(admin);
         };
