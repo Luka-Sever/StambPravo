@@ -45,7 +45,7 @@ public class AdminController {
                 coOwner.setUsername(coOwnerTemp.getUsername());
                 coOwner.setFirstName(coOwnerTemp.getFirstName());
                 coOwner.setLastName(coOwnerTemp.getLastName());
-                coOwner.setPasswd(coOwnerTemp.getPasswd());
+                coOwner.setPasswd(coOwnerTemp.getPassword());
                 coOwner.setRole(coOwnerTemp.getRole());
 
                 if (coOwnerTemp.getBuildingId() != null) {
