@@ -66,7 +66,7 @@ function AdminPage() {
         try {
 
             const bId = buildingId === '' ? null : Number(buildingId);
-            const newUser = { email, username, firstName, lastName, building: bId ? { buildingId: bId } : null, password, role: role};
+            const newUser = { email, username, firstName, lastName, buildingId: bId, password, role: role};
 
             await createUser(newUser);
             setMessage(`Korisnik ${username} je uspješno kreiran!`);
