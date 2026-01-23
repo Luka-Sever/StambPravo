@@ -1,6 +1,7 @@
 package com.pcelice.backend.controller;
 import com.pcelice.backend.dto.ConclusionRequest;
 import com.pcelice.backend.entities.CoOwner;
+import com.pcelice.backend.entities.RoleType;
 import com.pcelice.backend.entities.Item;
 import com.pcelice.backend.entities.ItemStatus;
 import com.pcelice.backend.entities.Meeting;
@@ -90,11 +91,13 @@ public class MeetingController {
         CoOwner creator = coOwnerRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("User not found"));
         
-        if (creator.getBuilding() != null) {
+        if (creator.getBuilding() != null && creator.getRole() == RoleType.REP) {
             meeting.setBuilding(creator.getBuilding());
         } else {
             throw new RuntimeException("User cannot create Meeting");
         }
+    } else {
+        return ResponseEntity.badRequest().body("Bad Request");
     }
     
     return ResponseEntity.ok(meetingService.createMeeting(meeting));
