@@ -23,7 +23,7 @@ public class MeetingServiceJpa implements MeetingService {
         public Meeting participateMeeting(Integer meetingId, Integer coOwnerId) {
             Meeting meeting = meetingRepository.findByMeetingId(meetingId)
                     .orElseThrow(() -> new RuntimeException("Meeting not found"));
-            CoOwner attendee = coOwnerRepository.findByCoOwnerId(coOwnerId)
+            CoOwner attendee = coOwnerRepository.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("User not found"));
             meeting.getAttendingCoOwners().add(attendee);
             attendee.getAttendingMeetings().add(meeting);
