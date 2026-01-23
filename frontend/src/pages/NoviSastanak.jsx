@@ -28,6 +28,7 @@ export default function NoviSastanak() {
         try {
             const start = new Date(meeting.meetingStartTime);
             const end = new Date(start);
+            start.setHours(start.getHours() + 1);
             end.setHours(start.getHours() + 1);
 
             const finalData = {
