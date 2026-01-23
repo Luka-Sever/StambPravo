@@ -14,6 +14,11 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID:client-id}
             client-secret: ${GOOGLE_CLIENT_SECRET:client-secret}
+        provider:
+          google:
+            user-name-attribute: email
+          github:
+            user-name-attribute: email
   h2:
     console:
       enabled: ${H2_CONSOLE_ENABLED:true}
