@@ -43,6 +43,7 @@ public class CoOwner {
         joinColumns = @JoinColumn(name = "co_owner_id"),
         inverseJoinColumns = @JoinColumn(name = "meeting_id")
     )
+    @JsonIgnore
     private Set<Meeting> attendingMeetings;
 
     public Set<Meeting> getAttendingMeetings() {
