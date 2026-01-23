@@ -93,12 +93,17 @@ public class MeetingServiceJpa implements MeetingService {
 
             // Slanje emaila svim suvlasnicima zgrade
             Building building = meeting.getBuilding();
-            if (building != null) {
-                List<CoOwner> buildingCoOwners = coOwnerRepository.findByBuilding_BuildingId(building.getBuildingId());
-                System.out.println("Sending archive emails to " + buildingCoOwners.size() + " co-owners in building " + building.getBuildingId());
+            if (building != null && building.getBuildingId() != null) {
+                Integer bId = building.getBuildingId();
+                List<CoOwner> buildingCoOwners = coOwnerRepository.findByBuilding_BuildingId(bId);
+                System.out.println("Sending archive emails to " + buildingCoOwners.size() + " co-owners in building " + bId);
                 for (CoOwner coOwner : buildingCoOwners) {
+                    if (coOwner.getBuilding() == null || coOwner.getBuilding().getBuildingId() == null) continue;
+                    if (!bId.equals(coOwner.getBuilding().getBuildingId())) continue;
                     emailService.sendMeetingPublishedNotification(coOwner.getEmail(), savedMeeting); // možeš napraviti posebnu metodu za arhivu
                 }
+            } else {
+                System.out.println("Skipping archive emails: meeting has no buildingId");
             }
             return savedMeeting;
         }
@@ -144,14 +149,19 @@ public class MeetingServiceJpa implements MeetingService {
         
         // Send email only to co-owners in the same building
         Building building = meeting.getBuilding();
-        if (building != null) {
-            List<CoOwner> buildingCoOwners = coOwnerRepository.findByBuilding_BuildingId(building.getBuildingId());
-            System.out.println("Sending emails to " + buildingCoOwners.size() + " co-owners in building " + building.getBuildingId());
-        
-        for (CoOwner coOwner : buildingCoOwners) {
-            emailService.sendMeetingPublishedNotification(coOwner.getEmail(), savedMeeting);
+        if (building != null && building.getBuildingId() != null) {
+            Integer bId = building.getBuildingId();
+            List<CoOwner> buildingCoOwners = coOwnerRepository.findByBuilding_BuildingId(bId);
+            System.out.println("Sending emails to " + buildingCoOwners.size() + " co-owners in building " + bId);
+
+            for (CoOwner coOwner : buildingCoOwners) {
+                if (coOwner.getBuilding() == null || coOwner.getBuilding().getBuildingId() == null) continue;
+                if (!bId.equals(coOwner.getBuilding().getBuildingId())) continue;
+                emailService.sendMeetingPublishedNotification(coOwner.getEmail(), savedMeeting);
+            }
+        } else {
+            System.out.println("Skipping emails: meeting has no buildingId");
         }
-    }
         
         return savedMeeting;
     }

@@ -39,7 +39,9 @@ public class BuildingServiceJpa implements BuildingService {
         Building building = buildingRepository.findByBuildingId(addRepData.getBuildingId()).orElseThrow(() -> new UsernameNotFoundException("Building not found"));
 
         building.setRep(rep);
+        rep.setBuilding(building);
 
+        coOwnerRepository.save(rep);
         buildingRepository.save(building);
     }
 
