@@ -3,6 +3,7 @@ package com.pcelice.backend.controller;
 import com.pcelice.backend.dto.addRepData;
 import com.pcelice.backend.entities.Building;
 import com.pcelice.backend.entities.CoOwner;
+import com.pcelice.backend.entities.RoleType;
 import com.pcelice.backend.repositories.BuildingRepository;
 import com.pcelice.backend.repositories.CoOwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class BuildingController {
         if (building.getRep() == null) {
             building.setRep(rep);
         } else {
-            currentRep = building.getRep();
+            CoOwner currentRep = building.getRep();
             currentRep.setRole(RoleType.CO_OWNER);
             building.setRep(rep);
         }
