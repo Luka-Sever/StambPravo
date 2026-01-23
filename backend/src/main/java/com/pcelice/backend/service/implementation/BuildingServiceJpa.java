@@ -41,7 +41,7 @@ public class BuildingServiceJpa implements BuildingService {
         CoOwner rep = coOwnerRepository.findByEmail(addRepData.getRepEmail()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
         Building building = buildingRepository.findByBuildingId(addRepData.getBuildingId()).orElseThrow(() -> new UsernameNotFoundException("Building not found"));
 
-        if (building.getRep()) {
+        if (building.getRep() != null) {
             CoOwner currentRep = building.getRep();
             currentRep.setRole(RoleType.CO_OWNER);
         }
