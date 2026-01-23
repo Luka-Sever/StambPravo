@@ -9,9 +9,18 @@ export default function Sastanci() {
     const [expandedId, setExpandedId] = useState(null);
     const [conclusions, setConclusions] = useState({});
     const [newItem, setNewItem] = useState({ title: '', summary: '', legal: 0 });
-    const [joinedMeetings, setJoinedMeetings] = useState(new Set());
+    const [joiningId, setJoiningId] = useState(null);
 
     const hasPrivileges = user?.role === 'ADMIN' || user?.role === 'REP';
+
+    const isUserAttending = (meeting) => {
+        if (!user?.email || !Array.isArray(meeting?.attendingCoOwners)) return false;
+        return meeting.attendingCoOwners.some(co => co?.email === user.email);
+    };
+
+    const getParticipantsCount = (meeting) => {
+        return Array.isArray(meeting?.attendingCoOwners) ? meeting.attendingCoOwners.length : 0;
+    };
 
     useEffect(() => {
         loadMeetings();
@@ -30,14 +39,14 @@ export default function Sastanci() {
 
     const handleAction = async (actionFn, id, successMsg, isParticipation = false) => {
         try {
+            if (isParticipation) setJoiningId(id);
             await actionFn(id); 
             alert(successMsg);
-            if (isParticipation) {
-                setJoinedMeetings(prev => new Set(prev).add(id));
-            }
             loadMeetings(); 
         } catch (err) {
             alert(err.message);
+        } finally {
+            if (isParticipation) setJoiningId(null);
         }
     };
 
@@ -133,7 +142,7 @@ export default function Sastanci() {
                                 <span className="info-item">📍 {m.meetingLocation}</span>
                                 {(m.status === 'Public' || m.status === 'Obavljen') && (
                                     <span className="info-item participant-count">
-                                         Sudionika: <strong>{m.participantsCount || 0}</strong>
+                                         Sudionika: <strong>{getParticipantsCount(m)}</strong>
                                     </span>
                                 )}
                             </div>
@@ -228,13 +237,17 @@ export default function Sastanci() {
                                 )}
 
                                 {!hasPrivileges && m.status === 'Public' && (
-                                    <button 
-                                        className="auth-button primary small-btn" 
-                                        disabled={joinedMeetings.has(mId)}
-                                        onClick={() => handleAction(meetingService.confirmParticipation, mId, "Sudjelovanje uspješno potvrđeno!", true)}
-                                    >
-                                        {joinedMeetings.has(mId) ? '✓ Prijavljeni' : '✅ Sudjelovat ću'}
-                                    </button>
+                                    isUserAttending(m) ? (
+                                        <span className="status-badge joined">✓ Prijavljeni</span>
+                                    ) : (
+                                        <button 
+                                            className="auth-button primary small-btn" 
+                                            disabled={joiningId === mId}
+                                            onClick={() => handleAction(meetingService.confirmParticipation, mId, "Sudjelovanje uspješno potvrđeno!", true)}
+                                        >
+                                            {joiningId === mId ? 'Prijava...' : '✅ Sudjelovat ću'}
+                                        </button>
+                                    )
                                 )}
                             </div>
                         </div>

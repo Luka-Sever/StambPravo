@@ -12,6 +12,8 @@ import com.pcelice.backend.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import com.pcelice.backend.repositories.CoOwnerRepository;
@@ -25,12 +27,21 @@ public class MeetingController {
     @PostMapping("/{id}/participate")
 
     public ResponseEntity<?> participateMeeting(@PathVariable Integer id, Authentication authentication) {
+
+        Object principal = authentication.getPrincipal();
+        String email;
+        if (principal instanceof UserDetails user) {
+            email = user.getUsername();
+        }
+        else if (principal instanceof DefaultOAuth2User oauthUser) {
+            email = oauthUser.getAttributes().get("email").toString();
+        }
+        else email = null;
+
         try {
-            CoOwner coOwner  = null;
-            if (authentication != null) {
-                coOwner = coOwnerRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RuntimeException("Korisnik ne može sudjelovati u sastanku."));
-                System.out.println(coOwner);
-            }
+            CoOwner coOwner;
+            coOwner = coOwnerRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Korisnik ne može sudjelovati u sastanku."));
+            System.out.println(coOwner);
 
             Meeting meeting = meetingService.participateMeeting(id, coOwner.getCoOwnerId());
             return ResponseEntity.ok(meeting);
@@ -84,24 +95,31 @@ public class MeetingController {
     public ResponseEntity<Meeting> createMeeting(
         @RequestBody Meeting meeting,
         Authentication authentication) {
-    
 
-    if (authentication != null && meeting.getBuilding() == null) {
-        String email = authentication.getName();
-        CoOwner creator = coOwnerRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-        
-        if (creator.getBuilding() != null && creator.getRole() == RoleType.REP) {
-            meeting.setBuilding(creator.getBuilding());
+        Object principal = authentication.getPrincipal();
+        String email;
+        if (principal instanceof UserDetails user) {
+            email = user.getUsername();
+        }
+        else if (principal instanceof DefaultOAuth2User oauthUser) {
+            email = oauthUser.getAttributes().get("email").toString();
+        }
+        else email = null;
+
+        if (meeting.getBuilding() == null) {
+            CoOwner creator = coOwnerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+            if (creator.getBuilding() != null && creator.getRole() == RoleType.REP) {
+                meeting.setBuilding(creator.getBuilding());
+            } else {
+                throw new RuntimeException("User cannot create Meeting");
+            }
         } else {
             throw new RuntimeException("User cannot create Meeting");
         }
-    } else {
-        throw new RuntimeException("User cannot create Meeting");
+        return ResponseEntity.ok(meetingService.createMeeting(meeting));
     }
-    
-    return ResponseEntity.ok(meetingService.createMeeting(meeting));
-}
 
     @PostMapping("/{meetingId}/items")
     public ResponseEntity<Meeting> addItem(

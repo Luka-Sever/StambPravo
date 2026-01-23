@@ -28,17 +28,23 @@ public class BuildingController {
         CoOwner rep = coOwnerRepository.findByEmail(addRepData.getRepEmail()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
         Building building = buildingRepository.findByBuildingId(addRepData.getBuildingId()).orElseThrow(() -> new UsernameNotFoundException("Building not found"));
 
+        rep.setBuilding(building);
+
         if (building.getRep() == null) {
             building.setRep(rep);
         } else {
             CoOwner currentRep = building.getRep();
             currentRep.setRole(RoleType.CO_OWNER);
             building.setRep(rep);
+            // keep current rep in the building as a regular co-owner
+            currentRep.setBuilding(building);
+            coOwnerRepository.save(currentRep);
         }
         if (rep.getRole() == RoleType.CO_OWNER) {
             rep.setRole(RoleType.REP);
         }
 
+        coOwnerRepository.save(rep);
         buildingRepository.save(building);
     }
 }
