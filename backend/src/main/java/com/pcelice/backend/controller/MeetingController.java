@@ -97,7 +97,7 @@ public class MeetingController {
             throw new RuntimeException("User cannot create Meeting");
         }
     } else {
-        return ResponseEntity.badRequest().body("Bad Request");
+        throw new RuntimeException("User cannot create Meeting");
     }
     
     return ResponseEntity.ok(meetingService.createMeeting(meeting));
