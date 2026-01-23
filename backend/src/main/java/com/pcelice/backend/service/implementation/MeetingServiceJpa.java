@@ -74,18 +74,17 @@ public class MeetingServiceJpa implements MeetingService {
             Meeting meeting = meetingRepository.findByMeetingId(meetingId)
                .orElseThrow(() -> new RuntimeException("Meeting not found"));
 
-            // Provjera: sve pravne točke moraju imati zaključak
             boolean allLegalHaveConclusion = true;
             if (meeting.getItems() != null) {
                 for (Item item : meeting.getItems()) {
-                    if (item.getLegal() == 1 && (item.getConclusion() == null || item.getConclusion().trim().isEmpty())) {
+                    if (item.getConclusion() == null || item.getConclusion().trim().isEmpty()) {
                         allLegalHaveConclusion = false;
                         break;
                     }
                 }
             }
             if (!allLegalHaveConclusion) {
-                throw new RuntimeException("Nisu dodani zaključci za sve pravne točke!");
+                throw new RuntimeException("Nisu dodani zaključci za sve točke!");
             }
 
             meeting.setStatus(MeetingStatus.Archived);
