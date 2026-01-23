@@ -129,7 +129,7 @@ export default function Sastanci() {
                             <p className="meeting-summary">{m.summary}</p>
                             
                             <div className="meeting-info">
-                                <span className="info-item">📅 {new Date(m.meetingStartTime).toLocaleString('hr-HR')}</span>
+                                <span className="info-item">📅 {new Date(m.meetingStartTime).toLocaleString('hr-HR', { timeZone: 'Europe/Helsinki' })}</span>
                                 <span className="info-item">📍 {m.meetingLocation}</span>
                                 {(m.status === 'Public' || m.status === 'Obavljen') && (
                                     <span className="info-item participant-count">
