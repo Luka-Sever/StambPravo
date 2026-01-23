@@ -3,6 +3,7 @@ package com.pcelice.backend.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -31,9 +32,9 @@ public class CoOwner {
     @NotNull
     private RoleType roleType;
 
-    /// treba biti false u pravoj bazi
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "building_id", nullable = true)
+    @JsonIgnore
     private Building building;
 
     @ManyToMany

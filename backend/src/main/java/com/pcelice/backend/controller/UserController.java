@@ -1,5 +1,6 @@
 package com.pcelice.backend.controller;
 
+import com.pcelice.backend.dto.addCoOwnerToBuilding;
 import com.pcelice.backend.dto.changePasswordData;
 import com.pcelice.backend.entities.Building;
 import com.pcelice.backend.repositories.BuildingRepository;
@@ -95,13 +96,11 @@ public class UserController {
 
     @PostMapping("/add-coOwner")
     @PreAuthorize("hasAnyRole('REP', 'ADMIN')")
-    public void addCoOwner(@RequestBody String coOwnerEmail, String repEmail) throws Exception {
+    public void addCoOwner(@RequestBody addCoOwnerToBuilding addCoOwnerToBuilding) throws Exception {
 
-        CoOwner rep = coOwnerRepository.findByEmail(repEmail).orElseThrow(() -> new Exception("User not found"));
+        Building building = buildingRepository.findByBuildingId(addCoOwnerToBuilding.getBuildingId()).orElseThrow(() -> new Exception("Building not found"));
 
-        Building building = buildingRepository.findByBuildingId(rep.getBuilding().getBuildingId()).orElseThrow(() -> new Exception("Building not found"));
-
-        CoOwner coOwner = coOwnerRepository.findByEmail(coOwnerEmail).orElseThrow(() -> new Exception("User not found"));
+        CoOwner coOwner = coOwnerRepository.findByEmail(addCoOwnerToBuilding.getEmail()).orElseThrow(() -> new Exception("User not found"));
 
         coOwner.setBuilding(building);
         coOwnerRepository.save(coOwner);

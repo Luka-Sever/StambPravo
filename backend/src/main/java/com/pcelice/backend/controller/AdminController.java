@@ -1,6 +1,7 @@
 package com.pcelice.backend.controller;
 
 import com.pcelice.backend.dto.createBuildingData;
+import com.pcelice.backend.dto.createCoOwner;
 import com.pcelice.backend.entities.CoOwner;
 import com.pcelice.backend.repositories.CoOwnerRepository;
 import com.pcelice.backend.service.BuildingService;
@@ -33,15 +34,26 @@ public class AdminController {
     private CoOwnerRepository coOwnerRepository;
 
     @PostMapping("/user")
-    public ResponseEntity<?> createCoOwner(@RequestBody CoOwner coOwner) {
+    public ResponseEntity<?> createCoOwner(@RequestBody createCoOwner coOwnerTemp) {
 
+        CoOwner coOwner = new CoOwner();
 
         try {
-            if (!coOwnerService.emailPresent(coOwner.getEmail())) {
-                if (coOwner.getBuilding() != null && coOwner.getBuilding().getBuildingId() != null) {
-                Building building = buildingRepository.findByBuildingId(coOwner.getBuilding().getBuildingId())
+            if (!coOwnerService.emailPresent(coOwnerTemp.getEmail()) && !coOwnerService.usernamePresent(coOwnerTemp.getUsername())) {
+
+                coOwner.setEmail(coOwnerTemp.getEmail());
+                coOwner.setUsername(coOwnerTemp.getUsername());
+                coOwner.setFirstName(coOwnerTemp.getFirstName());
+                coOwner.setLastName(coOwnerTemp.getLastName());
+                coOwner.setPassword(coOwnerTemp.getPassword());
+                coOwner.setRole(coOwnerTemp.getRole());
+
+                if (coOwnerTemp.getBuildingId() != null) {
+                Building building = buildingRepository.findByBuildingId(coOwnerTemp.getBuildingId())
                 .orElseThrow(() -> new RuntimeException("Building not found"));
+
                 coOwner.setBuilding(building);
+
             }
                 CoOwner createdCoOwner = coOwnerService.createCoOwner(coOwner);
                 return ResponseEntity.ok(createdCoOwner);
