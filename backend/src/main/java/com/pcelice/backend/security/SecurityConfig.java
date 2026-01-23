@@ -101,6 +101,7 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("http://localhost:5173");
         configuration.addAllowedOrigin("http://localhost:8081");
         configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("https://progistanblog.azurewebsites.net/api/stanplan/discussions/positive");
         configuration.addAllowedHeader(CorsConfiguration.ALL);
         configuration.addAllowedMethod(CorsConfiguration.ALL);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
