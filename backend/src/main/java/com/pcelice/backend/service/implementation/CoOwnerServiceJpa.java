@@ -35,7 +35,7 @@ public class CoOwnerServiceJpa implements CoOwnerService {
     @Override
     public CoOwner createCoOwner(CoOwner coOwner) {
 
-        validatePassword(coOwner.getPassword());
+        validatePassword(coOwner.getPasswd());
         validateUsername(coOwner.getUsername());
         validateName(coOwner.getFirstName(), coOwner.getLastName());
 
@@ -43,8 +43,8 @@ public class CoOwnerServiceJpa implements CoOwnerService {
             throw new RuntimeException("Email already in use");
         }
 
-        String hashedPassword = passwordEncoder.encode(coOwner.getPassword());
-        coOwner.setPassword(hashedPassword);
+        String hashedPassword = passwordEncoder.encode(coOwner.getPasswd());
+        coOwner.setPasswd(hashedPassword);
         return coOwnerRepository.save(coOwner);
     }
 

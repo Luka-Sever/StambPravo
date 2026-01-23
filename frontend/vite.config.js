@@ -3,6 +3,7 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+<<<<<<< HEAD
   plugins: [react()],
   server: {
     proxy: {
@@ -13,4 +14,7 @@ export default defineConfig({
       },
     },
   },
+=======
+  plugins: [react()]
+>>>>>>> origin/deployyyyy
 })

@@ -23,25 +23,25 @@ spring:
         web-allow-others: true
   datasource:
     url: ${DATABASE_URL:jdbc:h2:mem:testdb}
-#    driver-class-name: org.postgresql.Driver
-#    hikari:
-#      maximum-pool-size: 10
-#      data-source-properties:
-#        sslmode: require
-#  jpa:
-#    hibernate:
-#        ddl-auto: validate
-#  mail:
-#    host: smtp.gmail.com
-#    port: 587
-#    username: ${MAIL_USERNAME:your-email@gmail.com}
-#    password: ${MAIL_PASSWORD:your-app-password}
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      data-source-properties:
+        sslmode: require
+  jpa:
+    hibernate:
+        ddl-auto: validate
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:your-email@gmail.com}
+    password: ${MAIL_PASSWORD:your-app-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 server:
   servlet:
     session:

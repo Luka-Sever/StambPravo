@@ -1,5 +1,6 @@
 package com.pcelice.backend;
 
+import com.pcelice.backend.entities.Building;
 import com.pcelice.backend.entities.CoOwner;
 import com.pcelice.backend.entities.RoleType;
 import com.pcelice.backend.repositories.CoOwnerRepository;
@@ -26,22 +27,22 @@ public class BackendApplication {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Bean
-    public CommandLineRunner demo(CoOwnerRepository repository) {
-        //hardcodeani useri za testiranje
-        return (args) -> {
-            String encodedPassword = passwordEncoder.encode("password123");
-
-            CoOwner admin = new CoOwner();
-            admin.setEmail("brunoplese0@gmail.com");
-            admin.setUsername("Admin");
-            admin.setPassword(encodedPassword);
-            admin.setFirstName("Bruno");
-            admin.setLastName("Plese");
-            admin.setRole(RoleType.ADMIN);
-            repository.save(admin);
-        };
-    }
+//    @Bean
+//    public CommandLineRunner demo(CoOwnerRepository repository) {
+//        //hardcodeani useri za testiranje
+//        return (args) -> {
+//            String encodedPassword = passwordEncoder.encode("password123");
+//
+//            CoOwner admin = new CoOwner();
+//            admin.setEmail("brunoplese0@gmail.com");
+//            admin.setUsername("Admin");
+//            admin.setPasswd(encodedPassword);
+//            admin.setFirstName("Bruno");
+//            admin.setLastName("Plese");
+//            admin.setRole(RoleType.ADMIN);
+//            repository.save(admin);
+//        };
+//    }
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {  // fix za prihvatit request s frontenda za dodat usera

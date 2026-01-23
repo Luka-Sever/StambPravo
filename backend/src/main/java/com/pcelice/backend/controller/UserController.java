@@ -6,7 +6,6 @@ import com.pcelice.backend.entities.Building;
 import com.pcelice.backend.repositories.BuildingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.expression.ExpressionException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +18,6 @@ import com.pcelice.backend.repositories.CoOwnerRepository;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Optional;
 
 @Profile("security")
 @RestController
@@ -87,11 +85,11 @@ public class UserController {
 
         CoOwner coOwner = coOwnerRepository.findByUsername(changePasswordData.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
-        if (!passwordEncoder.matches(changePasswordData.getOldPassword(), coOwner.getPassword())) {
+        if (!passwordEncoder.matches(changePasswordData.getOldPassword(), coOwner.getPasswd())) {
             throw new Exception("Incorrect password");
         }
 
-        coOwner.setPassword(passwordEncoder.encode(changePasswordData.getNewPassword()));
+        coOwner.setPasswd(passwordEncoder.encode(changePasswordData.getNewPassword()));
         coOwnerRepository.save(coOwner);
 
     }

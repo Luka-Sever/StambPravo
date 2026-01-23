@@ -4,7 +4,6 @@ import com.pcelice.backend.entities.CoOwner;
 import com.pcelice.backend.entities.RoleType;
 import com.pcelice.backend.repositories.CoOwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -13,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.*;
-import static org.springframework.security.core.authority.AuthorityUtils.commaSeparatedStringToAuthorityList;
 
 @Service
 public class coOwnerUserDetailsService implements UserDetailsService {
@@ -40,7 +38,7 @@ public class coOwnerUserDetailsService implements UserDetailsService {
 
         return new User(
                 user.getEmail(),
-                user.getPassword(), 
+                user.getPasswd(),
                 authorities
         );
     }
