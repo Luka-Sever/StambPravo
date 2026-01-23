@@ -103,7 +103,7 @@ public class UserTest {
                 ExpectedConditions.elementToBeClickable(By.cssSelector("[placeholder=\"Adresa\"]"))
         );
         WebElement postanskiBroj = driver.findElement(By.cssSelector("[placeholder=\"Poštanski broj\"]"));
-        adresaZgrade.sendKeys("Murterska 17");
+        adresaZgrade.sendKeys("Unska 3");
         postanskiBroj.sendKeys("10000");
 
         WebElement kreirajZgradu = driver.findElement(
