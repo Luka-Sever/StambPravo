@@ -14,7 +14,7 @@ export default function Diskusija() {
                 setError(null);
 
                 // relative path to the backend endpoint
-                const res = await fetch('/diskusije', {
+                const res = await fetch('https://stanplan-136r.onrender.com/diskusije', {
                     method: 'GET',
                     headers: apiKey ? { 'x-api-key': apiKey } : undefined,
                 });
@@ -23,7 +23,7 @@ export default function Diskusija() {
                     const text = await res.text().catch(() => '');
                     throw new Error(text || res.statusText || 'Request failed');
                 }
-
+                console.log(res);
                 const data = await res.json();
                 setDiscussions(Array.isArray(data) ? data : []);
             } catch (err) {

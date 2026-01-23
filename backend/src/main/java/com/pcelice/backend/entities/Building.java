@@ -22,7 +22,7 @@ public class Building {
     @JoinColumn(name = "rep_id", unique = true)
     private CoOwner rep;
 
-    @NotNull
+    @Column(nullable = false, name = "postal_code")
     private Integer cityId;
 
     @NotNull
