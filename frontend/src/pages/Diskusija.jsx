@@ -4,6 +4,7 @@ export default function Diskusija() {
     const [discussions, setDiscussions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const STANBLOG_BASE_URL = 'https://progistanblog.azurewebsites.net';
 
     useEffect(() => {
         const apiKey = import.meta.env.VITE_STANBLOG_API_KEY;
@@ -44,6 +45,13 @@ export default function Diskusija() {
         return d.toLocaleString('hr-HR');
     };
 
+    const toStanBlogUrl = (link) => {
+        if (!link) return '';
+        if (/^https?:\/\//i.test(link)) return link;
+        const normalized = link.startsWith('/') ? link : `/${link}`;
+        return `${STANBLOG_BASE_URL}${normalized}`;
+    };
+
     return (
         <div className="page-container">
             <h1 className="admin-title">StanBlog - Diskusije</h1>
@@ -69,7 +77,7 @@ export default function Diskusija() {
                             )}
 
                             {d.link && (
-                                <a className="auth-link" href={d.link} target="_blank" rel="noreferrer">
+                                <a className="auth-link" href={toStanBlogUrl(d.link)} target="_blank" rel="noreferrer">
                                     Otvori diskusiju
                                 </a>
                             )}
