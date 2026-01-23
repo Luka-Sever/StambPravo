@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       // StanBlog proxy endpoint (backend exposes /diskusije outside /api/**, so proxy avoids CORS in dev)
       '/diskusije': {
-        target: 'http://localhost:8080',
+        target: 'https://progistanblog.azurewebsites.net/api/stanplan/discussions/positive',
         changeOrigin: true,
       },
     },
