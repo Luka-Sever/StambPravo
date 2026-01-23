@@ -23,7 +23,7 @@ export default function Diskusija() {
                     const text = await res.text().catch(() => '');
                     throw new Error(text || res.statusText || 'Request failed');
                 }
-
+                console.log(data);
                 const data = await res.json();
                 setDiscussions(Array.isArray(data) ? data : []);
             } catch (err) {
