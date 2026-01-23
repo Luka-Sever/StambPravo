@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState} from 'react';
 import '../App.css';
 import { createUser } from '../services/adminService';
-import { createBuilding, addRepToBuilding, getAllBuildings } from '../services/buildingService';
+import { addRepToBuilding, createBuilding, getAllBuildings } from '../services/buildingService';
 
 function AdminPage() {
     const [email, setEmail] = useState('');
@@ -147,7 +147,7 @@ function AdminPage() {
                             required
                         />
                     </div>
-                    
+
                     <div className="auth-field">
                         <input 
                             type="text" 
@@ -199,7 +199,7 @@ function AdminPage() {
                             <option value="">Odaberite zgradu</option>
                             {buildings.map(building => (
                                 <option key={building.buildingId} value={building.buildingId}>
-                                    ID {building.buildingId} - {building.address}
+                                    {building.address} - {building.cityId}
                                 </option>
                             ))}
                         </select>
@@ -260,7 +260,20 @@ function AdminPage() {
             <div className="auth-card">
                 <form onSubmit={handleAddRep} className="auth-form">
                     <div className="auth-field">
-                        <input type="number" value={buildingIdForRep} onChange={e => setBuildingIdForRep(e.target.value)} placeholder="ID zgrade" required />
+                        <label className="label-text">Zgrada:</label>
+                        <select
+                            className="role-select"
+                            value={buildingIdForRep}
+                            onChange={e => setBuildingIdForRep(e.target.value)}
+                            required
+                        >
+                            <option value="">Odaberite zgradu</option>
+                            {buildings.map(building => (
+                                <option key={building.buildingId} value={building.buildingId}>
+                                    {building.address} - {building.cityId}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="auth-field">
                         <input type="email" value={repEmail} onChange={e => setRepEmail(e.target.value)} placeholder="Email predstavnika" required />
