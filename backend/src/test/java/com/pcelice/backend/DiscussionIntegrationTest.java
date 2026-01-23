@@ -28,6 +28,5 @@ public class DiscussionIntegrationTest {
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         Discussion[] discussions = response.getBody();
         assertThat(discussions).isNotNull();
-
     }
 }
