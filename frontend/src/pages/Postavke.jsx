@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
-import { changePassword } from '../services/authService.js';
-import { addRepToBuilding, getAllBuildings } from '../services/buildingService';
+import { changePassword, addCoOwner } from '../services/authService.js';
+import {  getAllBuildings } from '../services/buildingService';
 
 export default function Postavke() {
     const navigate = useNavigate();
@@ -69,7 +69,7 @@ export default function Postavke() {
                 return;
             }
 
-            await addRepToBuilding({ buildingId: Number(selectedBuildingId), repEmail: tenantEmail });
+            await addCoOwner({ buildingId: Number(selectedBuildingId),email: tenantEmail });
             setTenantMessage('Stanar uspješno dodan u zgradu!');
             setTenantEmail('');
         } catch (err) {

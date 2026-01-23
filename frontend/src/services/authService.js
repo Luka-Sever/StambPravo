@@ -25,3 +25,7 @@ export function logout() {
 export function changePassword(changePasswordData) {
   return post('/api/user/change-password', changePasswordData);
 }
+
+export function addCoOwner(data) {
+    return post("/api/user/add-coOwner", data)
+}
