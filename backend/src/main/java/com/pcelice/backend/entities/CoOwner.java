@@ -1,5 +1,6 @@
 package com.pcelice.backend.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.*;

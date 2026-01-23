@@ -22,10 +22,16 @@ import java.util.Objects;
 @RequestMapping("/api/meetings")
 public class MeetingController {
     @PostMapping("/{id}/participate")
-    public ResponseEntity<?> participateMeeting(@PathVariable Integer id) {
+
+    public ResponseEntity<?> participateMeeting(@PathVariable Integer id, Authentication authentication) {
         try {
-            // MORA poslati username korisnika koji se želi priključiti sastanku, ko prvi zna nek riješi
-            Meeting meeting = meetingService.participateMeeting(id, username);
+            CoOwner coOwner  = null;
+            if (authentication != null) {
+                coOwner = coOwnerRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RuntimeException("Korisnik ne može sudjelovati u sastanku."));
+                System.out.println(coOwner);
+            }
+
+            Meeting meeting = meetingService.participateMeeting(id, coOwner.getCoOwnerId());
             return ResponseEntity.ok(meeting);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -113,7 +119,6 @@ public class MeetingController {
                     .orElse(0) + 1;
             meetingItemId.setItemNumber(nextItemNumber);
 
-            // defaults
             if (item.getStatus() == null) item.setStatus(ItemStatus.Pending);
             if (item.getLegal() == null) item.setLegal(0);
 
