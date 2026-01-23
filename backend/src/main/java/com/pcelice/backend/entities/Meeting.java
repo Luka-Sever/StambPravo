@@ -21,15 +21,6 @@ import jakarta.persistence.*;
     }
 )
 public class Meeting {
-    private Integer participantsCount = 0;
-
-    public Integer getParticipantsCount() {
-        return participantsCount;
-    }
-
-    public void setParticipantsCount(Integer participantsCount) {
-        this.participantsCount = participantsCount;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -140,4 +131,14 @@ public class Meeting {
     public void setItems(List<Item> items) {
         this.items = items;
     }
+
+    public Set<CoOwner> getAttendingCoOwners() {
+        if (this.attendingCoOwners == null) {
+            this.attendingCoOwners = new HashSet<>();
+        }
+        return attendingCoOwners;
+    }
+
+    public void setAttendingCoOwners(Set<CoOwner> attendingCoOwners) { this.attendingCoOwners = attendingCoOwners; }
+
 }

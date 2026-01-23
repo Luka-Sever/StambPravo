@@ -24,7 +24,8 @@ public class MeetingController {
     @PostMapping("/{id}/participate")
     public ResponseEntity<?> participateMeeting(@PathVariable Integer id) {
         try {
-            Meeting meeting = meetingService.participateMeeting(id);
+            // MORA poslati id korisnika koji se želi priključiti sastanku, ko prvi zna nek riješi
+            Meeting meeting = meetingService.participateMeeting(id, coOwnerId);
             return ResponseEntity.ok(meeting);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

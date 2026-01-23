@@ -44,6 +44,9 @@ public class CoOwner {
     private Set<Meeting> attendingMeetings;
 
     public Set<Meeting> getAttendingMeetings() {
+        if (this.attendingMeetings == null) {
+            this.attendingMeetings = new HashSet<>();
+        }
         return attendingMeetings;
     }
 
