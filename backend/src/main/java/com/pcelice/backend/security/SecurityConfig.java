@@ -110,6 +110,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/oauth2/**", configuration);
         source.registerCorsConfiguration("/login/oauth2/**", configuration);
         source.registerCorsConfiguration("/user/**", configuration);
+        source.registerCorsConfiguration("/api/meetings/**", configuration);
         return source;
     }
 

@@ -55,7 +55,9 @@ public class BuildingServiceJpa implements BuildingService {
         }
 
         building.setRep(rep);
+        rep.setBuilding(building);
 
+        coOwnerRepository.save(rep);
         buildingRepository.save(building);
     }
 
