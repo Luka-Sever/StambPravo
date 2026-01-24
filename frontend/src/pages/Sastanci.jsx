@@ -13,6 +13,8 @@ export default function Sastanci() {
     const [busyByKey, setBusyByKey] = useState({});
 
     const hasPrivileges = user?.role === 'ADMIN' || user?.role === 'REP';
+    const userBuildingIdRaw = user?.building?.buildingId ?? user?.buildingId ?? null;
+    const userBuildingId = userBuildingIdRaw == null ? null : String(userBuildingIdRaw);
 
     const isBusy = (key) => !!busyByKey[key];
     const setBusy = (key, val) => {
@@ -22,6 +24,16 @@ export default function Sastanci() {
     const isUserAttending = (meeting) => {
         if (!user?.email || !Array.isArray(meeting?.attendingCoOwners)) return false;
         return meeting.attendingCoOwners.some(co => co?.email === user.email);
+    };
+
+    const getMeetingBuildingId = (meeting) => {
+        const id =
+            meeting?.building?.buildingId ??
+            meeting?.buildingId ??
+            meeting?.building_id ??
+            meeting?.building?.id ??
+            null;
+        return id == null ? null : String(id);
     };
 
     const getParticipantsCount = (meeting) => {
@@ -136,6 +148,12 @@ export default function Sastanci() {
                 {meetings.map(m => {
                     if (m.status === 'Archived') return null;
                     if (!hasPrivileges && m.status !== 'Public') return null;
+
+                    if (userBuildingId) {
+                        const meetingBuildingId = getMeetingBuildingId(m);
+                        if (!meetingBuildingId || meetingBuildingId !== userBuildingId) return null;
+                    }
+
                     const mId = m.meetingId;
 
                     return (
