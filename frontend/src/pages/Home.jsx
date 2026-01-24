@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { meetingService } from '../services/meetingService.js'
+import { useAuth } from '../context/AuthContext.jsx'
 
 function Home() {
+  const { user } = useAuth()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [meetings, setMeetings] = useState([])
@@ -28,6 +30,11 @@ function Home() {
     }
   }, [])
 
+  const userBuildingId = useMemo(() => {
+    const id = user?.building?.buildingId ?? user?.buildingId
+    return id == null ? null : String(id)
+  }, [user])
+
   const normalized = useMemo(() => {
     return (meetings || [])
       .map((m) => ({
@@ -37,21 +44,30 @@ function Home() {
         status: m.status,
         meetingStartTime: m.meetingStartTime,
         meetingLocation: m.meetingLocation,
+        buildingId: (() => {
+          const id = m.buildingId ?? m.building_id ?? m.building?.buildingId ?? m.building?.id
+          return id == null ? null : String(id)
+        })(),
         items: m.items || [],
       }))
       .filter((m) => m.id != null)
       .sort((a, b) => new Date(b.meetingStartTime || 0) - new Date(a.meetingStartTime || 0))
   }, [meetings])
 
+  const visible = useMemo(() => {
+    if (!userBuildingId) return normalized
+    return normalized.filter((m) => m.buildingId != null && m.buildingId === userBuildingId)
+  }, [normalized, userBuildingId])
+
   const active = useMemo(
-    () => normalized.filter((m) => m.status !== 'Archived'),
-    [normalized]
+    () => visible.filter((m) => m.status !== 'Archived'),
+    [visible]
   )
 
   const selected = useMemo(() => {
     if (!selectedId) return null
-    return normalized.find((m) => m.id === selectedId) || null
-  }, [normalized, selectedId])
+    return visible.find((m) => m.id === selectedId) || null
+  }, [visible, selectedId])
 
   useEffect(() => {
     if (!isModalOpen) return

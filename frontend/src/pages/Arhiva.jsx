@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useAuth } from '../context/AuthContext.jsx'
 import { meetingService } from '../services/meetingService.js'
 
 export default function Arhiva() {
+    const { user } = useAuth()
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [meetings, setMeetings] = useState([])
@@ -11,20 +13,25 @@ export default function Arhiva() {
 
     useEffect(() => {
         let cancelled = false
-        ;(async () => {
-            try {
-                setLoading(true)
-                setError(null)
-                const data = await meetingService.getAll()
-                if (!cancelled) setMeetings(Array.isArray(data) ? data : [])
-            } catch (e) {
-                if (!cancelled) setError(e?.message || 'Greška pri dohvaćanju sastanaka.')
-            } finally {
-                if (!cancelled) setLoading(false)
-            }
-        })()
+            ; (async () => {
+                try {
+                    setLoading(true)
+                    setError(null)
+                    const data = await meetingService.getAll()
+                    if (!cancelled) setMeetings(Array.isArray(data) ? data : [])
+                } catch (e) {
+                    if (!cancelled) setError(e?.message || 'Greška pri dohvaćanju sastanaka.')
+                } finally {
+                    if (!cancelled) setLoading(false)
+                }
+            })()
         return () => { cancelled = true }
     }, [])
+
+    const userBuildingId = useMemo(() => {
+        const id = user?.building?.buildingId ?? user?.buildingId
+        return id == null ? null : String(id)
+    }, [user])
 
     useEffect(() => {
         if (!isModalOpen) return
@@ -44,11 +51,19 @@ export default function Arhiva() {
                 status: m.status,
                 meetingStartTime: m.meetingStartTime,
                 meetingLocation: m.meetingLocation,
+                buildingId: (() => {
+                    const id = m.buildingId ?? m.building_id ?? m.building?.buildingId ?? m.building?.id
+                    return id == null ? null : String(id)
+                })(),
                 items: m.items || [],
             }))
-            .filter((m) => m.id != null && m.status === 'Archived')
+            .filter((m) => {
+                if (m.id == null || m.status !== 'Archived') return false
+                if (!userBuildingId) return true
+                return m.buildingId != null && m.buildingId === userBuildingId
+            })
             .sort((a, b) => new Date(b.meetingStartTime || 0) - new Date(a.meetingStartTime || 0))
-    }, [meetings])
+    }, [meetings, userBuildingId])
 
     const selected = useMemo(() => {
         if (!selectedId) return null

@@ -10,12 +10,30 @@ export default function Sastanci() {
     const [conclusions, setConclusions] = useState({});
     const [newItem, setNewItem] = useState({ title: '', summary: '', legal: 0 });
     const [joiningId, setJoiningId] = useState(null);
+    const [busyByKey, setBusyByKey] = useState({});
 
     const hasPrivileges = user?.role === 'ADMIN' || user?.role === 'REP';
+    const userBuildingIdRaw = user?.building?.buildingId ?? user?.buildingId ?? null;
+    const userBuildingId = userBuildingIdRaw == null ? null : String(userBuildingIdRaw);
+
+    const isBusy = (key) => !!busyByKey[key];
+    const setBusy = (key, val) => {
+        setBusyByKey(prev => ({ ...prev, [key]: !!val }));
+    };
 
     const isUserAttending = (meeting) => {
         if (!user?.email || !Array.isArray(meeting?.attendingCoOwners)) return false;
         return meeting.attendingCoOwners.some(co => co?.email === user.email);
+    };
+
+    const getMeetingBuildingId = (meeting) => {
+        const id =
+            meeting?.building?.buildingId ??
+            meeting?.buildingId ??
+            meeting?.building_id ??
+            meeting?.building?.id ??
+            null;
+        return id == null ? null : String(id);
     };
 
     const getParticipantsCount = (meeting) => {
@@ -37,9 +55,11 @@ export default function Sastanci() {
         }
     };
 
-    const handleAction = async (actionFn, id, successMsg, isParticipation = false) => {
+    const handleAction = async (actionFn, id, successMsg, opts = {}) => {
+        const { isParticipation = false, busyKey = null } = opts || {};
         try {
             if (isParticipation) setJoiningId(id);
+            if (busyKey) setBusy(busyKey, true);
             await actionFn(id);
             alert(successMsg);
             loadMeetings();
@@ -47,6 +67,7 @@ export default function Sastanci() {
             alert(err.message);
         } finally {
             if (isParticipation) setJoiningId(null);
+            if (busyKey) setBusy(busyKey, false);
         }
     };
 
@@ -55,7 +76,7 @@ export default function Sastanci() {
             alert("Sastanak mora imati barem jednu točku dnevnog reda da bi se objavio!");
             return;
         }
-        handleAction(meetingService.publish, mId, "Sastanak objavljen!");
+        handleAction(meetingService.publish, mId, "Sastanak objavljen!", { busyKey: `publish-${mId}` });
     };
 
     const handleDelete = async (id) => {
@@ -127,6 +148,12 @@ export default function Sastanci() {
                 {meetings.map(m => {
                     if (m.status === 'Archived') return null;
                     if (!hasPrivileges && m.status !== 'Public') return null;
+
+                    if (userBuildingId) {
+                        const meetingBuildingId = getMeetingBuildingId(m);
+                        if (!meetingBuildingId || meetingBuildingId !== userBuildingId) return null;
+                    }
+
                     const mId = m.meetingId;
 
                     return (
@@ -210,8 +237,9 @@ export default function Sastanci() {
                                                 <button
                                                     className="auth-button dark small-btn"
                                                     onClick={() => handlePublish(mId, m.items)}
+                                                    disabled={isBusy(`publish-${mId}`)}
                                                 >
-                                                    Objavi
+                                                    {isBusy(`publish-${mId}`) ? 'Objavljujem...' : 'Objavi'}
                                                 </button>
                                                 <button className="auth-button danger small-btn" onClick={() => handleDelete(mId)}>
                                                     Obriši
@@ -229,9 +257,10 @@ export default function Sastanci() {
                                             <button
                                                 className="auth-button primary small-btn"
                                                 title={!canArchive(m) ? "Morate popuniti zaključke za sve pravne točke!" : ""}
-                                                onClick={() => handleAction(meetingService.archive, mId, "Sastanak arhiviran i mail poslan!")}
+                                                onClick={() => handleAction(meetingService.archive, mId, "Sastanak arhiviran i mail poslan!", { busyKey: `archive-${mId}` })}
+                                                disabled={!canArchive(m) || isBusy(`archive-${mId}`)}
                                             >
-                                                Arhiviraj
+                                                {isBusy(`archive-${mId}`) ? 'Arhiviram...' : 'Arhiviraj'}
                                             </button>
                                         )}
                                     </div>
@@ -244,7 +273,7 @@ export default function Sastanci() {
                                         <button
                                             className="auth-button primary small-btn"
                                             disabled={joiningId === mId}
-                                            onClick={() => handleAction(meetingService.confirmParticipation, mId, "Sudjelovanje uspješno potvrđeno!", true)}
+                                            onClick={() => handleAction(meetingService.confirmParticipation, mId, "Sudjelovanje uspješno potvrđeno!", { isParticipation: true })}
                                         >
                                             {joiningId === mId ? 'Prijava...' : '✅ Sudjelovat ću'}
                                         </button>
