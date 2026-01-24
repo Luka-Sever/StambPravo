@@ -4,45 +4,42 @@ import com.pcelice.backend.entities.CoOwner;
 import com.pcelice.backend.entities.RoleType;
 import com.pcelice.backend.repositories.CoOwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.*;
-import static org.springframework.security.core.authority.AuthorityUtils.commaSeparatedStringToAuthorityList;
 
 @Service
 public class coOwnerUserDetailsService implements UserDetailsService {
 
-    @Value("{$progi.admin.password}")
-
-    private String adminPasswordHash;
-
-    @Autowired
-    private CoOwnerService coOwnerService;
-    @Autowired
+   @Autowired
     private CoOwnerRepository coOwnerRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new User(username, adminPasswordHash, authorities(username));
-    }
+    public UserDetails loadUserByUsername(String loginToken) throws UsernameNotFoundException {
 
-    private List<GrantedAuthority> authorities(String email) {
+        CoOwner user = coOwnerRepository.findByEmail(loginToken).orElse(null);
 
-        if (coOwnerRepository.findByEmail(email).get().getRole().equals(RoleType.ADMIN)) {
-            return commaSeparatedStringToAuthorityList("ROLE_ADMIN");
+        if (user == null) {
+            user = coOwnerRepository.findByUsername(loginToken).orElseThrow(() -> new UsernameNotFoundException("No user with email or username " + loginToken));
         }
-        CoOwner coOwner = coOwnerRepository.findByEmail(email).orElseThrow(
-                () -> new UsernameNotFoundException("No user '" + email + "'")
-                );
-        if (coOwner.getRole().equals(RoleType.REP)) {
-            return commaSeparatedStringToAuthorityList("ROLE_REP");
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        
+        if (user.getRole() == RoleType.REP) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_CO_OWNER"));
         }
-        else
-            return commaSeparatedStringToAuthorityList("ROLE_COOWNER");
+
+
+        return new User(
+                user.getEmail(),
+                user.getPasswd(),
+                authorities
+        );
     }
 }

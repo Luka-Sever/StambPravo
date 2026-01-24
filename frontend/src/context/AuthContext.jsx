@@ -31,10 +31,15 @@ export function AuthProvider({ children }) {
       try {
         const sessionUser = await fetchUser()
         if (sessionUser) {
-          setUser({ 
+          setUser({
+            username: sessionUser.username,
             firstName: sessionUser.firstName || sessionUser.name, 
             lastName: sessionUser.lastName || '',
-            role: sessionUser.role 
+            email: sessionUser.email,
+            role: sessionUser.role,
+            buildingId: sessionUser.buildingId,
+            buildingAddress: sessionUser.buildingAddress,
+            building: sessionUser.building || (sessionUser.buildingId ? { buildingId: sessionUser.buildingId, address: sessionUser.buildingAddress } : null)
           })
         }
       } catch { /* ignore */ } finally {
@@ -48,8 +53,13 @@ export function AuthProvider({ children }) {
     const nextToken = data?.token || data?.accessToken || null
     const nextUser = data?.user || (data?.firstName ? { 
       firstName: data.firstName, 
-      lastName: data.lastName, 
-      role: data.role 
+      lastName: data.lastName,
+      username: data.username,
+      email: data.email,
+      role: data.role,
+      buildingId: data.buildingId,
+      buildingAddress: data.buildingAddress,
+      building: data.building || (data.buildingId ? { buildingId: data.buildingId, address: data.buildingAddress } : null)
     } : null)
     persist(nextUser, nextToken)
     return { user: nextUser, token: nextToken, raw: data }
@@ -60,8 +70,10 @@ export function AuthProvider({ children }) {
     const nextToken = data?.token || data?.accessToken || null
     const nextUser = data?.user || (data?.firstName ? { 
       firstName: data.firstName, 
-      lastName: data.lastName, 
-      role: data.role 
+      lastName: data.lastName,
+      username: data.username,
+      email: data.email,
+      role: data.role
     } : null)
     if (nextToken || nextUser) persist(nextUser, nextToken)
     return { user: nextUser, token: nextToken, raw: data }

@@ -1,5 +1,6 @@
 package com.pcelice.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -20,6 +21,7 @@ public class Item {
     @ManyToOne(optional = false)
     @MapsId("meetingId")
     @JoinColumn(name = "meeting_id", nullable = false)
+    @JsonIgnore
     private Meeting meeting;
     
     @NotNull
@@ -102,5 +104,18 @@ public class Item {
 
     public void setStatus(ItemStatus status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", meeting=" + meeting +
+                ", title='" + title + '\'' +
+                ", summary='" + summary + '\'' +
+                ", legal=" + legal +
+                ", conclusion='" + conclusion + '\'' +
+                ", status=" + status +
+                '}';
     }
 }

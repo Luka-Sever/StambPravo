@@ -18,12 +18,17 @@ export default function Head() {
                 {isAuthenticated ? (
                     <>
                         {isAdmin && (
-                            <button onClick={() => navigate('/admin')} style={{ marginRight: '10px' }}>
+                            <button onClick={() => navigate('/admin')} >
                                 Admin
                             </button>
                         )}
                         <span className="user-label">{displayName || 'Korisnik'}</span>
-                        <button onClick={logout} style={{ marginLeft: 10 }}>Odjavi se</button>
+                        <button onClick={logout}>Odjavi se</button>
+
+                       <button  onClick={() => navigate('/postavke')}>
+                            ⚙️
+                        </button>
+
                     </>
                 ) : !isAuthRoute ? (
                     <button onClick={() => navigate('/login')}>Prijavi se</button>

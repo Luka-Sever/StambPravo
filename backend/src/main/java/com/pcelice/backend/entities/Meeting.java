@@ -1,6 +1,9 @@
 package com.pcelice.backend.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -28,12 +31,12 @@ public class Meeting {
     @Column(nullable = false)
     private MeetingStatus status;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime meetingStartTime;
 
     private LocalDateTime meetingEndTime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String meetingLocation;
 
     @Column(nullable = false)
@@ -42,12 +45,21 @@ public class Meeting {
     @Column(nullable = false)
     private String summary;
 
-    @ManyToOne(optional = false)
+    /// PROMIJENITI
+    @ManyToOne(optional = true)
     @JoinColumn(name = "building_id", nullable = false)
     private Building building;
 
     @ManyToMany(mappedBy = "attendingMeetings")
     private Set<CoOwner> attendingCoOwners;
+
+    @OneToMany(
+            mappedBy = "meeting",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+
+    private List<Item> items = new ArrayList<>();
 
     public Integer getMeetingId() {
         return meetingId;
@@ -112,5 +124,22 @@ public class Meeting {
     public void setBuilding(Building building) {
         this.building = building;
     }
-    
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public Set<CoOwner> getAttendingCoOwners() {
+        if (this.attendingCoOwners == null) {
+            this.attendingCoOwners = new HashSet<>();
+        }
+        return attendingCoOwners;
+    }
+
+    public void setAttendingCoOwners(Set<CoOwner> attendingCoOwners) { this.attendingCoOwners = attendingCoOwners; }
+
 }

@@ -1,36 +1,34 @@
 package com.pcelice.backend;
 
+import com.pcelice.backend.entities.Building;
 import com.pcelice.backend.entities.CoOwner;
 import com.pcelice.backend.entities.RoleType;
 import com.pcelice.backend.repositories.CoOwnerRepository;
-import com.pcelice.backend.service.CoOwnerService;
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Collections;
-import java.util.Map;
-
 @SpringBootApplication
 @RestController
+@EnableCaching
+@EnableAsync
 public class BackendApplication {
     @Autowired
     private CoOwnerRepository coOwnerRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-//
+
 //    @Bean
 //    public CommandLineRunner demo(CoOwnerRepository repository) {
 //        //hardcodeani useri za testiranje
@@ -38,29 +36,13 @@ public class BackendApplication {
 //            String encodedPassword = passwordEncoder.encode("password123");
 //
 //            CoOwner admin = new CoOwner();
-//            admin.setEmail("placeholder@gmail.com");
+//            admin.setEmail("brunoplese0@gmail.com");
+//            admin.setUsername("Admin");
 //            admin.setPasswd(encodedPassword);
-//            admin.setFirstName("Admin");
-//            admin.setLastName("Adminovic");
+//            admin.setFirstName("Bruno");
+//            admin.setLastName("Plese");
 //            admin.setRole(RoleType.ADMIN);
 //            repository.save(admin);
-//
-//
-//            CoOwner coOwner1 = new CoOwner();
-//            coOwner1.setEmail("suvlasnik@example.com");
-//            coOwner1.setPasswd(encodedPassword);
-//            coOwner1.setFirstName("Ime");
-//            coOwner1.setLastName("Prezime");
-//            coOwner1.setRole(RoleType.CO_OWNER);
-//            repository.save(coOwner1);
-//
-//            CoOwner coOwner2 = new CoOwner();
-//            coOwner2.setEmail("predstavnik@example.com");
-//            coOwner2.setPasswd(encodedPassword);
-//            coOwner2.setFirstName("Ime");
-//            coOwner2.setLastName("Prezimepredstavnik");
-//            coOwner2.setRole(RoleType.REP);
-//            repository.save(coOwner2);
 //        };
 //    }
 

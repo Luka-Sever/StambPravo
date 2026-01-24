@@ -3,16 +3,25 @@ import { useAuth } from '../context/AuthContext.jsx'
 
 function Login() {
   const { oauthLogin, login, loading } = useAuth()
-  const [email, setEmail] = useState('')
+  const [loginToken, setLoginToken] = useState('')
   const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
 
   if (loading) {
     return <div className="loading">Učitavanje...</div>
   }
 
-  const handleEmailLogin = (e) => {
+  const handleEmailUsernameLogin = async (e) => {
     e.preventDefault()
-    login({ email, password })
+    setMessage('')
+    
+    try {
+      await login({ loginToken, password })
+    } catch {
+      setMessage('Nevažeći podaci za prijavu. Molimo pokušajte ponovno.')
+      setLoginToken('')
+      setPassword('')
+    }
   }
 
   return (
@@ -21,14 +30,14 @@ function Login() {
 
       <div className="auth-container">
         <div className="auth-card">
-          <form onSubmit={handleEmailLogin} className="auth-form">
+          <form onSubmit={handleEmailUsernameLogin} className="auth-form">
             <div className="auth-field">
-              <label>EMAIL</label>
+              <label>EMAIL ILI KORISNIČKO IME</label>
               <input 
-                type="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                placeholder="Unesite email"
+                type="text"
+                value={loginToken}
+                onChange={(e) => setLoginToken(e.target.value)}
+                placeholder="Unesite email ili korisničko ime"
                 required
               />
             </div>
@@ -48,13 +57,19 @@ function Login() {
               PRIJAVI SE
             </button>
 
-            <button id="login" className="auth-button small-btn" type="button" onClick={() => oauthLogin('google')}>
+            <button id="login-google" className="auth-button small-btn" type="button" onClick={() => oauthLogin('google')}>
               GOOGLE PRIJAVA
             </button>
             
-            <button id="login" className="auth-button small-btn" type="button" onClick={() => oauthLogin('github')}>
+            <button id="login-git" className="auth-button small-btn" type="button" onClick={() => oauthLogin('github')}>
               GITHUB PRIJAVA
             </button>
+
+            {message && (
+              <p className="status-message" aria-live="polite">
+                {message}
+              </p>
+            )}
           </form>
         </div>
       </div>

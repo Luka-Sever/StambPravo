@@ -1,17 +1,22 @@
 package com.pcelice.backend.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-//@Table(name = "CO_OWNER")
+@Table(name = "CO_OWNER")
 public class CoOwner {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer coOwnerId;
+
+    @Column(unique = true, nullable = false)
+    private String username;
 
     @Column(nullable = false)
     private String passwd;
@@ -27,8 +32,9 @@ public class CoOwner {
     @NotNull
     private RoleType roleType;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "building_id", nullable = true)
+    @JsonIgnore
     private Building building;
 
     @ManyToMany
@@ -37,9 +43,13 @@ public class CoOwner {
         joinColumns = @JoinColumn(name = "co_owner_id"),
         inverseJoinColumns = @JoinColumn(name = "meeting_id")
     )
+    @JsonIgnore
     private Set<Meeting> attendingMeetings;
 
     public Set<Meeting> getAttendingMeetings() {
+        if (this.attendingMeetings == null) {
+            this.attendingMeetings = new HashSet<>();
+        }
         return attendingMeetings;
     }
 
@@ -55,12 +65,20 @@ public class CoOwner {
         this.coOwnerId = coOwnerId;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPasswd() {
         return passwd;
     }
 
-    public void setPasswd(String passwd) {
-        this.passwd = passwd;
+    public void setPasswd(String password) {
+        this.passwd = password;
     }
 
     public String getFirstName() {

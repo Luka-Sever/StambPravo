@@ -9,23 +9,22 @@ CREATE TABLE CO_OWNER (
 	last_name VARCHAR(20) NOT NULL,
 	email VARCHAR(100) NOT NULL UNIQUE,
 	role_type VARCHAR(20) NOT NULL,
-	building_id INTEGER NOT NULL
+	building_id INTEGER
 );
 
 -- create city table
 CREATE TABLE CITY (
-	city_id SERIAL PRIMARY KEY,
-	postal_code INTEGER NOT NULL UNIQUE,
+	postal_code INTEGER PRIMARY KEY,
 	city_name VARCHAR(50) NOT NULL
 );
 
 -- create building table
 CREATE TABLE BUILDING (
 	building_id SERIAL PRIMARY KEY,
-	city_id INTEGER NOT NULL REFERENCES CITY(city_id),
+	postal_code INTEGER NOT NULL REFERENCES CITY(postal_code),
 	address VARCHAR(100) NOT NULL,
 	rep_id INTEGER UNIQUE,
-	CONSTRAINT city_address UNIQUE (city_id, address)
+	CONSTRAINT city_address UNIQUE (postal_code, address)
 );
 
 -- assign foreign key references
