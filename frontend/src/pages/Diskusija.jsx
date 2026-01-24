@@ -173,13 +173,7 @@ export default function Diskusija() {
 
                             {(d.link || canCreateMeeting) && (
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '12px', gap: '12px' }}>
-                                    <div>
-                                        {d.link && (
-                                            <a className="auth-link" href={toStanBlogUrl(d.link)} target="_blank" rel="noreferrer">
-                                                Otvori diskusiju
-                                            </a>
-                                        )}
-                                    </div>
+
                                     {canCreateMeeting && (
                                         <button
                                             type="button"
