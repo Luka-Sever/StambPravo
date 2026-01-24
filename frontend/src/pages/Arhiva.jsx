@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { meetingService } from '../services/meetingService.js'
 import { useAuth } from '../context/AuthContext.jsx'
+import { meetingService } from '../services/meetingService.js'
 
 export default function Arhiva() {
     const { user } = useAuth()
@@ -13,18 +13,18 @@ export default function Arhiva() {
 
     useEffect(() => {
         let cancelled = false
-        ;(async () => {
-            try {
-                setLoading(true)
-                setError(null)
-                const data = await meetingService.getAll()
-                if (!cancelled) setMeetings(Array.isArray(data) ? data : [])
-            } catch (e) {
-                if (!cancelled) setError(e?.message || 'Greška pri dohvaćanju sastanaka.')
-            } finally {
-                if (!cancelled) setLoading(false)
-            }
-        })()
+            ; (async () => {
+                try {
+                    setLoading(true)
+                    setError(null)
+                    const data = await meetingService.getAll()
+                    if (!cancelled) setMeetings(Array.isArray(data) ? data : [])
+                } catch (e) {
+                    if (!cancelled) setError(e?.message || 'Greška pri dohvaćanju sastanaka.')
+                } finally {
+                    if (!cancelled) setLoading(false)
+                }
+            })()
         return () => { cancelled = true }
     }, [])
 
