@@ -31,17 +31,7 @@ spring:
   jpa:
     hibernate:
         ddl-auto: validate
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${MAIL_USERNAME:your-email@gmail.com}
-    password: ${MAIL_PASSWORD:your-app-password}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+
 server:
   servlet:
     session:
@@ -49,6 +39,9 @@ server:
         same-site: none
         secure: true
         http-only: true
+
+MAILTRAP_API_TOKEN: ${MAILTRAP_API_TOKEN}
+MAILTRAP_FROM_EMAIL: ${MAILTRAP_FROM_EMAIL:StanPlan <no-reply@mailtrap.io>}
 
 progi:
   fronted:
