@@ -40,8 +40,10 @@ server:
         secure: true
         http-only: true
 
-MAILTRAP_API_TOKEN: ${MAILTRAP_API_TOKEN}
-MAILTRAP_FROM_EMAIL: ${MAILTRAP_FROM_EMAIL:StanPlan <no-reply@mailtrap.io>}
+mailtrap:
+  api-token: ${MAILTRAP_API_TOKEN:}
+  from-email: ${MAILTRAP_FROM_EMAIL:StanPlan <no-reply@mailtrap.io>}
+
 
 progi:
   fronted:

@@ -12,11 +12,12 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class EmailService {
 
-    @Value("${MAILTRAP_API_TOKEN}")
+    @Value("${mailtrap.api-token:}")
     private String apiToken;
 
-    @Value("${MAILTRAP_FROM_EMAIL}")
+    @Value("${mailtrap.from-email:StanPlan <no-reply@mailtrap.io>}")
     private String fromEmail;
+
 
     private final OkHttpClient client = new OkHttpClient();
 
